@@ -250,9 +250,8 @@ export const tutorMensajes = pgTable(
     usuarioId: text()
       .notNull()
       .references(() => usuarios.id, {onDelete: 'cascade'}),
-    leccionId: text()
-      .notNull()
-      .references(() => lecciones.id, {onDelete: 'cascade'}),
+    /** La lección de la conversación. Null = «¿Por qué me equivoqué?» fuera de una lección. */
+    leccionId: text().references(() => lecciones.id, {onDelete: 'cascade'}),
     rol: text({enum: ['docente', 'tutor']}).notNull(),
     texto: text().notNull(),
     creado: timestamp({withTimezone: true}).notNull().defaultNow(),

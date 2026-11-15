@@ -1,0 +1,1 @@
+ALTER TABLE "tutor_mensajes" ALTER COLUMN "leccion_id" DROP NOT NULL;

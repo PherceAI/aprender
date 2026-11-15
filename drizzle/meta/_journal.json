@@ -8,6 +8,13 @@
       "when": 1794784080087,
       "tag": "0000_inicial",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794785494588,
+      "tag": "0001_tutor-sin-leccion",
+      "breakpoints": true
     }
   ]
 }
