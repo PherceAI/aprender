@@ -13,7 +13,7 @@ export default async function Curso() {
   const mapa = await mapaCurso(await getDb(), u.id);
   return (
     <div className="rise">
-      <h1 className="text-[30px] font-semibold tracking-[-0.035em] text-ink sm:text-[36px]">Tu curso</h1>
+      <h1 className="text-[30px] font-medium tracking-[-0.04em] text-ink sm:text-[36px]">Tu curso</h1>
       <p className="mt-1.5 text-[15.5px] text-ink-2">Ciencias Naturales · EGB Superior · Dimensión 1 de la evaluación</p>
 
       <div className="mt-8 flex flex-col gap-10">
@@ -26,7 +26,7 @@ export default async function Curso() {
                 <p className="text-[13.5px] text-ink-3">{b.unidades.length} unidades · {b.unidades.reduce((n, x) => n + x.temas.length, 0)} temas</p>
               </div>
             </div>
-            <div className="grid gap-4 lg:grid-cols-2">
+            <div className="grid grid-cols-[minmax(0,1fr)] gap-4 lg:grid-cols-2">
               {b.unidades.map((un) => (
                 <div key={un.id} className="card p-4 sm:p-5">
                   <div className="mb-2 flex items-center justify-between gap-3 px-1">

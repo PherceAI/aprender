@@ -27,12 +27,12 @@ export default async function Diagnostico() {
         <TemaToggle compacto />
       </div>
       <div className="rise flex flex-1 flex-col justify-center py-10">
-        <h1 className="text-[32px] leading-[1.1] font-semibold tracking-[-0.03em] text-ink sm:text-[40px]">Primero, veamos dónde estás.</h1>
+        <h1 className="text-[32px] leading-[1.1] font-medium tracking-[-0.04em] text-ink sm:text-[40px]">Primero, veamos dónde estás.</h1>
         <p className="mt-3 text-[17px] leading-relaxed text-ink-2">18 preguntas, 2 de cada unidad. Unos 15 minutos. Con esto armamos tu ruta.</p>
         <ul className="mt-8 flex flex-col gap-4">
           {PUNTOS.map((p) => (
             <li key={p.texto} className="flex gap-3.5">
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-ctl bg-accent text-on-accent">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-ctl bg-accent-soft text-accent-ink">
                 <p.icono size={19} />
               </span>
               <p className="pt-2 text-[15.5px] leading-relaxed text-ink">{p.texto}</p>

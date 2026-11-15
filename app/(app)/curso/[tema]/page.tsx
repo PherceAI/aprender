@@ -32,7 +32,7 @@ export default async function Tema({params}: {params: Promise<{tema: string}>}) 
       <div className="mt-4 flex flex-wrap items-center justify-between gap-5">
         <div className="min-w-0">
           <p className="text-[14px] font-medium text-ink-3">{t.unidadNombre}</p>
-          <h1 className="mt-1 text-[30px] leading-tight font-semibold tracking-[-0.035em] text-ink sm:text-[36px]">{t.nombre}</h1>
+          <h1 className="mt-1 text-[30px] leading-tight font-medium tracking-[-0.04em] text-ink sm:text-[36px]">{t.nombre}</h1>
           <div className="mt-3 flex items-center gap-2.5">
             {t.abierto ? <EtiquetaEstado estado={t.estado} /> : <span className="inline-flex h-6 items-center gap-1.5 rounded-full bg-surface px-2.5 text-[12px] font-semibold text-ink-3"><Lock size={12} /> Próximamente</span>}
             <span className="text-[13.5px] text-ink-3">{t.lecciones.length} lecciones</span>
@@ -41,7 +41,7 @@ export default async function Tema({params}: {params: Promise<{tema: string}>}) 
         {t.abierto && <Anillo valor={t.nivel} tam={92} grosor={9} etiqueta="Dominio del tema" />}
       </div>
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-[1.6fr_1fr]">
+      <div className="mt-8 grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[1.6fr_1fr]">
         <div className="flex flex-col gap-6">
           {/* Video del tema (NotebookLM) */}
           <section className="card overflow-hidden">

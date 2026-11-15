@@ -37,7 +37,7 @@ export default async function ResultadoDiagnostico({params}: {params: Promise<{i
       <Marca />
       <div className="mt-8 grid items-center gap-6 sm:grid-cols-[1fr_auto]">
         <div className="rise">
-          <h1 className="text-[32px] leading-[1.1] font-semibold tracking-[-0.03em] text-ink sm:text-[42px]">
+          <h1 className="text-[32px] leading-[1.1] font-medium tracking-[-0.04em] text-ink sm:text-[42px]">
             ¡Listo, {u.nombre.split(' ')[0]}! Este es tu <span className="text-resalte">punto de partida</span>.
           </h1>
           <p className="mt-3 max-w-[54ch] text-[16.5px] leading-relaxed text-ink-2">
@@ -61,10 +61,10 @@ export default async function ResultadoDiagnostico({params}: {params: Promise<{i
         <MapaDominio unidades={unidades} revelar />
       </section>
 
-      <div className="mt-6 grid gap-5 lg:grid-cols-2">
+      <div className="mt-6 grid grid-cols-[minmax(0,1fr)] gap-5 lg:grid-cols-2">
         <section className="card p-5 sm:p-6">
           <h2 className="flex items-center gap-2.5 text-[17px] font-semibold text-ink">
-            <span className="grid h-9 w-9 place-items-center rounded-ctl bg-accent text-on-accent">
+            <span className="grid h-9 w-9 place-items-center rounded-ctl bg-accent-soft text-accent-ink">
               <Trophy size={18} />
             </span>
             Lo que ya traes

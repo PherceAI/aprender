@@ -21,7 +21,7 @@ export interface UnidadMapa {
 export function MapaDominio({unidades, revelar = false, enlazar = false, compacto = false}: {unidades: UnidadMapa[]; revelar?: boolean; enlazar?: boolean; compacto?: boolean}) {
   let i = 0;
   return (
-    <div className={`grid gap-x-6 gap-y-4 ${compacto ? 'sm:grid-cols-2' : 'sm:grid-cols-2 xl:grid-cols-3'} ${revelar ? 'revelar' : ''}`}>
+    <div className={`grid gap-x-6 gap-y-4 grid-cols-[minmax(0,1fr)] ${compacto ? 'sm:grid-cols-[repeat(2,minmax(0,1fr))]' : 'sm:grid-cols-[repeat(2,minmax(0,1fr))] xl:grid-cols-[repeat(3,minmax(0,1fr))]'} ${revelar ? 'revelar' : ''}`}>
       {unidades.map((u) => (
         <div key={u.id}>
           <p className="mb-2 truncate text-[13px] font-semibold text-ink-2">{u.nombre}</p>

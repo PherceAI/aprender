@@ -25,7 +25,7 @@ export default async function Inicio() {
     <div className="rise flex flex-col gap-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-[30px] leading-[1.08] font-semibold tracking-[-0.035em] text-ink sm:text-[40px]">
+          <h1 className="text-[30px] leading-[1.08] font-medium tracking-[-0.04em] text-ink sm:text-[40px]">
             Hola, {nombre}.<br />
             ¿Qué <span className="text-resalte">aprendemos</span> hoy?
           </h1>
@@ -36,7 +36,7 @@ export default async function Inicio() {
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[1.7fr_1fr]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[1.7fr_1fr]">
         <div className="flex flex-col gap-6">
           {/* Lo que toca ahora */}
           <section className="rounded-card bg-destacado p-6 text-on-destacado shadow-float sm:p-7">
@@ -67,7 +67,7 @@ export default async function Inicio() {
           </section>
 
           {/* Bloques y repaso */}
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid grid-cols-[minmax(0,1fr)] gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {mapa.bloques.map((b) => (
               <div key={b.id} className="card flex items-center gap-3.5 p-4">
                 <Anillo valor={b.nivel} tam={60} grosor={7} etiqueta={b.nombre} />

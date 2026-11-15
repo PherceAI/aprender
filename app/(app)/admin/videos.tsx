@@ -14,7 +14,7 @@ export function Videos({temas}: {temas: T[]}) {
     <div className="mt-4">
       <div className="mb-3 flex gap-1.5">
         {(['abiertos', 'todos'] as const).map((v) => (
-          <button key={v} onClick={() => setVer(v)} className={`h-9 rounded-full px-3.5 text-[13.5px] font-semibold ${ver === v ? 'bg-accent text-on-accent' : 'bg-surface-2 text-ink-2'}`}>
+          <button key={v} onClick={() => setVer(v)} className={`h-9 rounded-full px-3.5 text-[13.5px] font-semibold ${ver === v ? 'bg-ink text-bg' : 'bg-surface-2 text-ink-2'}`}>
             {v === 'abiertos' ? 'Temas abiertos' : 'Los 31 temas'}
           </button>
         ))}

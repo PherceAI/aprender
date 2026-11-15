@@ -63,7 +63,7 @@ export function Secciones({secciones}: {secciones: Seccion[]}) {
           case 'laboratorio':
             return (
               <div key={i} className="rounded-card border border-line bg-surface p-4 sm:p-5">
-                <p className="mb-3 inline-flex h-7 items-center rounded-full bg-accent px-3 text-[13px] font-semibold text-on-accent">Laboratorio</p>
+                <p className="mb-3 inline-flex h-7 items-center rounded-full bg-accent-soft px-3 text-[13px] font-semibold text-accent-ink">Laboratorio</p>
                 <Explorar lab={s.lab} consigna={s.consigna} reto={RETO[s.lab]} compacto />
               </div>
             );

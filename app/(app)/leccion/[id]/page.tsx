@@ -35,9 +35,9 @@ export default async function Leccion({params}: {params: Promise<{id: string}>})
         <ArrowLeft size={16} /> {l.tema.nombre}
       </Link>
 
-      <div className="mt-4 grid gap-6 lg:grid-cols-[1fr_360px]">
+      <div className="mt-4 grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[1fr_360px]">
         <article className="min-w-0">
-          <h1 className="text-[28px] leading-tight font-semibold tracking-[-0.035em] text-ink sm:text-[34px]">{l.titulo}</h1>
+          <h1 className="text-[28px] leading-tight font-medium tracking-[-0.04em] text-ink sm:text-[34px]">{l.titulo}</h1>
           <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-[14px] text-ink-3">
             <span className="inline-flex items-center gap-1.5">
               <Clock size={15} /> {l.minutos} min

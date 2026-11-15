@@ -14,7 +14,7 @@ const ICONO: Record<string, LucideIcon> = {
 export function ElegirEspecialidad({especialidades}: {especialidades: {id: string; nombre: string; nivel: string; activa: boolean}[]}) {
   const [pendiente, iniciar] = useTransition();
   return (
-    <div className="mt-8 grid gap-3 sm:grid-cols-2">
+    <div className="mt-8 grid grid-cols-[minmax(0,1fr)] gap-3 sm:grid-cols-2">
       {especialidades.map((e) => {
         const Icono = ICONO[e.id] ?? Atom;
         return (

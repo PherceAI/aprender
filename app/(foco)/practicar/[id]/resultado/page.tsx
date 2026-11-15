@@ -72,7 +72,7 @@ export default async function Resultado({params}: {params: Promise<{id: string}>
         <p className="mt-2 text-[14px] font-medium text-ink-3">
           {TITULO_INTENTO[r.tipo]} · {r.aciertos} de {r.total} correctas
         </p>
-        <h1 className="mt-4 text-[30px] font-semibold tracking-[-0.03em] text-ink sm:text-[36px]">{titulo}</h1>
+        <h1 className="mt-4 text-[30px] font-medium tracking-[-0.04em] text-ink sm:text-[36px]">{titulo}</h1>
         <p className="mt-2 max-w-[52ch] text-[16px] leading-relaxed text-ink-2">{texto}</p>
       </div>
 
@@ -97,7 +97,7 @@ export default async function Resultado({params}: {params: Promise<{id: string}>
       {r.tipo === 'simulacro' && r.porUnidad.length > 0 && (
         <section className="card mt-10 p-5 sm:p-6">
           <h2 className="text-[17px] font-semibold text-ink">Por unidad</h2>
-          <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+          <ul className="mt-4 grid grid-cols-[minmax(0,1fr)] gap-3 sm:grid-cols-2">
             {r.porUnidad.map((g) => (
               <li key={g.id} className="flex items-center justify-between gap-3 rounded-ctl bg-surface-2 px-3.5 py-2.5 text-[14.5px]">
                 <span className="min-w-0 truncate text-ink">{g.nombre}</span>

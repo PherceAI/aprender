@@ -26,7 +26,7 @@ export default async function Admin() {
   return (
     <div className="rise flex flex-col gap-6">
       <div>
-        <h1 className="text-[30px] font-semibold tracking-[-0.035em] text-ink sm:text-[36px]">Panel</h1>
+        <h1 className="text-[30px] font-medium tracking-[-0.04em] text-ink sm:text-[36px]">Panel</h1>
         <p className="mt-1.5 text-[15.5px] text-ink-2">Cómo van los docentes, qué temas cuestan más, cuentas y videos.</p>
       </div>
 
@@ -39,37 +39,25 @@ export default async function Admin() {
         ))}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[1.5fr_1fr]">
         <section className="card overflow-hidden">
           <h2 className="px-5 pt-5 text-[17px] font-semibold text-ink">Docentes</h2>
           {docentes.length === 0 ? (
             <p className="px-5 py-4 text-[14.5px] text-ink-3">Aún no hay docentes. Crea la primera cuenta a la derecha.</p>
           ) : (
-            <div className="relative mt-3 overflow-x-auto">
-              <table className="w-full min-w-[560px] text-left text-[14px]">
-                <thead className="bg-surface-2 text-[12.5px] font-semibold text-ink-3">
-                  <tr>
-                    <th className="px-5 py-2.5">Docente</th>
-                    <th className="px-3 py-2.5">Preparación</th>
-                    <th className="px-3 py-2.5">Lecciones</th>
-                    <th className="px-3 py-2.5">Último ingreso</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {docentes.map((d) => (
-                    <tr key={d.id} className="border-t border-line">
-                      <td className="px-5 py-3">
-                        <p className="font-semibold text-ink">{d.nombre}</p>
-                        <p className="text-[12.5px] text-ink-3">{d.correo}</p>
-                      </td>
-                      <td className="num px-3 py-3 text-ink">{d.diagnosticoHecho ? `${d.preparacion} %` : <span className="text-ink-3">Sin diagnóstico</span>}</td>
-                      <td className="num px-3 py-3 text-ink">{d.lecciones}</td>
-                      <td className="px-3 py-3 text-ink-2">{fecha(d.ultimoIngreso)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <ul className="mt-3 divide-y divide-line border-t border-line">
+              {docentes.map((d) => (
+                <li key={d.id} className="grid grid-cols-[1fr_auto] gap-x-4 gap-y-1 px-5 py-3.5 sm:grid-cols-[1fr_110px_90px_150px] sm:items-center">
+                  <div className="min-w-0">
+                    <p className="truncate font-medium text-ink">{d.nombre}</p>
+                    <p className="truncate text-[12.5px] text-ink-3">{d.correo}</p>
+                  </div>
+                  <p className="num text-right text-[14px] text-ink sm:text-left">{d.diagnosticoHecho ? `${d.preparacion} %` : <span className="text-ink-3">Sin diagnóstico</span>}</p>
+                  <p className="num text-[13px] text-ink-3 sm:text-[14px] sm:text-ink">{d.lecciones} lecciones</p>
+                  <p className="text-right text-[13px] text-ink-3 sm:text-left">{fecha(d.ultimoIngreso)}</p>
+                </li>
+              ))}
+            </ul>
           )}
         </section>
 

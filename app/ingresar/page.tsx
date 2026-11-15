@@ -16,7 +16,7 @@ export default async function Ingresar() {
           <Marca grande />
         </Link>
         <div className="card mt-7 p-6 sm:p-7">
-          <h1 className="text-[24px] font-semibold tracking-[-0.03em] text-ink">Hola de nuevo</h1>
+          <h1 className="text-[24px] font-medium tracking-[-0.04em] text-ink">Hola de nuevo</h1>
           <p className="mt-1 text-[15px] text-ink-2">Entra con el correo y la contraseña que te dimos.</p>
           <FormIngreso />
         </div>

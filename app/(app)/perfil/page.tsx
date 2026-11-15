@@ -32,7 +32,7 @@ export default async function Perfil() {
       <div className="card flex flex-col gap-6 p-5 sm:flex-row sm:items-center sm:p-7">
         <Anillo valor={p.preparacion} tam={128} grosor={12} etiqueta="Preparación" />
         <div className="min-w-0 flex-1">
-          <h1 className="text-[28px] font-semibold tracking-[-0.035em] text-ink sm:text-[32px]">{p.nombre}</h1>
+          <h1 className="text-[28px] font-medium tracking-[-0.04em] text-ink sm:text-[32px]">{p.nombre}</h1>
           <p className="text-[15px] text-ink-2">
             {p.especialidad} · {p.correo}
           </p>

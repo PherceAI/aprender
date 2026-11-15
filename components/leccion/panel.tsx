@@ -27,7 +27,7 @@ export function PanelLeccion({leccionId, historial, nota, tutorActivo}: {leccion
             aria-selected={pestana === id}
             onClick={() => setPestana(id)}
             className={`flex h-10 flex-1 items-center justify-center gap-2 rounded-[10px] text-[14px] font-semibold transition-colors ${
-              pestana === id ? 'bg-accent text-on-accent' : 'text-ink-3 hover:bg-surface-2 hover:text-ink'
+              pestana === id ? 'bg-surface-2 text-ink shadow-card' : 'text-ink-3 hover:bg-surface-2 hover:text-ink'
             }`}
           >
             <Icono size={16} /> {texto}

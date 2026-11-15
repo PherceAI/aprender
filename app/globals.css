@@ -39,8 +39,8 @@
   --color-dom-3: var(--dom-3);
   --color-dom-4: var(--dom-4);
 
-  --radius-card: 20px;
-  --radius-ctl: 12px;
+  --radius-card: 14px;
+  --radius-ctl: 8px;
 
   --shadow-card: var(--sombra-card);
   --shadow-float: var(--sombra-float);
@@ -49,91 +49,93 @@
 }
 
 :root {
-  --bg: #eceee6;
-  --surface: #fdfdfb;
-  --surface-2: #f5f6f0;
-  --ink: #16181a;
-  --ink-2: #4b504c;
-  --ink-3: #656b66;
-  --line: #e2e5dc;
-  --line-2: #eef0e8;
-  --accent: #d9f26b;
-  --accent-ink: #4a6300;
-  --accent-soft: #eef8c6;
-  --on-accent: #16181a;
-  --primary: #16181a;
-  --on-primary: #fdfdfb;
-  --destacado: #16181a;
-  --on-destacado: #f3f5ee;
-  --boton-destacado: #d9f26b;
-  --on-boton-destacado: #16181a;
-  --anillo: #86ae12;
-  --resalte: #b98400;
-  --warm: #c77700;
-  --warm-soft: #fff3d6;
-  --ok: #17784f;
-  --ok-soft: #e4f4ea;
-  --bad: #c3303b;
-  --bad-soft: #fcebec;
-  --wip: #9a6200;
-  --wip-soft: #fdf2d9;
-  --dom-0: #e3e6dd;
-  --dom-1: #eef6cd;
-  --dom-2: #dfef98;
-  --dom-3: #c9e34f;
-  --dom-4: #9cc419;
-  --sombra-card: 0 1px 2px rgb(22 24 26 / 0.04), 0 6px 18px -8px rgb(60 70 40 / 0.14);
-  --sombra-float: 0 2px 6px rgb(22 24 26 / 0.05), 0 20px 44px -14px rgb(60 70 40 / 0.26);
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #fafafa;
+  --ink: #171717;
+  --ink-2: #525252;
+  --ink-3: #737373;
+  --line: #e5e5e5;
+  --line-2: #f2f2f2;
+  --accent: #f0360a;
+  --accent-ink: #d42d06;
+  --accent-soft: #fff3ee;
+  --on-accent: #ffffff;
+  --primary: #f0360a;
+  --on-primary: #ffffff;
+  --destacado: #fff3ee;
+  --on-destacado: #171717;
+  --boton-destacado: #f0360a;
+  --on-boton-destacado: #ffffff;
+  --anillo: #f0360a;
+  --resalte: #f0360a;
+  --warm: #d42d06;
+  --warm-soft: #fff3ee;
+  --ok: #15803d;
+  --ok-soft: #effaf2;
+  --bad: #c81e1e;
+  --bad-soft: #fdf1f1;
+  --wip: #a16207;
+  --wip-soft: #fdf8e8;
+  --dom-0: #f0f0f0;
+  --dom-1: #ffe2d6;
+  --dom-2: #ffbea3;
+  --dom-3: #ff8556;
+  --dom-4: #f0360a;
+  --sombra-card: 0 0 1px rgb(0 0 0 / 0.03), 0 1px 2px rgb(0 0 0 / 0.05);
+  --sombra-float: 0 0 1px rgb(0 0 0 / 0.04), 0 2px 4px rgb(0 0 0 / 0.04), 0 12px 32px -8px rgb(0 0 0 / 0.1);
   color-scheme: light;
 }
 
 
 :root[data-tema='oscuro'] {
-  --bg: #0f110f;
-  --surface: #181b18;
-  --surface-2: #1f231f;
-  --ink: #f1f3ec;
-  --ink-2: #bcc2b8;
-  --ink-3: #8f968c;
-  --line: #2a2f29;
-  --line-2: #222721;
-  --accent: #d9f26b;
-  --accent-ink: #d9f26b;
-  --accent-soft: #283212;
-  --on-accent: #16181a;
-  --primary: #d9f26b;
-  --on-primary: #16181a;
-  --destacado: #d9f26b;
-  --on-destacado: #16181a;
-  --boton-destacado: #16181a;
-  --on-boton-destacado: #d9f26b;
-  --anillo: #d9f26b;
-  --resalte: #f6c944;
-  --warm: #f6b73c;
-  --warm-soft: #2e2510;
-  --ok: #4cc58f;
-  --ok-soft: #13271e;
-  --bad: #ff6b76;
-  --bad-soft: #2c151a;
-  --wip: #f2b14b;
-  --wip-soft: #2b2212;
-  --dom-0: #252a24;
-  --dom-1: #2f3a16;
-  --dom-2: #52661c;
-  --dom-3: #93b02a;
-  --dom-4: #d9f26b;
-  --sombra-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 6px 18px -8px rgb(0 0 0 / 0.5);
-  --sombra-float: 0 2px 6px rgb(0 0 0 / 0.35), 0 20px 44px -14px rgb(0 0 0 / 0.6);
+  --bg: #0a0a0a;
+  --surface: #121212;
+  --surface-2: #1a1a1a;
+  --ink: #f5f5f5;
+  --ink-2: #b5b5b5;
+  --ink-3: #8a8a8a;
+  --line: #262626;
+  --line-2: #1f1f1f;
+  --accent: #ff5a2e;
+  --accent-ink: #ff7a52;
+  --accent-soft: #2a140c;
+  --on-accent: #ffffff;
+  --primary: #ff5a2e;
+  --on-primary: #ffffff;
+  --destacado: #2a140c;
+  --on-destacado: #f5f5f5;
+  --boton-destacado: #ff5a2e;
+  --on-boton-destacado: #ffffff;
+  --anillo: #ff5a2e;
+  --resalte: #ff7a52;
+  --warm: #ff7a52;
+  --warm-soft: #2a140c;
+  --ok: #4ade80;
+  --ok-soft: #10261a;
+  --bad: #f87171;
+  --bad-soft: #2a1414;
+  --wip: #fbbf24;
+  --wip-soft: #2a2110;
+  --dom-0: #222222;
+  --dom-1: #3a1d12;
+  --dom-2: #6b2b14;
+  --dom-3: #b8451c;
+  --dom-4: #ff5a2e;
+  --sombra-card: 0 0 0 1px rgb(255 255 255 / 0.02);
+  --sombra-float: 0 12px 32px -8px rgb(0 0 0 / 0.6);
   color-scheme: dark;
 }
 
 html {
   -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
   scrollbar-color: var(--line) transparent;
   background: var(--bg);
 }
 
 body {
+  overflow-x: hidden;
   background: var(--bg);
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
@@ -142,7 +144,7 @@ body {
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--accent) 55%, transparent);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
   color: var(--ink);
 }
 

@@ -94,7 +94,7 @@ export function SobreDibujo(props: Omit<FormatoProps, 'comoExamen'>) {
     else estados[z] = i === elegida ? 'activa' : 'normal';
   });
   return (
-    <div className="grid gap-4 md:grid-cols-[1.2fr_1fr] md:items-start">
+    <div className="grid grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-[1.2fr_1fr] md:items-start">
       <div className="rounded-[16px] bg-surface-2 p-3">
         <Celula
           lab={lab}

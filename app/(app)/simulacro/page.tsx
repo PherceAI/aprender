@@ -24,10 +24,10 @@ export default async function Simulacro() {
 
   return (
     <div className="rise">
-      <h1 className="text-[30px] font-semibold tracking-[-0.035em] text-ink sm:text-[36px]">Simulacro</h1>
+      <h1 className="text-[30px] font-medium tracking-[-0.04em] text-ink sm:text-[36px]">Simulacro</h1>
       <p className="mt-1.5 max-w-[60ch] text-[15.5px] text-ink-2">Practica con reloj y en el formato del examen real: 4 opciones, una correcta, y la corrección al final.</p>
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+      <div className="mt-8 grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[1.4fr_1fr]">
         <section className="rounded-card bg-destacado p-6 text-on-destacado shadow-float sm:p-7">
           <p className="text-[14px] font-semibold opacity-70">Para practicar a diario</p>
           <h2 className="mt-2 text-[26px] font-semibold tracking-[-0.025em]">Simulacro corto</h2>
@@ -67,9 +67,9 @@ export default async function Simulacro() {
         {p.simulacros.length === 0 ? (
           <p className="mt-2 text-[14.5px] text-ink-3">Cuando hagas el primero, aquí verás cómo vas subiendo.</p>
         ) : (
-          <div className="mt-5 flex h-40 items-end gap-3 overflow-x-auto pb-1">
-            {p.simulacros.map((s) => (
-              <div key={s.id} className="flex w-12 shrink-0 flex-col items-center gap-1.5">
+          <div className="mt-5 flex h-40 items-end gap-2 pb-1">
+            {p.simulacros.slice(-8).map((s) => (
+              <div key={s.id} className="flex min-w-0 max-w-14 flex-1 flex-col items-center gap-1.5">
                 <span className="num text-[12.5px] font-semibold text-ink-2">{s.puntaje}</span>
                 <div className="w-full rounded-t-[8px]" style={{height: `${Math.max(6, (s.puntaje / max) * 110)}px`, background: 'var(--anillo)'}} />
                 <span className="text-[11.5px] text-ink-3">{fecha(s.fecha)}</span>

@@ -36,7 +36,7 @@ export default async function Portada() {
       <main>
         <section className="mx-auto grid max-w-[1180px] items-center gap-10 px-4 pt-8 pb-16 sm:px-6 lg:grid-cols-[1fr_1.05fr] lg:gap-14 lg:pt-16 lg:pb-24">
           <div className="rise">
-            <h1 className="text-[38px] leading-[1.05] font-semibold tracking-[-0.035em] text-ink sm:text-[52px]">
+            <h1 className="text-[38px] leading-[1.05] font-medium tracking-[-0.04em] text-ink sm:text-[52px]">
               Prepárate para tu evaluación docente <span className="text-resalte">haciendo</span>, no memorizando.
             </h1>
             <p className="mt-5 max-w-[46ch] text-[17px] leading-relaxed text-ink-2">
@@ -76,7 +76,7 @@ export default async function Portada() {
           <h2 className="max-w-[24ch] text-[30px] leading-[1.1] font-semibold tracking-[-0.03em] text-ink sm:text-[36px]">
             Todo el temario de la Dimensión 1: {temas} temas.
           </h2>
-          <div className="mt-8 grid gap-5 lg:grid-cols-2">
+          <div className="mt-8 grid grid-cols-[minmax(0,1fr)] gap-5 lg:grid-cols-2">
             {bloques.map((b) => (
               <div key={b.id} className="card p-6">
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
