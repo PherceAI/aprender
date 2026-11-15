@@ -9,7 +9,8 @@
     "sembrar": "tsx scripts/sembrar.mts",
     "db:generar": "drizzle-kit generate",
     "test": "tsx --test tests/*.test.mts",
-    "temario": "tsx scripts/temario.mts"
+    "temario": "tsx scripts/temario.mts",
+    "cuentas": "tsx scripts/cuentas.mts"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.16",

@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
   outputFileTracingRoot: path.resolve(__dirname),
   devIndicators: false,
   // PGlite (Postgres en WASM, solo en local) no se empaqueta: se carga tal cual desde node_modules.
-  serverExternalPackages: ['@electric-sql/pglite'],
+  serverExternalPackages: ['@electric-sql/pglite', 'pg'],
   eslint: {ignoreDuringBuilds: true},
 };
 
