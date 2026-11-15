@@ -38,6 +38,14 @@ export async function requerirUsuario(): Promise<UsuarioPublico> {
   return u;
 }
 
+/** Un docente con su especialidad elegida (si no la eligió, a la bienvenida; el admin, a su panel). */
+export async function requerirDocente(): Promise<UsuarioPublico & {especialidadId: string}> {
+  const u = await requerirUsuario();
+  if (u.rol === 'admin') redirect('/admin');
+  if (!u.especialidadId) redirect('/bienvenida');
+  return u as UsuarioPublico & {especialidadId: string};
+}
+
 export async function requerirAdmin(): Promise<UsuarioPublico> {
   const u = await requerirUsuario();
   if (u.rol !== 'admin') redirect('/inicio');

@@ -1,68 +1,159 @@
 @import 'tailwindcss';
 
+/* Modo oscuro: por atributo (elección del docente) o por el sistema cuando no eligió. */
+@custom-variant dark (&:where([data-tema='oscuro'], [data-tema='oscuro'] *));
+
 @theme {
   --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
 
-  --color-paper: #ffffff;
-  --color-subtle: #fafafa;
-  --color-ink: #171717;
-  --color-ink-2: #525252;
-  --color-ink-3: #737373;
-  --color-line: #e5e5e5;
-  --color-line-2: #f2f2f2;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-primary: var(--primary);
+  --color-on-primary: var(--on-primary);
+  --color-destacado: var(--destacado);
+  --color-on-destacado: var(--on-destacado);
+  --color-boton-destacado: var(--boton-destacado);
+  --color-on-boton-destacado: var(--on-boton-destacado);
+  --color-resalte: var(--resalte);
+  --color-accent-soft: var(--accent-soft);
+  --color-on-accent: var(--on-accent);
+  --color-warm: var(--warm);
+  --color-warm-soft: var(--warm-soft);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-bad: var(--bad);
+  --color-bad-soft: var(--bad-soft);
+  --color-wip: var(--wip);
+  --color-wip-soft: var(--wip-soft);
+  --color-dom-0: var(--dom-0);
+  --color-dom-1: var(--dom-1);
+  --color-dom-2: var(--dom-2);
+  --color-dom-3: var(--dom-3);
+  --color-dom-4: var(--dom-4);
 
-  --color-accent: #f0360a;
-  --color-accent-strong: #d42d06;
-  --color-accent-soft: #fff3ee;
+  --radius-card: 20px;
+  --radius-ctl: 12px;
 
-  --color-ok: #15803d;
-  --color-ok-soft: #effaf2;
-  --color-bad: #c81e1e;
-  --color-bad-soft: #fdf1f1;
-  --color-wip: #a16207;
-  --color-wip-soft: #fdf8e8;
+  --shadow-card: var(--sombra-card);
+  --shadow-float: var(--sombra-float);
 
-  --color-recepcion: #3b82f6;
-  --color-alimentos: #f59e0b;
-  --color-pisos: #14b8a6;
-  --color-lavanderia: #8b5cf6;
-
-  --shadow-soft: 0 0 1px rgb(0 0 0 / 0.03), 0 1px 2px rgb(0 0 0 / 0.06);
-  --shadow-float: 0 0 1px rgb(0 0 0 / 0.04), 0 2px 4px rgb(0 0 0 / 0.04), 0 12px 32px -8px rgb(0 0 0 / 0.1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.area-recepcion { --area: var(--color-recepcion); }
-.area-alimentos { --area: var(--color-alimentos); }
-.area-pisos { --area: var(--color-pisos); }
-.area-lavanderia { --area: var(--color-lavanderia); }
+:root {
+  --bg: #eceee6;
+  --surface: #fdfdfb;
+  --surface-2: #f5f6f0;
+  --ink: #16181a;
+  --ink-2: #4b504c;
+  --ink-3: #656b66;
+  --line: #e2e5dc;
+  --line-2: #eef0e8;
+  --accent: #d9f26b;
+  --accent-ink: #4a6300;
+  --accent-soft: #eef8c6;
+  --on-accent: #16181a;
+  --primary: #16181a;
+  --on-primary: #fdfdfb;
+  --destacado: #16181a;
+  --on-destacado: #f3f5ee;
+  --boton-destacado: #d9f26b;
+  --on-boton-destacado: #16181a;
+  --anillo: #86ae12;
+  --resalte: #b98400;
+  --warm: #c77700;
+  --warm-soft: #fff3d6;
+  --ok: #17784f;
+  --ok-soft: #e4f4ea;
+  --bad: #c3303b;
+  --bad-soft: #fcebec;
+  --wip: #9a6200;
+  --wip-soft: #fdf2d9;
+  --dom-0: #e3e6dd;
+  --dom-1: #eef6cd;
+  --dom-2: #dfef98;
+  --dom-3: #c9e34f;
+  --dom-4: #9cc419;
+  --sombra-card: 0 1px 2px rgb(22 24 26 / 0.04), 0 6px 18px -8px rgb(60 70 40 / 0.14);
+  --sombra-float: 0 2px 6px rgb(22 24 26 / 0.05), 0 20px 44px -14px rgb(60 70 40 / 0.26);
+  color-scheme: light;
+}
+
+
+:root[data-tema='oscuro'] {
+  --bg: #0f110f;
+  --surface: #181b18;
+  --surface-2: #1f231f;
+  --ink: #f1f3ec;
+  --ink-2: #bcc2b8;
+  --ink-3: #8f968c;
+  --line: #2a2f29;
+  --line-2: #222721;
+  --accent: #d9f26b;
+  --accent-ink: #d9f26b;
+  --accent-soft: #283212;
+  --on-accent: #16181a;
+  --primary: #d9f26b;
+  --on-primary: #16181a;
+  --destacado: #d9f26b;
+  --on-destacado: #16181a;
+  --boton-destacado: #16181a;
+  --on-boton-destacado: #d9f26b;
+  --anillo: #d9f26b;
+  --resalte: #f6c944;
+  --warm: #f6b73c;
+  --warm-soft: #2e2510;
+  --ok: #4cc58f;
+  --ok-soft: #13271e;
+  --bad: #ff6b76;
+  --bad-soft: #2c151a;
+  --wip: #f2b14b;
+  --wip-soft: #2b2212;
+  --dom-0: #252a24;
+  --dom-1: #2f3a16;
+  --dom-2: #52661c;
+  --dom-3: #93b02a;
+  --dom-4: #d9f26b;
+  --sombra-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 6px 18px -8px rgb(0 0 0 / 0.5);
+  --sombra-float: 0 2px 6px rgb(0 0 0 / 0.35), 0 20px 44px -14px rgb(0 0 0 / 0.6);
+  color-scheme: dark;
+}
 
 html {
   -webkit-text-size-adjust: 100%;
-  color-scheme: light;
-  scrollbar-color: #d4d4d4 transparent;
+  scrollbar-color: var(--line) transparent;
+  background: var(--bg);
 }
 
 body {
-  background: var(--color-paper);
-  color: var(--color-ink);
+  background: var(--bg);
+  color: var(--ink);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: transparent;
 }
 
 ::selection {
-  background: #f0360a26;
-  color: var(--color-ink);
+  background: color-mix(in srgb, var(--accent) 55%, transparent);
+  color: var(--ink);
 }
 
 input,
 textarea,
 select {
-  caret-color: var(--color-accent);
+  caret-color: var(--accent-ink);
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--accent-ink);
   outline-offset: 2px;
 }
 
@@ -74,210 +165,112 @@ a {
   text-underline-offset: 3px;
 }
 
-/* ───── Marco de líneas finas con marcas de acento en las esquinas ───── */
-.frame {
-  position: relative;
-  border: 1px solid var(--color-line);
-  background: var(--color-paper);
-}
-.frame::before,
-.frame::after {
-  content: '';
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  background: var(--color-accent);
-  z-index: 1;
-}
-.frame::before { top: -3px; left: -3px; }
-.frame::after { bottom: -3px; right: -3px; }
-
-/* Cuadrícula tenue que se desvanece, para fondos de cabecera */
-.grid-fade {
-  background-image:
-    linear-gradient(to right, #ededed 1px, transparent 1px),
-    linear-gradient(to bottom, #ededed 1px, transparent 1px);
-  background-size: 40px 40px;
-  mask-image: radial-gradient(ellipse 80% 70% at 70% 0%, #000 30%, transparent 75%);
+h1,
+h2,
+h3 {
+  text-wrap: balance;
 }
 
-/* Tira de 12 meses */
-.month-cell[data-s='aprobado'] { --tone: var(--color-ok); }
-.month-cell[data-s='reprobado'] { --tone: var(--color-bad); }
-.month-cell[data-s='en-curso'] { --tone: var(--color-wip); }
-.month-cell[data-s='pendiente'] { --tone: var(--color-accent); }
-.month-cell[data-s='sin-dato'] { --tone: #d4d4d4; }
-
-.live-dot {
-  position: relative;
-}
-.live-dot::after {
-  content: '';
-  position: absolute;
-  inset: -3px;
-  border-radius: 999px;
-  border: 1.5px solid var(--color-accent);
-  animation: live 1.8s cubic-bezier(0.16, 1, 0.3, 1) infinite;
-}
-@keyframes live {
-  from { opacity: 0.8; transform: scale(0.8); }
-  to { opacity: 0; transform: scale(1.8); }
+/* Tarjeta base */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  box-shadow: var(--sombra-card);
 }
 
+/* Entrada suave de una pantalla */
 .rise {
-  animation: rise 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: rise 360ms var(--ease-out-expo) both;
 }
 @keyframes rise {
-  from { opacity: 0.4; transform: translateY(8px); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0.5;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
-.score-in {
-  animation: score-in 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+/* Revelación del mapa de dominio: las baldosas se tiñen en cascada (el momento con autor). */
+.baldosa {
+  transition: background-color 240ms var(--ease-out-expo), transform 160ms var(--ease-out-expo);
 }
-@keyframes score-in {
-  from { opacity: 0.3; transform: translateY(14px); }
-  to { opacity: 1; transform: none; }
+.revelar .baldosa {
+  animation: tenir 700ms var(--ease-out-expo) both;
+  animation-delay: calc(var(--i, 0) * 45ms + 200ms);
 }
-
-/* ───── Examen tipo juego: fichas con relieve, botones táctiles y respuesta al instante ───── */
-.tile {
-  border: 2px solid var(--color-line);
-  border-bottom-width: 4px;
-  border-radius: 16px;
-  background: var(--color-paper);
-  color: var(--color-ink);
-  transition: border-color 160ms, background-color 160ms, transform 90ms, border-bottom-width 90ms, opacity 200ms;
-  -webkit-tap-highlight-color: transparent;
-}
-.tile:not(:disabled):hover { background: var(--color-subtle); }
-.tile:not(:disabled):active { transform: translateY(2px); border-bottom-width: 2px; margin-bottom: 2px; }
-.tile .tile-key { border-color: var(--color-line); color: var(--color-ink-3); }
-.tile-on { border-color: var(--color-accent); background: var(--color-accent-soft) !important; color: var(--color-accent-strong); }
-.tile-on .tile-key { border-color: var(--color-accent); background: var(--color-accent); color: #fff; }
-.tile-ok { border-color: var(--color-ok); background: var(--color-ok-soft); color: var(--color-ok); }
-.tile-ok .tile-key { border-color: var(--color-ok); background: var(--color-ok); color: #fff; }
-.tile-bad { border-color: var(--color-bad); background: var(--color-bad-soft); color: var(--color-bad); }
-.tile-bad .tile-key { border-color: var(--color-bad); background: var(--color-bad); color: #fff; }
-.tile-dim { opacity: 0.45; }
-.tile:disabled { cursor: default; }
-
-.btn-game {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  height: 54px;
-  border-radius: 16px;
-  border-bottom: 4px solid var(--btn-edge);
-  background: var(--btn-face);
-  color: #fff;
-  font-size: 17px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  transition: transform 90ms, border-bottom-width 90ms, background-color 160ms, filter 160ms;
-  -webkit-tap-highlight-color: transparent;
-}
-.btn-game:not(:disabled):hover { filter: brightness(1.04); }
-.btn-game:not(:disabled):active { transform: translateY(3px); border-bottom-width: 1px; margin-bottom: 3px; }
-.btn-game:disabled { --btn-face: #e5e5e5; --btn-edge: #d4d4d4; color: #a3a3a3; cursor: not-allowed; }
-.btn-game-accent { --btn-face: var(--color-accent); --btn-edge: #b52805; }
-.btn-game-ok { --btn-face: #16a34a; --btn-edge: #11803a; }
-.btn-game-bad { --btn-face: var(--color-bad); --btn-edge: #9a1717; }
-.btn-game-ink { --btn-face: var(--color-ink); --btn-edge: #000; }
-
-.game-bar {
-  position: relative;
-  transition: width 600ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-.game-bar::after {
-  content: '';
-  position: absolute;
-  left: 8px;
-  right: 8px;
-  top: 3px;
-  height: 3px;
-  border-radius: 999px;
-  background: rgb(255 255 255 / 0.35);
+@keyframes tenir {
+  from {
+    background-color: var(--dom-0);
+    transform: scale(0.82);
+  }
+  60% {
+    transform: scale(1.06);
+  }
+  to {
+    transform: none;
+  }
 }
 
-.slide-in { animation: slide-in 360ms cubic-bezier(0.22, 1, 0.36, 1) both; }
-@keyframes slide-in {
-  from { opacity: 0; transform: translateX(28px); }
-  to { opacity: 1; transform: none; }
+/* Respuesta: sacudida corta al fallar, latido al acertar */
+.sacudir {
+  animation: sacudir 360ms var(--ease-out-expo);
 }
-.pop-in { animation: pop-in 420ms cubic-bezier(0.34, 1.4, 0.64, 1) both; }
-@keyframes pop-in {
-  from { opacity: 0; transform: scale(0.94) translateY(10px); }
-  to { opacity: 1; transform: none; }
+@keyframes sacudir {
+  20% { transform: translateX(-5px); }
+  45% { transform: translateX(4px); }
+  70% { transform: translateX(-2px); }
 }
-.feedback-in { animation: feedback-in 280ms cubic-bezier(0.22, 1, 0.36, 1) both; }
-@keyframes feedback-in {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: none; }
+.latir {
+  animation: latir 420ms var(--ease-out-expo);
 }
-.pulse-ok { animation: pulse-ok 420ms cubic-bezier(0.34, 1.56, 0.64, 1); }
-@keyframes pulse-ok {
-  40% { transform: scale(1.03); }
-}
-.shake { animation: shake 380ms cubic-bezier(0.36, 0.07, 0.19, 0.97); }
-@keyframes shake {
-  20%, 60% { transform: translateX(-6px); }
-  40%, 80% { transform: translateX(6px); }
-}
-.flame-pop { animation: flame-pop 460ms cubic-bezier(0.34, 1.56, 0.64, 1); }
-@keyframes flame-pop {
-  0% { transform: scale(0.6) rotate(-12deg); }
-  60% { transform: scale(1.25) rotate(6deg); }
+@keyframes latir {
+  40% { transform: scale(1.02); }
 }
 
-/* Confeti del resultado */
-.confetti {
-  position: absolute;
-  top: -12px;
-  width: 8px;
-  height: 14px;
-  border-radius: 2px;
-  opacity: 0;
-  animation: confetti 1800ms cubic-bezier(0.25, 0.7, 0.4, 1) forwards;
+/* Panel inferior de retroalimentación */
+.subir {
+  animation: subir 300ms var(--ease-out-expo) both;
 }
-@keyframes confetti {
-  0% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0); }
-  100% { opacity: 0; transform: translate3d(var(--dx), 420px, 0) rotate(var(--rot)); }
-}
-.count-up { animation: pop-in 700ms cubic-bezier(0.34, 1.4, 0.64, 1) both; }
-.star-in { animation: star-in 500ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
-@keyframes star-in {
-  from { opacity: 0; transform: scale(0.3) rotate(-30deg); }
-  to { opacity: 1; transform: none; }
+@keyframes subir {
+  from {
+    transform: translateY(16px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
 }
 
-/* Gráficos de Gerencia */
-.bar-grow { transform-origin: left; animation: bar-grow 800ms cubic-bezier(0.22, 1, 0.36, 1) both; }
-@keyframes bar-grow {
-  from { transform: scaleX(0); }
+/* Zonas del laboratorio */
+.zona {
+  cursor: pointer;
+  transition: fill 180ms, stroke 180ms, opacity 180ms, filter 180ms;
 }
-.col-grow { transform-origin: bottom; transform-box: fill-box; animation: col-grow 800ms cubic-bezier(0.22, 1, 0.36, 1) both; }
-@keyframes col-grow {
-  from { transform: scaleY(0); }
+.zona:hover,
+.zona:focus-visible {
+  filter: brightness(1.06) saturate(1.1);
+}
+.zona[data-activa='true'] {
+  stroke: var(--accent-ink);
+  stroke-width: 3;
+}
+.zona:focus-visible {
+  outline: none;
+  stroke: var(--accent-ink);
+  stroke-width: 3;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .live-dot::after,
-  .rise,
-  .score-in,
-  .slide-in,
-  .pop-in,
-  .feedback-in,
-  .pulse-ok,
-  .shake,
-  .flame-pop,
-  .confetti,
-  .count-up,
-  .star-in,
-  .bar-grow,
-  .col-grow {
-    animation: none !important;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 1ms !important;
   }
-  .confetti { display: none; }
 }

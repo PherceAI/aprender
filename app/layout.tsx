@@ -1,5 +1,5 @@
 import type {Metadata, Viewport} from 'next';
-import {IBM_Plex_Mono, Instrument_Sans} from 'next/font/google';
+import {Instrument_Sans} from 'next/font/google';
 import './globals.css';
 
 const instrument = Instrument_Sans({
@@ -8,27 +8,32 @@ const instrument = Instrument_Sans({
   display: 'swap',
 });
 
-const plexMono = IBM_Plex_Mono({
-  subsets: ['latin'],
-  weight: ['400', '500'],
-  variable: '--font-plex-mono',
-  display: 'swap',
-});
-
 export const metadata: Metadata = {
-  title: 'Ruta Docente',
-  description: 'Prepárate para la Evaluación del Desempeño Docente.',
+  title: {default: 'Ruta Docente', template: '%s · Ruta Docente'},
+  description: 'Prepárate para la Evaluación del Desempeño Docente con un método que se adapta a ti.',
+  applicationName: 'Ruta Docente',
+  appleWebApp: {capable: true, title: 'Ruta Docente', statusBarStyle: 'default'},
 };
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#ffffff',
+  viewportFit: 'cover',
+  themeColor: [
+    {media: '(prefers-color-scheme: light)', color: '#f2f4f8'},
+    {media: '(prefers-color-scheme: dark)', color: '#0d1017'},
+  ],
 };
+
+// Pone el tema antes de pintar (sin parpadeo): lo elegido por el docente o, si no eligió, el del sistema.
+const TEMA = `try{var t=localStorage.getItem('tema');if(t!=='claro'&&t!=='oscuro'){t=matchMedia('(prefers-color-scheme: dark)').matches?'oscuro':'claro'}document.documentElement.dataset.tema=t}catch(e){}`;
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
-    <html lang="es" className={`${instrument.variable} ${plexMono.variable}`}>
+    <html lang="es" className={instrument.variable} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{__html: TEMA}} />
+      </head>
       <body className="min-h-dvh font-sans">{children}</body>
     </html>
   );
