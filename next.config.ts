@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
   // Fija la raíz del proyecto: hay otros package-lock.json en carpetas superiores de este PC.
   outputFileTracingRoot: path.resolve(__dirname),
   devIndicators: false,
+  // PGlite (Postgres en WASM, solo en local) no se empaqueta: se carga tal cual desde node_modules.
+  serverExternalPackages: ['@electric-sql/pglite'],
   eslint: {ignoreDuringBuilds: true},
 };
 
