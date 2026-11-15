@@ -225,6 +225,7 @@ El dueño mandó 6 referencias de Pinterest: AdsVoice, Vektora Academy, Edulearn
 - **La lección al estilo AdsVoice:** el video grande, y a un lado las pestañas Resumen, Tutor IA y Notas. El tutor se ve como en la tarjeta «Ask Anything».
 - **Un acento de color principal.** Se elige al diseñar.
 - **Se mantiene del hotel:** una sola tipografía, líneas finas, nada recargado y nada infantil.
+- **Cómo se diseña (pedido del dueño, 15 nov):** con las skills `impeccable` y `taste-skill`, y siguiendo las buenas prácticas web modernas de Google (rendimiento, accesibilidad, PWA).
 
 ## 7. Las pantallas
 
