@@ -4,22 +4,26 @@ Dirección fijada por el dueño el 15 nov: sus referencias de Pinterest (Vektora
 
 ## Mundo
 
-Un cuaderno de estudio moderno y sereno: fondo azulado muy suave, tarjetas claras redondeadas que flotan apenas, un solo acento cobalto que marca lo que se domina y lo que se hace ahora. Profesional, nunca infantil. Funciona igual en modo claro y oscuro (el docente elige; arranca con el del teléfono).
+Tras ver las referencias, el dueño eligió DoDo (15 nov): lienzo verdoso muy suave, barra lateral flotante con la persona arriba, acento lima, botones negros y la palabra clave del saludo en amarillo. Profesional, nunca infantil. Modo claro y oscuro (el docente elige; arranca con el del teléfono).
 
 ## Color
 
 | Token | Claro | Oscuro | Uso |
 |---|---|---|---|
-| `bg` | #F2F4F8 | #0D1017 | Fondo de la app (tintado, no gris plano) |
-| `surface` | #FDFDFE | #151A23 | Tarjetas y barra lateral |
-| `surface-2` | #F6F7FA | #1B212C | Rellenos suaves, hover, pistas |
-| `ink` / `ink-2` / `ink-3` | #121826 / #4A5265 / #646C80 | #EEF1F7 / #B3BACA / #8E96A9 | Texto, secundario, etiquetas |
-| `line` / `line-2` | #E3E6EE / #EEF0F5 | #262D3A / #1F2531 | Bordes de 1 px |
-| `accent` | #2E5BFF | #6D8BFF | Acción principal, selección, progreso, dominio |
-| `warm` | #E8590C | #FF8A4C | Solo la racha (energía del día) |
-| `ok` / `bad` / `wip` | #12805C / #C92A36 / #A35F00 | #3FC08E / #FF6B76 / #F2B14B | Correcto, incorrecto, aprendiendo |
+| `bg` | #ECEEE6 | #0F110F | Lienzo de la app |
+| `surface` / `surface-2` | #FDFDFB / #F5F6F0 | #181B18 / #1F231F | Tarjetas, barra lateral; rellenos suaves |
+| `ink` / `ink-2` / `ink-3` | #16181A / #4B504C / #656B66 | #F1F3EC / #BCC2B8 / #8F968C | Texto |
+| `line` / `line-2` | #E2E5DC / #EEF0E8 | #2A2F29 / #222721 | Bordes de 1 px |
+| `accent` (relleno) | #D9F26B | #D9F26B | Navegación activa, chips, marca; siempre con texto `on-accent` oscuro |
+| `accent-ink` | #4A6300 | #D9F26B | Texto e íconos «de acento» (con contraste) |
+| `primary` | #16181A | #D9F26B | Botón principal (negro en claro, lima en oscuro) |
+| `destacado` | #16181A | #D9F26B | Tarjeta «lo que toca ahora» (como la tarjeta negra de DoDo) |
+| `resalte` | #B98400 | #F6C944 | La palabra clave del saludo («aprendemos») |
+| `anillo` | #86AE12 | #D9F26B | Anillos y barras de progreso |
+| `warm` | #C77700 | #F6B73C | Solo la racha |
+| `ok` / `bad` / `wip` | verde / rojo / ámbar | | Correcto, incorrecto, aprendiendo |
 
-**Escala de dominio** (un solo tono, de vacío a cobalto): sin empezar `line-2`; 1–39 `dom-1`; 40–69 `dom-2`; 70–79 `dom-3`; 80+ dominado `accent`.
+**Escala de dominio** (lima de vacío a lleno): `dom-0` sin empezar → `dom-4` dominado.
 
 ## Tipo
 
@@ -32,11 +36,11 @@ Una sola familia: **Instrument Sans** (decisión del dueño). Cifras con `tabula
 
 - Tarjetas: radio 20 px, borde `line` de 1 px y sombra suave tintada.
 - Controles (botones, campos, opciones): radio 12 px. Chips y pastillas: radio completo.
-- Botón principal: cobalto, 44–48 px de alto. Al presionar baja 1 px.
+- Botón principal: negro en claro y lima en oscuro, 44–48 px de alto. Al presionar baja 1 px.
 
 ## Piezas
 
-- **Cascarón:** barra lateral de 248 px en computadora (marca, Inicio, Curso, Simulacro, Perfil; Admin para administración; abajo, tema claro/oscuro y cuenta). En teléfono, barra inferior de 4 pestañas y cabecera compacta.
+- **Cascarón:** barra lateral flotante de 272 px (tarjeta de radio 28 px con avatar y nombre arriba) en computadora (marca, Inicio, Curso, Simulacro, Perfil; Admin para administración; abajo, tema claro/oscuro y cuenta). En teléfono, barra inferior de 4 pestañas y cabecera compacta.
 - **Mapa de dominio (movimiento distintivo):** los 31 temas como un mosaico de baldosas agrupadas por unidad, cada una teñida por su nivel en la escala de dominio. Aparece en el resultado del diagnóstico (se «revela» baldosa por baldosa), en Inicio y en Perfil. Es dato real, no decoración.
 - **Anillo de preparación:** un solo anillo grande con el % de preparación (dato real, pedido en las referencias).
 - **Laboratorio:** célula animal y vegetal dibujadas en SVG con zonas tocables. Es el único dibujo a mano y se justifica porque es contenido interactivo.
