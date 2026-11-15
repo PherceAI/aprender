@@ -16,8 +16,8 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Evaluaciones · Hotel Zeus',
-  description: 'Evaluación mensual del personal de Hotel Zeus, Riobamba.',
+  title: 'Ruta Docente',
+  description: 'Prepárate para la Evaluación del Desempeño Docente.',
 };
 
 export const viewport: Viewport = {
