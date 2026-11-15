@@ -102,7 +102,7 @@ Especialidad (Ciencias Naturales)
 | 8. Materia y energía | El carbono y las biomoléculas · El movimiento y la fuerza |
 | 9. La Tierra y el Universo | Origen y estructura del universo · Ciclos biogeoquímicos · Efectos antrópicos · Origen de la vida · Cambios geológicos |
 
-Las lecciones de cada tema son los subtemas del PDF, que en total son cerca de 90.
+Las lecciones de cada tema son los subtemas del PDF: 70 en total (13 de generales y 57 de Ciencias Naturales).
 
 ### Qué lleva cada tema
 

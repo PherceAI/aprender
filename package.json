@@ -6,9 +6,10 @@
     "dev": "next dev -p 3200",
     "build": "next build",
     "start": "next start",
-    "sembrar": "tsx scripts/sembrar.ts",
+    "sembrar": "tsx scripts/sembrar.mts",
     "db:generar": "drizzle-kit generate",
-    "test": "tsx --test tests/*.test.mts"
+    "test": "tsx --test tests/*.test.mts",
+    "temario": "tsx scripts/temario.mts"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.16",

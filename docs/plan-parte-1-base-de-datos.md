@@ -117,7 +117,7 @@
 - Create: `contenido/generales/preguntas.ts`, `contenido/ccnn-egb-superior/preguntas.ts` y `contenido/ccnn-egb-superior/anatomia-celular.ts` (las lecciones con contenido).
 
 **Qué contiene:**
-- Diagnóstico: 18 preguntas, 2 por unidad. Mezclan los 5 formatos y hay al menos 2 con `dibujo`.
+- Diagnóstico: 18 preguntas, 2 por unidad. Mezclan los 5 formatos y hay al menos 1 con `dibujo` (por ahora solo hay laboratorios de células).
 - Tema «Anatomía celular»: 2 lecciones con contenido y unas 14 preguntas (diagnóstico del tema, práctica y prueba).
 - Simulacro corto: unas 12 preguntas de otras unidades.
 
