@@ -23,6 +23,13 @@ Es una academia en línea para que los **docentes** de Ecuador (no los estudiant
 - **Nunca debe haber scroll horizontal en el teléfono.** En móvil las grillas usan `grid-cols-[minmax(0,1fr)]`, y en cada página `scrollWidth` debe ser igual al ancho de la pantalla.
 - Ya se rechazaron dos versiones: una en cobalto y otra lima/crema estilo DoDo.
 
+## Decisiones del 15 nov (noche)
+- La plataforma se llama **Pragma**. El logo del dueño está en public/marca/: el símbolo va en el naranja de la plataforma y el ícono de la app es naranja con el símbolo blanco.
+- La landing sigue las referencias del dueño: academia con fotos de docentes (Unsplash, créditos en public/landing/CREDITOS.md), pasos con íconos, especialidades, «aprende más inteligente», preguntas frecuentes y banner final. Poco texto. Rechazó las versiones tipográficas y planas.
+- Modelo de negocio: entra gratis (diagnóstico y 2 lecciones). El resto, las pruebas de tema y los simulacros se desbloquean con un **pago único** que el administrador activa en el panel. La regla está en lib/acceso.ts.
+- Para diseñar: correr Impeccable completo y Taste Skill, y mostrar opciones o referencias antes de programar.
+- El checklist de pulido está en docs/pulido-checklist.md.
+
 ## Producción
 - URL: https://aprender.automationpherce.cloud
 - Repo: github.com/PherceAI/aprender (privado), rama main.
