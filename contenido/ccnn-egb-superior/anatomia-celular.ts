@@ -47,7 +47,7 @@ export const ANATOMIA_CELULAR: Tema = tema(
           titulo: '¿Por qué el antibiótico no nos daña?',
           situacion: 'El médico receta penicilina para una infección de garganta causada por bacterias. El antibiótico elimina a las bacterias, pero no daña las células de la persona.',
           explicacion:
-            'La penicilina impide que la bacteria construya su pared celular de peptidoglucano. Nuestras células son eucariotas animales y no tienen pared celular, así que el antibiótico no tiene dónde actuar. Una diferencia de estructura entre procariotas y eucariotas, con consecuencias en la vida real.',
+            'La penicilina impide que la bacteria construya su pared celular de peptidoglucano. Nuestras células son eucariotas animales y no tienen pared celular, así que el antibiótico no tiene dónde actuar. Una diferencia de estructura entre la célula bacteriana y la nuestra, con consecuencias en la vida real.',
         },
         {
           tipo: 'laboratorio',
@@ -69,7 +69,7 @@ export const ANATOMIA_CELULAR: Tema = tema(
           titulo: 'Entrenar cambia tus células',
           situacion: 'Una docente empieza a entrenar para una carrera de 10 km. Después de unos meses se cansa mucho menos. Si se observaran sus células musculares, tendrían más mitocondrias que al inicio.',
           explicacion:
-            'La mitocondria produce la energía de la célula (ATP) mediante la respiración celular. Con el entrenamiento de resistencia, las células musculares fabrican más mitocondrias porque se les pide más energía. La estructura cambia porque cambia la función que se le exige.',
+            'La mitocondria produce la mayor parte de la energía de la célula (ATP) mediante la respiración celular. Con el entrenamiento de resistencia, las células musculares fabrican más mitocondrias porque se les pide más energía. La estructura cambia porque cambia la función que se le exige.',
         },
         {
           tipo: 'aula',
@@ -107,7 +107,7 @@ export const ANATOMIA_CELULAR: Tema = tema(
           titulo: 'La papa que se pone verde',
           situacion: 'Por dentro, la papa es blanca. Pero si dejas unas papas varios días al sol, su cáscara se pone verdosa.',
           explicacion:
-            'Las células de la papa guardan su reserva de energía como almidón, propio de las plantas, dentro de plastidios llamados amiloplastos. Con la luz, esos plastidios se transforman en cloroplastos y fabrican clorofila. Por eso no todas las células vegetales tienen cloroplastos: solo las que reciben luz.',
+            'Las células de la papa guardan su reserva de energía como almidón, propio de las plantas, dentro de plastidios llamados amiloplastos. Con la luz, esos amiloplastos pueden transformarse en cloroplastos y fabricar clorofila. Por eso los órganos que crecen bajo tierra, como la raíz o el tubérculo, normalmente no tienen cloroplastos. Ojo en el aula: la papa verde también acumula solanina y no se debe comer esa parte.',
         },
         {
           tipo: 'laboratorio',

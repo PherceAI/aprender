@@ -91,3 +91,12 @@ export async function perfilDe(db: Db, usuarioId: string, ahora: Date = new Date
     },
   };
 }
+
+/** Los temas en tres grupos según lo que hizo el docente (no según dónde lo ubicó el diagnóstico). */
+export function gruposDeTemas<T extends {estado: string}>(temas: T[]) {
+  return {
+    dominados: temas.filter((t) => t.estado === 'dominado'),
+    enCamino: temas.filter((t) => t.estado === 'aprendiendo' || t.estado === 'repasar'),
+    porEmpezar: temas.filter((t) => t.estado === 'sin-empezar'),
+  };
+}

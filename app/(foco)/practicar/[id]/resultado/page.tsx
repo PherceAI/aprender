@@ -7,6 +7,7 @@ import {getDb} from '@/lib/db';
 import {ErrorAcademia, terminarIntento} from '@/lib/intentos';
 import {siguientePaso} from '@/lib/ruta';
 import {TITULO_INTENTO} from '@/lib/vista';
+import {destinoResultado} from '@/lib/resultado';
 import {Anillo, Marca, btn} from '@/components/ui';
 import {BotonIniciar} from '@/components/boton-iniciar';
 import {SaltarBoton} from './saltar';
@@ -67,9 +68,7 @@ export default async function Resultado({params}: {params: Promise<{id: string}>
 
   const ref = r.referencia;
   const volverLeccion = r.tipo === 'practica' && ref ? `/leccion/${ref}` : null;
-  const destino =
-    sig.tipo === 'leccion' ? `/leccion/${sig.leccionId}` : sig.tipo === 'prueba-tema' ? `/curso/${sig.temaId}` : ref && r.tipo !== 'simulacro' && r.tipo !== 'repaso' ? `/curso/${r.porTema[0]?.id ?? ''}` : '/inicio';
-  const textoDestino = sig.tipo === 'leccion' ? `Seguir: lección ${sig.numero} de ${sig.temaNombre}` : sig.tipo === 'prueba-tema' ? `Ir a la prueba de ${sig.temaNombre}` : 'Volver al inicio';
+  const {href: destino, texto: textoDestino} = destinoResultado(sig, r.tipo, ref);
 
   return (
     <div className="mx-auto max-w-[820px] px-4 py-6 sm:px-6 lg:py-10">

@@ -3,9 +3,10 @@ import Link from 'next/link';
 import {BookCheck, Flame, ListChecks, Target} from 'lucide-react';
 import {requerirDocente} from '@/lib/auth/cookies';
 import {getDb} from '@/lib/db';
-import {perfilDe} from '@/lib/perfil';
+import {gruposDeTemas, perfilDe} from '@/lib/perfil';
+import {hoyEc} from '@/lib/util';
 import {mapaCurso} from '@/lib/curso';
-import {historialPreparacion} from '@/lib/avance';
+import {conHoy, historialPreparacion} from '@/lib/avance';
 import {Anillo} from '@/components/ui';
 import {GraficoPreparacion} from '@/components/grafico-preparacion';
 
@@ -21,9 +22,8 @@ export default async function MiProgreso() {
   const u = await requerirDocente();
   const db = await getDb();
   const [p, mapa, historia] = await Promise.all([perfilDe(db, u.id), mapaCurso(db, u.id), historialPreparacion(db, u.id, 30)]);
-  const dominados = p.temas.filter((t) => t.estado === 'dominado');
-  const enCamino = p.temas.filter((t) => t.estado !== 'dominado' && t.nivel > 0);
-  const porEmpezar = p.temas.filter((t) => t.estado !== 'dominado' && t.nivel === 0);
+  const {dominados, enCamino, porEmpezar} = gruposDeTemas(p.temas);
+  const evolucion = conHoy(historia, hoyEc(new Date()), p.preparacion);
   const nombreTema = new Map(p.temas.map((t) => [t.temaId, t.nombre]));
   const historial = [
     ...p.pruebas.map((x) => ({tipo: 'Prueba del tema', nombre: nombreTema.get(x.temaId) ?? x.temaId, puntaje: x.puntaje, fecha: x.fecha})),
@@ -59,7 +59,7 @@ export default async function MiProgreso() {
         <section className="card p-5 sm:p-6">
           <h2 className="text-[18px] font-semibold tracking-[-0.02em] text-ink">Tu evolución</h2>
           <p className="mb-4 text-[14px] text-ink-2">Tu preparación en los últimos 30 días.</p>
-          <GraficoPreparacion puntos={historia} />
+          <GraficoPreparacion puntos={evolucion} />
         </section>
       </div>
 
@@ -94,7 +94,7 @@ export default async function MiProgreso() {
         {[
           {titulo: 'Dominados', lista: dominados, vacio: 'Aún ninguno. Con 80 % en la prueba de un tema, queda aquí.', punto: 'bg-ok'},
           {titulo: 'En camino', lista: enCamino, vacio: 'Los temas que vas estudiando aparecen aquí.', punto: 'bg-accent'},
-          {titulo: 'Por empezar', lista: porEmpezar, vacio: '¡Ya empezaste todos!', punto: 'bg-line'},
+          {titulo: 'Por empezar', lista: porEmpezar, vacio: '¡Ya empezaste todos!', punto: 'bg-ink-3'},
         ].map((g) => (
           <div key={g.titulo} className="card p-5">
             <h2 className="flex items-center justify-between text-[16px] font-semibold text-ink">

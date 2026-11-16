@@ -31,3 +31,10 @@ export async function historialPreparacion(db: Db, usuarioId: string, dias = 30,
     .where(and(eq(preparacionDias.usuarioId, usuarioId), gte(preparacionDias.dia, desde)))
     .orderBy(asc(preparacionDias.dia));
 }
+
+/** El historial terminando en la preparación de hoy (la misma que muestra el anillo). Sin estudio, no inventa puntos. */
+export function conHoy(historia: {dia: string; preparacion: number}[], hoy: string, valor: number): {dia: string; preparacion: number}[] {
+  if (!historia.length && valor === 0) return [];
+  const previos = historia.filter((h) => h.dia !== hoy);
+  return [...previos, {dia: hoy, preparacion: valor}];
+}

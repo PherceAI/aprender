@@ -35,8 +35,10 @@ Checklist de lo que pidieron el dueño y su cuñado después de probar la demo. 
 - [x] Notas arregladas: se perdían al cambiar de pestaña y al salir rápido; ahora viven en la lección y se guardan al escribir, al cerrar y al salir.
 
 ## 6. Retroalimentación y progreso visible
-- [ ] Después de cada práctica o prueba: qué mejoró, en qué tema y cuánto subió su preparación.
-- [ ] En el perfil: la evolución en el tiempo (antes y ahora) y los temas que pasaron de débil a dominado.
+- [x] Después de cada práctica, prueba o simulacro: «Tu avance» con el nivel del tema y la preparación antes y después (se guarda y no cambia al recargar).
+- [x] «Mi progreso»: preparación, gráfico de evolución por día, nivel por prueba, temas en tres grupos (dominados, en camino, por empezar), lo que más se le complica e historial de pruebas y simulacros.
+- [x] Simulacros, bienvenida e ingreso con el estilo nuevo; candado claro con cuenta gratis; «¿No tienes cuenta? Empieza gratis».
+- [x] Lecciones con ejemplos de la vida real (situación → pensar por qué → explicación). Los 4 de Anatomía celular deben pasar por la revisión del docente experto.
 
 ## 7. Referencias al PDF oficial
 - [x] El PDF de la ficha técnica dentro de la plataforma (barra lateral «Ficha oficial»).
