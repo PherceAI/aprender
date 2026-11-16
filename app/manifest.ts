@@ -3,8 +3,8 @@ import type {MetadataRoute} from 'next';
 // Para instalar la plataforma como app en el teléfono («Agregar a pantalla de inicio»).
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Ruta Docente',
-    short_name: 'Ruta Docente',
+    name: 'Pragma',
+    short_name: 'Pragma',
     description: 'Prepárate para la Evaluación del Desempeño Docente con un método que se adapta a ti.',
     lang: 'es-EC',
     start_url: '/inicio',

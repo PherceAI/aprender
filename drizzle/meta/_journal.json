@@ -15,6 +15,13 @@
       "when": 1794785494588,
       "tag": "0001_tutor-sin-leccion",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794802601678,
+      "tag": "0002_plan-gratis",
+      "breakpoints": true
     }
   ]
 }

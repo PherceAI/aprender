@@ -1,4 +1,4 @@
-# Design · Ruta Docente
+# Design · Pragma
 
 Dirección fijada por el dueño el 15 nov: sus referencias de Pinterest (Vektora Academy, Edulearn, Quest, DoDo, AdsVoice) más el estilo limpio de sus apps del hotel. Por eso no se sorteó un mundo visual: lo eligió él (ver PRODUCT.md, Brand Commitments). Tokens en `app/globals.css`; piezas en `components/`.
 

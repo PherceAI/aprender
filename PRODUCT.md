@@ -32,7 +32,7 @@ No es un curso de videos ni un banco de preguntas: es un método. Diagnóstico c
 - Ver `VISION.md` (fuente de verdad) y `docs/plan-parte-*.md`. Lógica del servidor completa y probada en `lib/`.
 - Debe funcionar en teléfono y computadora, e instalarse como app (PWA).
 - No usar el nombre ni el logo del Ineval como marca; aviso visible «No somos el Ineval».
-- Nombre provisional: «Ruta Docente».
+- Nombre: «Pragma» (decidido por el dueño el 15 nov, con su logo en public/marca/).
 - Sin decidir: precio, pagos, nombre definitivo, dominio.
 
 ## Brand Commitments

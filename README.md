@@ -1,4 +1,4 @@
-# Ruta Docente
+# Pragma
 
 Plataforma para que los docentes de Ecuador se preparen para la Evaluación del Desempeño Docente del Ineval. Empieza con Ciencias Naturales (EGB Superior), Dimensión 1.
 

@@ -1,4 +1,4 @@
-# Ruta Docente (academia docente)
+# Pragma (academia docente)
 
 Este es un proyecto aparte de PherceStudio y no se mezcla con él. Responde siempre en español. Lee VISION.md, PRODUCT.md y DESIGN.md antes de trabajar.
 
@@ -26,7 +26,7 @@ Es una academia en línea para que los **docentes** de Ecuador (no los estudiant
 ## Producción
 - URL: https://aprender.automationpherce.cloud
 - Repo: github.com/PherceAI/aprender (privado), rama main.
-- Coolify en panel.automationpherce.cloud, proyecto "Ruta Docente":
+- Coolify en panel.automationpherce.cloud, proyecto "Ruta Docente" (nombre viejo en Coolify):
   - app awqesizwrfjoonek78fkjgwo
   - Postgres 53mtcwipdsyvonzdzlbx622y
   - volumen /data

@@ -5,6 +5,7 @@ import {ArrowLeft, CheckCircle2, Circle, Clapperboard, Lock, PlayCircle, Target}
 import {requerirDocente} from '@/lib/auth/cookies';
 import {getDb} from '@/lib/db';
 import {temaDetalle} from '@/lib/curso';
+import {leccionesGratis, planDe} from '@/lib/acceso';
 import {ErrorAcademia} from '@/lib/intentos';
 import {Anillo, EtiquetaEstado, btn} from '@/components/ui';
 import {BotonIniciar} from '@/components/boton-iniciar';
@@ -14,13 +15,16 @@ export const metadata: Metadata = {title: 'Tema'};
 export default async function Tema({params}: {params: Promise<{tema: string}>}) {
   const {tema} = await params;
   const u = await requerirDocente();
+  const db = await getDb();
   let t;
   try {
-    t = await temaDetalle(await getDb(), u.id, tema);
+    t = await temaDetalle(db, u.id, tema);
   } catch (e) {
     if (e instanceof ErrorAcademia) notFound();
     throw e;
   }
+  const [plan, gratis] = await Promise.all([planDe(db, u.id), leccionesGratis(db)]);
+  const bloqueada = (id: string) => plan === 'gratis' && !gratis.has(id);
   const hechas = t.lecciones.filter((l) => l.completada).length;
   const siguiente = t.lecciones.find((l) => !l.completada) ?? t.lecciones[0];
 
@@ -71,7 +75,7 @@ export default async function Tema({params}: {params: Promise<{tema: string}>}) 
                 const contenido = (
                   <>
                     <span className="mt-0.5 shrink-0">
-                      {!t.abierto ? <Lock size={20} className="text-ink-3" /> : l.completada ? <CheckCircle2 size={21} className="text-accent-ink" /> : <Circle size={21} className="text-ink-3" />}
+                      {!t.abierto || bloqueada(l.id) ? <Lock size={20} className="text-ink-3" /> : l.completada ? <CheckCircle2 size={21} className="text-accent-ink" /> : <Circle size={21} className="text-ink-3" />}
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="block text-[15.5px] font-semibold text-ink">
@@ -79,7 +83,7 @@ export default async function Tema({params}: {params: Promise<{tema: string}>}) 
                       </span>
                       <span className="mt-0.5 block text-[13.5px] leading-snug text-ink-3">{l.objetivo}</span>
                     </span>
-                    {t.abierto && <span className="num shrink-0 text-[12.5px] text-ink-3">{l.minutos} min</span>}
+                    {t.abierto && (bloqueada(l.id) ? <span className="shrink-0 rounded-full bg-accent-soft px-2 py-0.5 text-[11.5px] font-semibold text-accent-ink">Acceso completo</span> : <span className="num shrink-0 text-[12.5px] text-ink-3">{l.minutos} min</span>)}
                   </>
                 );
                 return (

@@ -40,7 +40,7 @@ export function llamarGemini(clave = process.env.GEMINI_API_KEY ?? '', modelo = 
   };
 }
 
-const BASE = `Eres el tutor de Ruta Docente, una plataforma donde docentes de Ecuador se preparan para la Evaluación del Desempeño Docente del Ineval (Dimensión 1: saberes disciplinares).
+const BASE = `Eres el tutor de Pragma, una plataforma donde docentes de Ecuador se preparan para la Evaluación del Desempeño Docente del Ineval (Dimensión 1: saberes disciplinares).
 Hablas con un docente en ejercicio: trátalo de tú, con respeto y calidez, como un colega que sabe del tema.
 Reglas:
 - Responde en español sencillo, en 120 palabras o menos, sin títulos. Usa listas cortas solo si ayudan.
@@ -108,6 +108,7 @@ export async function preguntarTutor(
   if (!pregunta) throw new ErrorAcademia('invalida', 'Escribe tu pregunta');
   const l = await leccion(db, usuarioId, leccionId);
   if (l === 'tema-cerrado') throw new ErrorAcademia('tema-cerrado', 'Este tema estará disponible próximamente');
+  if (l === 'bloqueada') throw new ErrorAcademia('bloqueado', 'Esta lección es parte del acceso completo');
   const restantes = await conLimite(db, usuarioId, ahora);
 
   const previos = await db

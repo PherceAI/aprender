@@ -1,4 +1,5 @@
 import type {Metadata} from 'next';
+import {accionCambiarPlan} from '@/app/acciones';
 import {requerirAdmin} from '@/lib/auth/cookies';
 import {getDb} from '@/lib/db';
 import {docentesConAvance, resumenAdmin, temasYVideos} from '@/lib/admin';
@@ -55,6 +56,14 @@ export default async function Admin() {
                   <p className="num text-right text-[14px] text-ink sm:text-left">{d.diagnosticoHecho ? `${d.preparacion} %` : <span className="text-ink-3">Sin diagnóstico</span>}</p>
                   <p className="num text-[13px] text-ink-3 sm:text-[14px] sm:text-ink">{d.lecciones} lecciones</p>
                   <p className="text-right text-[13px] text-ink-3 sm:text-left">{fecha(d.ultimoIngreso)}</p>
+                  <form action={accionCambiarPlan.bind(null, d.id, d.plan === 'gratis' ? 'completo' : 'gratis')} className="col-span-full flex items-center gap-2">
+                    <span className={`rounded-full px-2.5 py-0.5 text-[12px] font-semibold ${d.plan === 'gratis' ? 'bg-surface-2 text-ink-2' : 'bg-ok-soft text-ok'}`}>
+                      {d.plan === 'gratis' ? 'Cuenta gratis' : 'Acceso completo'}
+                    </span>
+                    <button className="text-[12.5px] font-semibold text-accent-ink hover:underline">
+                      {d.plan === 'gratis' ? 'Activar acceso completo' : 'Pasar a gratis'}
+                    </button>
+                  </form>
                 </li>
               ))}
             </ul>

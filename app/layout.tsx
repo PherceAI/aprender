@@ -9,10 +9,10 @@ const instrument = Instrument_Sans({
 });
 
 export const metadata: Metadata = {
-  title: {default: 'Ruta Docente', template: '%s · Ruta Docente'},
+  title: {default: 'Pragma', template: '%s · Pragma'},
   description: 'Prepárate para la Evaluación del Desempeño Docente con un método que se adapta a ti.',
-  applicationName: 'Ruta Docente',
-  appleWebApp: {capable: true, title: 'Ruta Docente', statusBarStyle: 'default'},
+  applicationName: 'Pragma',
+  appleWebApp: {capable: true, title: 'Pragma', statusBarStyle: 'default'},
 };
 
 export const viewport: Viewport = {

@@ -126,6 +126,8 @@ export const usuarios = pgTable(
     correo: text().notNull(),
     claveHash: text().notNull(),
     rol: text({enum: ['docente', 'admin']}).notNull().default('docente'),
+    /** «gratis»: se registró solo y ve las primeras lecciones. «completo»: pagó o la cuenta la creó el administrador. */
+    plan: text({enum: ['gratis', 'completo']}).notNull().default('completo'),
     especialidadId: text().references(() => especialidades.id),
     creado: timestamp({withTimezone: true}).notNull().defaultNow(),
     ultimoIngreso: timestamp({withTimezone: true}),

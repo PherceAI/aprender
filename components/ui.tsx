@@ -1,4 +1,3 @@
-import {Route} from 'lucide-react';
 import type {EstadoDominio} from '@/lib/dominio';
 
 // Piezas visuales compartidas. Tokens en app/globals.css; decisiones en DESIGN.md.
@@ -14,13 +13,12 @@ export const btn = {
 export const field =
   'h-12 w-full rounded-ctl border border-line bg-surface px-3.5 text-[16px] text-ink outline-none transition-[border-color,box-shadow] placeholder:text-ink-3 focus:border-accent-ink focus:shadow-[0_0_0_3px_color-mix(in_srgb,var(--accent)_60%,transparent)]';
 
-export function Marca({className = '', grande = false}: {className?: string; grande?: boolean}) {
+export function Marca({className = '', grande = false, claro = false}: {className?: string; grande?: boolean; claro?: boolean}) {
+  const simbolo = 'url(/marca/pragma-simbolo.png) center / contain no-repeat';
   return (
-    <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <span className={`grid shrink-0 place-items-center rounded-[10px] bg-accent text-on-accent ${grande ? 'h-10 w-10' : 'h-8 w-8'}`}>
-        <Route size={grande ? 22 : 18} strokeWidth={2.2} />
-      </span>
-      <span className={`font-semibold tracking-[-0.03em] text-ink ${grande ? 'text-[21px]' : 'text-[17px]'}`}>Ruta Docente</span>
+    <span className={`inline-flex items-center gap-2 ${className}`}>
+      <span aria-hidden className={`shrink-0 ${grande ? 'h-10 w-10' : 'h-8 w-8'} ${claro ? 'bg-white' : 'bg-accent'}`} style={{WebkitMask: simbolo, mask: simbolo}} />
+      <span className={`font-semibold tracking-[-0.035em] whitespace-nowrap ${claro ? 'text-white' : 'text-ink'} ${grande ? 'text-[24px]' : 'text-[19px]'}`}>Pragma</span>
     </span>
   );
 }
@@ -97,5 +95,5 @@ export function Barra({valor, className = ''}: {valor: number; className?: strin
 }
 
 export function Aviso() {
-  return <p className="text-[12px] leading-relaxed text-ink-3">Ruta Docente no es el Ineval ni habla en su nombre. El temario sale de la ficha técnica pública 2026.</p>;
+  return <p className="text-[12px] leading-relaxed text-ink-3">Pragma no es el Ineval ni habla en su nombre. El temario sale de la ficha técnica pública 2026.</p>;
 }

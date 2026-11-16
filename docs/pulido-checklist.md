@@ -1,5 +1,7 @@
 # Pulido tras la prueba del cuñado (15 nov 2026)
 
+Nombre de la plataforma: **Pragma** (logo del dueño en public/marca/).
+
 Checklist de lo que pidieron el dueño y su cuñado después de probar la demo. Se hace **una parte a la vez**: cada parte se termina, se publica y se revisa antes de pasar a la siguiente.
 
 ## 1. Página de aterrizaje que venda
@@ -7,10 +9,12 @@ Checklist de lo que pidieron el dueño y su cuñado después de probar la demo. 
 - [x] Mostrar el método paso a paso: diagnóstico → ruta → lecciones interactivas → práctica y repaso → simulacro.
 - [x] Dejar claro que todo sale de la ficha técnica oficial, con un enlace a la página exacta del PDF.
 - [x] Mostrar qué incluye (temario, formatos de pregunta, tutor con IA, celular), las preguntas frecuentes y que es pago único.
-- [ ] Botón de «Quiero acceso» que lleve a WhatsApp. **Falta que el dueño pase el número.**
+- [x] Landing rehecha con las referencias del dueño (fotos de stock de Unsplash, pasos con íconos, especialidades, banner final).
+- [ ] Botón «Quiero el acceso completo» a WhatsApp. **Falta que el dueño pase el número.**
 
-## 2. Autenticación
+## 2. Autenticación y cuenta gratis
 - [x] Correo y contraseña: está bien.
+- [x] Registro abierto desde la landing («Empieza gratis»): cuenta gratis con diagnóstico y las primeras 2 lecciones; el resto, las pruebas de tema y los simulacros se desbloquean con el pago único (el administrador lo activa en el panel).
 - [ ] Google: va al final (parte 8).
 
 ## 3. Diagnóstico más profundo

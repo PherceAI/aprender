@@ -50,6 +50,7 @@ export async function docentesConAvance(db: Db) {
       id: usuarios.id,
       nombre: usuarios.nombre,
       correo: usuarios.correo,
+      plan: usuarios.plan,
       especialidadId: usuarios.especialidadId,
       especialidad: especialidades.nombre,
       creado: usuarios.creado,

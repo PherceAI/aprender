@@ -1,6 +1,7 @@
 import {and, arrayOverlaps, asc, eq, inArray, isNull} from 'drizzle-orm';
 import {listaNumeros, listaOrden, listaParejas} from '../contenido/validar';
 import type {Db} from './db';
+import {planDe, puedeVerLeccion} from './acceso';
 import {
   bloques,
   especialidadBloques,
@@ -50,7 +51,7 @@ export const RETROALIMENTACION: Record<TipoIntento, 'inmediata' | 'al-final' | '
 
 export class ErrorAcademia extends Error {
   constructor(
-    public codigo: 'no-encontrado' | 'terminado' | 'tiempo' | 'repetida' | 'ajena' | 'tema-cerrado' | 'sin-preguntas' | 'sin-especialidad' | 'invalida',
+    public codigo: 'no-encontrado' | 'terminado' | 'tiempo' | 'repetida' | 'ajena' | 'tema-cerrado' | 'sin-preguntas' | 'sin-especialidad' | 'invalida' | 'bloqueado',
     mensaje: string
   ) {
     super(mensaje);
@@ -201,6 +202,12 @@ export async function iniciarIntento(
 ): Promise<VistaIntento> {
   if (tipo === 'diagnostico' || tipo === 'simulacro') referencia = await especialidadDe(db, usuarioId);
   if (tipo === 'repaso') referencia = null;
+  if ((tipo === 'prueba-tema' || tipo === 'simulacro') && (await planDe(db, usuarioId)) === 'gratis') {
+    throw new ErrorAcademia('bloqueado', tipo === 'simulacro' ? 'Los simulacros son parte del acceso completo' : 'La prueba del tema es parte del acceso completo');
+  }
+  if (tipo === 'practica' && referencia && !(await puedeVerLeccion(db, usuarioId, referencia))) {
+    throw new ErrorAcademia('bloqueado', 'Esta lección es parte del acceso completo');
+  }
 
   const abiertos = await db
     .select()

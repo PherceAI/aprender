@@ -17,5 +17,5 @@ export const PAGINAS_FICHA = {
 /** Enlace a WhatsApp para pedir acceso. Se configura con CONTACTO_WHATSAPP (solo dígitos, con código de país). */
 export function enlaceAcceso(): string | null {
   const n = (process.env.CONTACTO_WHATSAPP ?? '').replace(/\D/g, '');
-  return n ? `https://wa.me/${n}?text=${encodeURIComponent('Hola, quiero mi acceso a Ruta Docente.')}` : null;
+  return n ? `https://wa.me/${n}?text=${encodeURIComponent('Hola, quiero mi acceso a Pragma.')}` : null;
 }

@@ -1,0 +1,1 @@
+ALTER TABLE "usuarios" ADD COLUMN "plan" text DEFAULT 'completo' NOT NULL;

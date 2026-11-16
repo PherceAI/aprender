@@ -11,6 +11,7 @@ import {Secciones} from '@/components/leccion/secciones';
 import {PanelLeccion} from '@/components/leccion/panel';
 import {BotonIniciar} from '@/components/boton-iniciar';
 import {CompletarLeccion} from './completar';
+import {AccesoCompleto} from '@/components/acceso-completo';
 
 export const metadata: Metadata = {title: 'Lección'};
 
@@ -26,6 +27,7 @@ export default async function Leccion({params}: {params: Promise<{id: string}>})
     throw e;
   }
   if (l === 'tema-cerrado') redirect(`/curso/${id.replace(/-\d+$/, '')}`);
+  if (l === 'bloqueada') return <AccesoCompleto volver={{href: '/curso', texto: 'Volver al curso'}} texto="Esta lección es del acceso completo" />;
   const historial = await historialTutor(db, u.id, l.id);
   const despues = l.siguiente ? `/leccion/${l.siguiente.id}` : `/curso/${l.tema.id}`;
 

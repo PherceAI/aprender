@@ -10,7 +10,8 @@ import {completarLeccion, guardarNota} from '@/lib/curso';
 import {saltarTema} from '@/lib/dominio';
 import {ErrorAcademia, iniciarIntento, responder, terminarIntento, type Respuesta, type Retro, type TipoIntento} from '@/lib/intentos';
 import {porQueMeEquivoque, preguntarTutor, type RespuestaTutor} from '@/lib/tutor';
-import {elegirEspecialidad, ingresar} from '@/lib/usuarios';
+import {elegirEspecialidad, ingresar, registrar} from '@/lib/usuarios';
+import {cambiarPlan, type Plan} from '@/lib/acceso';
 import {crearDocente} from '@/lib/admin';
 import {quitarVideo} from '@/lib/videos';
 
@@ -33,6 +34,32 @@ export async function accionIngresar(_: Estado, form: FormData): Promise<Estado>
   limpiarFallos(llave);
   await iniciarSesion({uid: u.id, rol: u.rol});
   redirect(u.rol === 'admin' ? '/admin' : '/inicio');
+}
+
+/** Registro abierto desde la portada: cuenta gratis y directo a elegir la especialidad. */
+export async function accionRegistrar(_: Estado, form: FormData): Promise<Estado> {
+  const nombre = String(form.get('nombre') ?? '').trim().slice(0, 80);
+  const correo = String(form.get('correo') ?? '').trim();
+  const clave = String(form.get('clave') ?? '');
+  if (!nombre || !correo || !clave) return {error: 'Completa tu nombre, tu correo y una contraseña'};
+  const ip = (await headers()).get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'local';
+  const llave = `registro|${ip}`;
+  if (bloqueado(llave)) return {error: 'Se crearon muchas cuentas desde esta conexión. Espera 15 minutos.'};
+  let u;
+  try {
+    u = await registrar(await getDb(), {nombre, correo, clave});
+  } catch (e) {
+    return {error: e instanceof Error ? e.message : 'No pudimos crear tu cuenta'};
+  }
+  registrarFallo(llave);
+  await iniciarSesion({uid: u.id, rol: u.rol});
+  redirect('/bienvenida');
+}
+
+export async function accionCambiarPlan(usuarioId: string, plan: Plan) {
+  await requerirAdmin();
+  await cambiarPlan(await getDb(), usuarioId, plan);
+  revalidatePath('/admin');
 }
 
 export async function accionSalir() {

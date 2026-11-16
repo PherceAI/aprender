@@ -18,7 +18,7 @@ function publico(u: Usuario): UsuarioPublico {
 
 export async function crearUsuario(
   db: Db,
-  d: {nombre: string; correo: string; clave: string; rol?: Rol}
+  d: {nombre: string; correo: string; clave: string; rol?: Rol; plan?: 'gratis' | 'completo'}
 ): Promise<UsuarioPublico> {
   const correo = normalizarCorreo(d.correo);
   const nombre = d.nombre.trim();
@@ -28,7 +28,7 @@ export async function crearUsuario(
   if (await usuarioPorCorreo(db, correo)) throw new Error('Ya existe una cuenta con ese correo');
   const [u] = await db
     .insert(usuarios)
-    .values({id: newId('u'), nombre, correo, claveHash: hashClave(d.clave), rol: d.rol ?? 'docente'})
+    .values({id: newId('u'), nombre, correo, claveHash: hashClave(d.clave), rol: d.rol ?? 'docente', plan: d.plan ?? 'completo'})
     .returning();
   return publico(u);
 }
@@ -44,6 +44,11 @@ export async function usuarioPorCorreo(db: Db, correo: string): Promise<Usuario 
 export async function usuarioPorId(db: Db, id: string): Promise<UsuarioPublico | null> {
   const [u] = await db.select().from(usuarios).where(eq(usuarios.id, id));
   return u ? publico(u) : null;
+}
+
+/** Registro abierto desde la portada: cuenta de docente con plan gratis. */
+export async function registrar(db: Db, d: {nombre: string; correo: string; clave: string}): Promise<UsuarioPublico> {
+  return crearUsuario(db, {...d, rol: 'docente', plan: 'gratis'});
 }
 
 /** Devuelve el usuario si correo y contraseña coinciden, y anota su último ingreso. */
