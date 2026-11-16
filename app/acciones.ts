@@ -103,11 +103,17 @@ export async function accionTerminar(intentoId: string, destino: 'diagnostico' |
   redirect(destino === 'diagnostico' ? `/diagnostico/${intentoId}/resultado` : `/practicar/${intentoId}/resultado`);
 }
 
-export async function accionCompletarLeccion(leccionId: string, siguiente: string) {
+/** Al llegar a la última pantalla de la lección: la marca vista sin salir de la pantalla. */
+export async function accionMarcarLeccion(leccionId: string): Promise<{ok: true} | {error: string}> {
   const u = await requerirUsuario();
-  await completarLeccion(await getDb(), u.id, leccionId);
+  try {
+    await completarLeccion(await getDb(), u.id, leccionId);
+  } catch (e) {
+    if (e instanceof ErrorAcademia) return {error: e.message};
+    throw e;
+  }
   revalidatePath('/', 'layout');
-  redirect(siguiente);
+  return {ok: true};
 }
 
 export async function accionGuardarNota(leccionId: string, texto: string) {

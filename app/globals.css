@@ -251,6 +251,7 @@ h3 {
 /* Zonas del laboratorio */
 .zona {
   cursor: pointer;
+  outline: none;
   transition: fill 180ms, stroke 180ms, opacity 180ms, filter 180ms;
 }
 .zona:hover,

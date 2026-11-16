@@ -1,45 +1,16 @@
 'use client';
 
 import {useEffect, useRef, useState, useTransition} from 'react';
-import {LoaderCircle, NotebookPen, SendHorizontal, Sparkles} from 'lucide-react';
-import {accionGuardarNota, accionTutor} from '@/app/acciones';
+import {LoaderCircle, SendHorizontal} from 'lucide-react';
+import {accionTutor} from '@/app/acciones';
 
-// Panel lateral de la lección: el tutor con IA y las notas del docente.
+// Piezas del panel de la lección: el tutor con IA y las notas del docente.
 
 type Msg = {rol: 'docente' | 'tutor'; texto: string};
 
 const SUGERENCIAS = ['Explícamelo con un ejemplo del aula', '¿Qué es lo más preguntado de esto?', 'Hazme una pregunta para practicar'];
 
-export function PanelLeccion({leccionId, historial, nota, tutorActivo}: {leccionId: string; historial: Msg[]; nota: string; tutorActivo: boolean}) {
-  const [pestana, setPestana] = useState<'tutor' | 'notas'>('tutor');
-  return (
-    <div className="card flex flex-col overflow-hidden lg:sticky lg:top-6 lg:max-h-[calc(100dvh-48px)]">
-      <div className="flex gap-1 border-b border-line p-1.5" role="tablist">
-        {(
-          [
-            ['tutor', 'Tutor IA', Sparkles],
-            ['notas', 'Mis notas', NotebookPen],
-          ] as const
-        ).map(([id, texto, Icono]) => (
-          <button
-            key={id}
-            role="tab"
-            aria-selected={pestana === id}
-            onClick={() => setPestana(id)}
-            className={`flex h-10 flex-1 items-center justify-center gap-2 rounded-[10px] text-[14px] font-semibold transition-colors ${
-              pestana === id ? 'bg-surface-2 text-ink shadow-card' : 'text-ink-3 hover:bg-surface-2 hover:text-ink'
-            }`}
-          >
-            <Icono size={16} /> {texto}
-          </button>
-        ))}
-      </div>
-      {pestana === 'tutor' ? <Tutor leccionId={leccionId} inicial={historial} activo={tutorActivo} /> : <Notas leccionId={leccionId} inicial={nota} />}
-    </div>
-  );
-}
-
-function Tutor({leccionId, inicial, activo}: {leccionId: string; inicial: Msg[]; activo: boolean}) {
+export function Tutor({leccionId, inicial, activo}: {leccionId: string; inicial: Msg[]; activo: boolean}) {
   const [msgs, setMsgs] = useState<Msg[]>(inicial);
   const [texto, setTexto] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -130,34 +101,23 @@ function Tutor({leccionId, inicial, activo}: {leccionId: string; inicial: Msg[];
   );
 }
 
-function Notas({leccionId, inicial}: {leccionId: string; inicial: string}) {
-  const [texto, setTexto] = useState(inicial);
-  const [estado, setEstado] = useState<'' | 'guardando' | 'guardado'>('');
-  const primero = useRef(true);
-  useEffect(() => {
-    if (primero.current) {
-      primero.current = false;
-      return;
-    }
-    setEstado('guardando');
-    const t = setTimeout(async () => {
-      await accionGuardarNota(leccionId, texto);
-      setEstado('guardado');
-    }, 700);
-    return () => clearTimeout(t);
-  }, [texto, leccionId]);
+/** Notas de la lección. El texto vive en la lección (no se pierde al cambiar de pestaña) y se guarda solo. */
+export function Notas({texto, onCambio, estado}: {texto: string; onCambio: (t: string) => void; estado: '' | 'guardando' | 'guardado' | 'error'}) {
   return (
-    <div className="flex min-h-[340px] flex-1 flex-col p-4">
-      <label htmlFor="nota" className="text-[13.5px] font-medium text-ink-3">
+    <div className="flex min-h-[300px] flex-1 flex-col p-4">
+      <label htmlFor="nota" className="text-[13.5px] font-medium text-ink-2">
         Lo que quieras recordar de esta lección. Se guarda solo.
       </label>
       <textarea
         id="nota"
         value={texto}
-        onChange={(e) => setTexto(e.target.value)}
-        className="mt-2 min-h-[240px] flex-1 resize-none rounded-ctl border border-line bg-surface-2 p-3 text-[15px] leading-relaxed text-ink outline-none focus:border-accent-ink"
+        onChange={(e) => onCambio(e.target.value)}
+        placeholder="Por ejemplo: el Golgi empaca y envía las proteínas."
+        className="mt-2 min-h-[220px] flex-1 resize-none rounded-ctl border border-line bg-surface-2 p-3 text-[15px] leading-relaxed text-ink outline-none placeholder:text-ink-3 focus:border-accent-ink"
       />
-      <p className="mt-2 h-5 text-[12.5px] text-ink-3">{estado === 'guardando' ? 'Guardando…' : estado === 'guardado' ? 'Guardado' : ''}</p>
+      <p className="mt-2 h-5 text-[12.5px] text-ink-3" aria-live="polite">
+        {estado === 'guardando' ? 'Guardando…' : estado === 'guardado' ? 'Guardado' : estado === 'error' ? 'No se pudo guardar. Revisa tu conexión.' : ''}
+      </p>
     </div>
   );
 }

@@ -24,23 +24,23 @@ Checklist de lo que pidieron el dueño y su cuñado después de probar la demo. 
 - [x] Lo que falla en el diagnóstico vuelve al día siguiente en su repaso, con la explicación.
 
 ## 4. Experiencia después del diagnóstico (lo que más confundió)
-- [ ] Flujo progresivo y obvio: siempre un «siguiente paso» claro, sin pestañas mezcladas.
-- [ ] Recorrido de bienvenida la primera vez («así funciona tu ruta»).
-- [ ] Reordenar el inicio, la barra lateral, el curso y el perfil: qué se ve en cada lugar y por qué.
-- [ ] Estructura de academia real: curso → unidad → tema → lecciones → práctica → prueba del tema.
+- [x] Flujo progresivo y obvio: el Inicio muestra un solo «siguiente paso» y «Así avanzas en cada tema» con «Estás aquí».
+- [x] El método se explica donde se usa: en el informe del diagnóstico («Qué sigue ahora»), en el Inicio y en cada tema (pasos 1, 2 y 3).
+- [x] Barra lateral nueva: Inicio, Mi ruta, Repaso (con pendientes), Simulacros, Mi progreso y Ficha oficial. Mi ruta separa «Disponible ahora» del temario completo, sin mezclar color y candado.
+- [x] Estructura de academia: ruta → tema (1 lecciones, 2 prueba, 3 dominado) → lección por pantallas → práctica.
 
 ## 5. Lecciones de verdad interactivas
-- [ ] Cambiar la pantalla plana de texto por una lección por pasos: una idea por pantalla, con interacción y una pregunta de control.
-- [ ] Rehacer el laboratorio de la célula para que sea llamativo y útil.
-- [ ] Arreglar las notas, que no se guardaban.
+- [x] Lección por pantallas en modo concentración: tarjetas para descubrir, laboratorio con partes por encontrar, pregunta de control con explicación y cierre con lo más importante.
+- [x] Laboratorio con meta (explorar al menos 3 partes), lista de partes que se marcan y nombres que también se pueden tocar.
+- [x] Notas arregladas: se perdían al cambiar de pestaña y al salir rápido; ahora viven en la lección y se guardan al escribir, al cerrar y al salir.
 
 ## 6. Retroalimentación y progreso visible
 - [ ] Después de cada práctica o prueba: qué mejoró, en qué tema y cuánto subió su preparación.
 - [ ] En el perfil: la evolución en el tiempo (antes y ahora) y los temas que pasaron de débil a dominado.
 
 ## 7. Referencias al PDF oficial
-- [ ] El PDF de la ficha técnica dentro de la plataforma.
-- [ ] Cada tema y cada lección con un «Ver en la ficha oficial» que abra la página exacta.
+- [x] El PDF de la ficha técnica dentro de la plataforma (barra lateral «Ficha oficial»).
+- [x] Cada tema y cada lección con «Ver en la ficha oficial, pág. N» (páginas revisadas contra el PDF).
 
 ## 8. Google (al final)
 - [ ] Entrar con Google, además de correo y contraseña.
