@@ -1,6 +1,8 @@
 # Pragma (academia docente)
 
 Este es un proyecto aparte de PherceStudio y no se mezcla con él. Responde siempre en español. Lee VISION.md, PRODUCT.md y DESIGN.md antes de trabajar.
+**Si eres un chat nuevo, lee primero `docs/CONTEXTO.md`.**
+
 
 ## Qué es
 Es una academia en línea para que los **docentes** de Ecuador (no los estudiantes) se preparen para la Evaluación del Desempeño Docente del Ineval.
