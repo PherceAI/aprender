@@ -108,8 +108,8 @@ export default async function Portada() {
 
       <main>
         {/* Portada: la promesa y una pregunta real para probar el método. */}
-        <section className="mx-auto grid max-w-[1180px] grid-cols-[minmax(0,1fr)] items-center gap-10 px-4 pt-10 pb-16 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16 lg:pt-20 lg:pb-24">
-          <div className="rise">
+        <section className="mx-auto grid max-w-[1180px] grid-cols-[minmax(0,1fr)] items-start gap-10 px-4 pt-10 pb-16 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16 lg:pt-20 lg:pb-24">
+          <div className="rise lg:pt-6">
             <h1 className="text-[36px] leading-[1.06] font-semibold tracking-[-0.04em] text-balance text-ink sm:text-[50px]">
               Prepárate para la evaluación docente con una <span className="text-accent">ruta hecha para ti</span>.
             </h1>
