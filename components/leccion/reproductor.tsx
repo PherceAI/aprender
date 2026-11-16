@@ -226,7 +226,7 @@ export function Reproductor(props: {
 
 function requiereAccion(p: Pantalla) {
   if (p.tipo === 'control') return true;
-  if (p.tipo === 'seccion') return p.s.tipo === 'laboratorio' || p.s.tipo === 'puntos';
+  if (p.tipo === 'seccion') return p.s.tipo === 'laboratorio' || p.s.tipo === 'puntos' || p.s.tipo === 'ejemplo';
   return false;
 }
 
@@ -234,6 +234,7 @@ function pistaDe(p: Pantalla) {
   if (p.tipo === 'control') return 'Responde para seguir';
   if (p.tipo === 'seccion' && p.s.tipo === 'laboratorio') return 'Explora la célula';
   if (p.tipo === 'seccion' && p.s.tipo === 'puntos') return 'Toca las tarjetas';
+  if (p.tipo === 'seccion' && p.s.tipo === 'ejemplo') return 'Mira la explicación';
   return '';
 }
 
@@ -280,6 +281,8 @@ function PantallaSeccion({s, n, total, titulo, onListo}: {s: Seccion; n: number;
       );
     case 'laboratorio':
       return <Laboratorio s={s} n={n} total={total} onListo={onListo} />;
+    case 'ejemplo':
+      return <Ejemplo s={s} n={n} total={total} onListo={onListo} />;
     case 'aula':
       return (
         <div className="mx-auto max-w-[680px]">
@@ -383,6 +386,45 @@ function Laboratorio({s, n, total, onListo}: {s: Extract<Seccion, {tipo: 'labora
             if ((reto && retoCompleto) || (!reto && v >= meta)) onListo();
           }}
         />
+      </div>
+    </div>
+  );
+}
+
+/** Ejemplo de la vida real: primero piensa por qué pasa; después ve la explicación. */
+function Ejemplo({s, n, total, onListo}: {s: Extract<Seccion, {tipo: 'ejemplo'}>; n: number; total: number; onListo: () => void}) {
+  const [visto, setVisto] = useState(false);
+  return (
+    <div className="mx-auto max-w-[720px]">
+      <Etiqueta>
+        Pantalla {n} de {total} · Ejemplo
+      </Etiqueta>
+      <h1 className="mt-4 text-[28px] leading-tight font-semibold tracking-[-0.035em] text-ink sm:text-[34px]">{s.titulo ?? 'Míralo en la vida real'}</h1>
+      <div className="mt-6 rounded-[22px] border border-line bg-surface p-6 sm:p-8">
+        <p className="flex items-center gap-2 text-[14px] font-semibold text-accent-ink">
+          <Lightbulb size={17} /> La situación
+        </p>
+        <p className="mt-2 text-[18px] leading-[1.65] text-ink">{s.situacion}</p>
+        {!visto ? (
+          <div className="mt-6 border-t border-line pt-5">
+            <p className="text-[15.5px] font-medium text-ink-2">¿Por qué crees que pasa? Piénsalo un momento.</p>
+            <button
+              type="button"
+              onClick={() => {
+                setVisto(true);
+                onListo();
+              }}
+              className="mt-4 inline-flex h-12 items-center gap-2 rounded-full bg-accent px-6 text-[15px] font-semibold text-white"
+            >
+              Ver la explicación
+            </button>
+          </div>
+        ) : (
+          <div className="subir mt-6 rounded-[16px] bg-ok-soft p-5">
+            <p className="text-[15px] font-semibold text-ok">La explicación</p>
+            <p className="mt-1.5 text-[16.5px] leading-[1.65] text-ink">{s.explicacion}</p>
+          </div>
+        )}
       </div>
     </div>
   );

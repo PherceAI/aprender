@@ -13,7 +13,7 @@ export const ANATOMIA_CELULAR: Tema = tema(
   ],
   {
     abierto: true,
-    minutos: {1: 7, 2: 7},
+    minutos: {1: 9, 2: 9},
     contenido: {
       1: [
         {
@@ -43,6 +43,13 @@ export const ANATOMIA_CELULAR: Tema = tema(
           ],
         },
         {
+          tipo: 'ejemplo',
+          titulo: '¿Por qué el antibiótico no nos daña?',
+          situacion: 'El médico receta penicilina para una infección de garganta causada por bacterias. El antibiótico elimina a las bacterias, pero no daña las células de la persona.',
+          explicacion:
+            'La penicilina impide que la bacteria construya su pared celular de peptidoglucano. Nuestras células son eucariotas animales y no tienen pared celular, así que el antibiótico no tiene dónde actuar. Una diferencia de estructura entre procariotas y eucariotas, con consecuencias en la vida real.',
+        },
+        {
           tipo: 'laboratorio',
           lab: 'celula-animal',
           consigna: 'Toca cada organelo para descubrir qué hace. Antes de abrirlo, intenta adivinar su función.',
@@ -56,6 +63,13 @@ export const ANATOMIA_CELULAR: Tema = tema(
             'Las neuronas tienen prolongaciones largas (axón y dendritas) para llevar impulsos lejos.',
             'Los glóbulos rojos maduros de los mamíferos pierden el núcleo: queda más espacio para la hemoglobina.',
           ],
+        },
+        {
+          tipo: 'ejemplo',
+          titulo: 'Entrenar cambia tus células',
+          situacion: 'Una docente empieza a entrenar para una carrera de 10 km. Después de unos meses se cansa mucho menos. Si se observaran sus células musculares, tendrían más mitocondrias que al inicio.',
+          explicacion:
+            'La mitocondria produce la energía de la célula (ATP) mediante la respiración celular. Con el entrenamiento de resistencia, las células musculares fabrican más mitocondrias porque se les pide más energía. La estructura cambia porque cambia la función que se le exige.',
         },
         {
           tipo: 'aula',
@@ -89,6 +103,13 @@ export const ANATOMIA_CELULAR: Tema = tema(
           ],
         },
         {
+          tipo: 'ejemplo',
+          titulo: 'La papa que se pone verde',
+          situacion: 'Por dentro, la papa es blanca. Pero si dejas unas papas varios días al sol, su cáscara se pone verdosa.',
+          explicacion:
+            'Las células de la papa guardan su reserva de energía como almidón, propio de las plantas, dentro de plastidios llamados amiloplastos. Con la luz, esos plastidios se transforman en cloroplastos y fabrican clorofila. Por eso no todas las células vegetales tienen cloroplastos: solo las que reciben luz.',
+        },
+        {
           tipo: 'laboratorio',
           lab: 'celula-vegetal',
           consigna: 'Encuentra y toca las tres estructuras que la célula animal no tiene.',
@@ -102,6 +123,13 @@ export const ANATOMIA_CELULAR: Tema = tema(
             'No todas las células vegetales tienen cloroplastos: las de la raíz, por ejemplo, no.',
             'La vacuola central mantiene la turgencia: por eso una planta sin agua se marchita.',
           ],
+        },
+        {
+          tipo: 'ejemplo',
+          titulo: 'El culantro marchito',
+          situacion: 'Una mata de culantro en el balcón pasa dos días sin agua y se ve caída y blanda. La riegas y en unas horas vuelve a estar firme.',
+          explicacion:
+            'Su vacuola central se llena de agua y empuja contra la pared celular: esa presión, la turgencia, mantiene firme a la planta. Sin agua, la vacuola se encoge y la planta se marchita. Al regarla, la vacuola se llena otra vez y la pared impide que la célula se rompa.',
         },
         {
           tipo: 'aula',

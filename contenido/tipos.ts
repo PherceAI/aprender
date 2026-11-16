@@ -55,7 +55,9 @@ export type Seccion =
   | {tipo: 'comparacion'; titulo?: string; columnas: [string, string]; filas: {aspecto: string; a: string; b: string}[]}
   | {tipo: 'laboratorio'; lab: LabId; consigna: string}
   | {tipo: 'aula'; texto: string}
-  | {tipo: 'clave'; texto: string};
+  | {tipo: 'clave'; texto: string}
+  /** Un caso de la vida diaria o del aula: el docente piensa por qué pasa y luego ve la explicación. */
+  | {tipo: 'ejemplo'; titulo?: string; situacion: string; explicacion: string};
 
 export type LabId = 'celula-animal' | 'celula-vegetal';
 

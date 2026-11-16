@@ -129,3 +129,10 @@ test('la especialidad apunta a bloques que existen', () => {
   const e = errores((c) => c.especialidades[0].bloques.push('nada'));
   assert.ok(e.some((x) => x.includes('nada')), e.join('\n'));
 });
+
+test('un ejemplo de lección necesita la situación y su explicación', () => {
+  const e = errores((c) => {
+    c.bloques[0].unidades[0].temas[0].lecciones[0].contenido = [{tipo: 'ejemplo', situacion: 'En el recreo…', explicacion: ''}];
+  });
+  assert.ok(e.some((x) => x.includes('l1') && x.includes('ejemplo')), e.join(String.fromCharCode(10)));
+});

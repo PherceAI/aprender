@@ -56,6 +56,7 @@ export function validarContenido(c: Contenido): string[] {
   for (const l of lecciones) {
     for (const s of l.contenido ?? []) {
       if (s.tipo === 'laboratorio' && !(s.lab in LABORATORIOS)) err(`Lección «${l.id}»: laboratorio «${s.lab}» desconocido`);
+      if (s.tipo === 'ejemplo' && (!s.situacion.trim() || !s.explicacion.trim())) err(`Lección «${l.id}»: un ejemplo necesita la situación y su explicación`);
     }
   }
 

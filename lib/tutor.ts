@@ -64,6 +64,8 @@ function textoDeSecciones(secciones: Seccion[]): string {
           return `En el aula: ${s.texto}`;
         case 'clave':
           return `Idea clave: ${s.texto}`;
+        case 'ejemplo':
+          return `Ejemplo: ${s.situacion} Explicación: ${s.explicacion}`;
         case 'laboratorio':
           return `(Laboratorio interactivo: ${s.consigna})`;
       }
