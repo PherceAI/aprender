@@ -1,7 +1,7 @@
 import type {Metadata} from 'next';
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
-import {ArrowRight, Check, PartyPopper, RotateCcw, X} from 'lucide-react';
+import {ArrowRight, Check, PartyPopper, RotateCcw, TrendingUp, X} from 'lucide-react';
 import {requerirUsuario} from '@/lib/auth/cookies';
 import {getDb} from '@/lib/db';
 import {ErrorAcademia, terminarIntento} from '@/lib/intentos';
@@ -12,6 +12,8 @@ import {BotonIniciar} from '@/components/boton-iniciar';
 import {SaltarBoton} from './saltar';
 
 export const metadata: Metadata = {title: 'Resultado'};
+
+// Resultado de una práctica, prueba, repaso o simulacro: cuánto acertó, cuánto subió y qué hace ahora.
 
 const LETRAS = 'ABCD';
 
@@ -46,18 +48,28 @@ export default async function Resultado({params}: {params: Promise<{id: string}>
   const texto =
     r.tipo === 'prueba-tema'
       ? r.dominado
-        ? 'Sacaste 80 % o más. El tema queda dominado y sale de tu ruta. Lo que fallaste vuelve en tu repaso.'
-        : 'Necesitas 80 % para dominarlo. Repasa lo que fallaste y vuelve a intentarlo: la próxima prueba empieza por esas preguntas.'
+        ? 'Sacaste 80 % o más: el tema queda dominado. Lo que fallaste vuelve en tu repaso.'
+        : 'Necesitas 80 % para dominarlo. Revisa abajo lo que fallaste y vuelve a intentarlo: la próxima prueba empieza por esas preguntas.'
       : r.tipo === 'diagnostico-tema'
         ? r.puedeSaltar
           ? 'Con 80 % o más puedes marcarlo como sabido y seguir con otro tema.'
           : 'Las lecciones de este tema son para ti. Empieza por la primera.'
         : r.tipo === 'simulacro'
-          ? 'Revisa cada pregunta abajo. Las que fallaste vuelven mañana en tu repaso.'
-          : 'Lo que fallaste vuelve mañana en tu repaso, para que se quede.';
+          ? 'Revisa cada pregunta abajo. Las que fallaste vuelven en tu repaso.'
+          : r.tipo === 'practica'
+            ? 'La práctica no cambia tu nivel: lo cambia la prueba del tema. Lo que fallaste vuelve en tu repaso, con su explicación.'
+            : 'Lo que fallaste vuelve en tu repaso, para que se quede.';
+
+  // Avance: solo lo que cambió (nada de «+0 %»).
+  const temasQueCambiaron = r.avance?.temas.filter((t) => t.antes !== t.despues) ?? [];
+  const difPrep = r.avance ? r.avance.preparacionDespues - r.avance.preparacionAntes : 0;
+  const hayAvance = temasQueCambiaron.length > 0 || difPrep !== 0;
 
   const ref = r.referencia;
   const volverLeccion = r.tipo === 'practica' && ref ? `/leccion/${ref}` : null;
+  const destino =
+    sig.tipo === 'leccion' ? `/leccion/${sig.leccionId}` : sig.tipo === 'prueba-tema' ? `/curso/${sig.temaId}` : ref && r.tipo !== 'simulacro' && r.tipo !== 'repaso' ? `/curso/${r.porTema[0]?.id ?? ''}` : '/inicio';
+  const textoDestino = sig.tipo === 'leccion' ? `Seguir: lección ${sig.numero} de ${sig.temaNombre}` : sig.tipo === 'prueba-tema' ? `Ir a la prueba de ${sig.temaNombre}` : 'Volver al inicio';
 
   return (
     <div className="mx-auto max-w-[820px] px-4 py-6 sm:px-6 lg:py-10">
@@ -69,29 +81,40 @@ export default async function Resultado({params}: {params: Promise<{id: string}>
           </span>
         )}
         <Anillo valor={r.puntaje} tam={150} grosor={13} etiqueta="Resultado" />
-        <p className="mt-2 text-[14px] font-medium text-ink-3">
+        <p className="mt-2 text-[14px] font-medium text-ink-2">
           {TITULO_INTENTO[r.tipo]} · {r.aciertos} de {r.total} correctas
         </p>
-        <h1 className="mt-4 text-[30px] font-medium tracking-[-0.04em] text-ink sm:text-[36px]">{titulo}</h1>
-        <p className="mt-2 max-w-[52ch] text-[16px] leading-relaxed text-ink-2">{texto}</p>
+        <h1 className="mt-4 text-[30px] font-semibold tracking-[-0.04em] text-ink sm:text-[36px]">{titulo}</h1>
+        <p className="mt-2 max-w-[54ch] text-[16px] leading-relaxed text-ink-2">{texto}</p>
       </div>
 
-      <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+      {hayAvance && r.avance && (
+        <section className="card mt-8 p-5 sm:p-6">
+          <h2 className="flex items-center gap-2 text-[17px] font-semibold text-ink">
+            <TrendingUp size={19} className="text-accent" /> Tu avance
+          </h2>
+          <ul className="mt-4 flex flex-col gap-4">
+            {temasQueCambiaron.map((t) => (
+              <FilaAvance key={t.id} nombre={`Tu nivel en ${t.nombre}`} antes={t.antes} despues={t.despues} />
+            ))}
+            {difPrep !== 0 && <FilaAvance nombre="Tu preparación para el examen" antes={r.avance.preparacionAntes} despues={r.avance.preparacionDespues} />}
+          </ul>
+        </section>
+      )}
+
+      <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        <Link href={destino} className={`${btn.primary} w-full rounded-full px-7 sm:w-auto`}>
+          {textoDestino} <ArrowRight size={18} />
+        </Link>
         {r.tipo === 'diagnostico-tema' && r.puedeSaltar && ref && <SaltarBoton temaId={ref} />}
-        {r.tipo === 'prueba-tema' && !r.dominado && ref && <BotonIniciar tipo="prueba-tema" referencia={ref} texto="Intentar de nuevo" variante="secondary" className="w-full sm:w-auto" />}
+        {r.tipo === 'prueba-tema' && !r.dominado && ref && (
+          <BotonIniciar tipo="prueba-tema" referencia={ref} texto="Intentar de nuevo" variante="secondary" className="w-full rounded-full sm:w-auto" />
+        )}
         {volverLeccion && (
-          <Link href={volverLeccion} className={`${btn.secondary} w-full sm:w-auto`}>
+          <Link href={volverLeccion} className={`${btn.secondary} w-full rounded-full sm:w-auto`}>
             <RotateCcw size={17} /> Volver a la lección
           </Link>
         )}
-        <Link
-          href={
-            sig.tipo === 'leccion' ? `/leccion/${sig.leccionId}` : sig.tipo === 'prueba-tema' ? `/curso/${sig.temaId}` : ref && r.tipo !== 'simulacro' && r.tipo !== 'repaso' ? `/curso/${r.porTema[0]?.id ?? ''}` : '/inicio'
-          }
-          className={`${btn.primary} w-full px-7 sm:w-auto`}
-        >
-          {sig.tipo === 'leccion' ? `Seguir: ${sig.titulo}` : 'Continuar'} <ArrowRight size={18} />
-        </Link>
       </div>
 
       {r.tipo === 'simulacro' && r.porUnidad.length > 0 && (
@@ -112,7 +135,8 @@ export default async function Resultado({params}: {params: Promise<{id: string}>
 
       {r.correccion && (
         <section className="mt-8">
-          <h2 className="mb-3 text-[17px] font-semibold text-ink">Pregunta por pregunta</h2>
+          <h2 className="mb-1 text-[17px] font-semibold text-ink">Pregunta por pregunta</h2>
+          <p className="mb-3 text-[14px] text-ink-2">Toca una pregunta para ver la respuesta y por qué.</p>
           <div className="flex flex-col gap-2.5">
             {r.correccion.map(({pregunta: p, elegida, correcta}, i) => (
               <details key={p.id} className="card group p-4 open:pb-5" open={!correcta && i < 3}>
@@ -134,6 +158,7 @@ export default async function Resultado({params}: {params: Promise<{id: string}>
                     </p>
                   )}
                   <p className="mt-2 text-ink-2">{p.explicaciones[p.correcta].replace(/^Correcto:\s*/, '')}</p>
+                  {!correcta && elegida !== null && <p className="mt-1.5 text-ink-2">Tu opción: {p.explicaciones[elegida]}</p>}
                 </div>
               </details>
             ))}
@@ -144,3 +169,24 @@ export default async function Resultado({params}: {params: Promise<{id: string}>
   );
 }
 
+function FilaAvance({nombre, antes, despues}: {nombre: string; antes: number; despues: number}) {
+  const dif = despues - antes;
+  return (
+    <li>
+      <div className="flex items-baseline justify-between gap-3">
+        <span className="min-w-0 truncate text-[15px] font-medium text-ink">{nombre}</span>
+        <span className="num shrink-0 text-[14.5px] text-ink-2">
+          {antes} % → <strong className="text-ink">{despues} %</strong>{' '}
+          <span className={`ml-1 rounded-full px-2 py-0.5 text-[12px] font-bold ${dif > 0 ? 'bg-ok-soft text-ok' : 'bg-bad-soft text-bad'}`}>
+            {dif > 0 ? '+' : ''}
+            {dif}
+          </span>
+        </span>
+      </div>
+      <div className="relative mt-2 h-2.5 overflow-hidden rounded-full bg-line-2" role="img" aria-label={`${nombre}: de ${antes} a ${despues} %`}>
+        <div className="absolute inset-y-0 left-0 rounded-full bg-accent" style={{width: `${Math.max(antes, despues)}%`}} />
+        <div className="absolute inset-y-0 left-0 rounded-full bg-dom-2" style={{width: `${Math.min(antes, despues)}%`}} />
+      </div>
+    </li>
+  );
+}
