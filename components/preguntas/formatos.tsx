@@ -268,7 +268,7 @@ export function Emparejar({p, marcado, setMarcado, bloqueado, correccion}: Omit<
   const {izquierda, derecha} = p.elementos as {izquierda: string[]; derecha: string[]};
   const parejas = marcado && 'interactiva' in marcado ? marcado.interactiva : izquierda.map(() => -1);
   const usar = (fila: number, d: number) => {
-    const n = parejas.map((x) => (x === d ? -1 : x));
+    const n = [...parejas];
     n[fila] = parejas[fila] === d ? -1 : d;
     setMarcado(n.some((x) => x >= 0) ? {interactiva: n} : null);
   };
