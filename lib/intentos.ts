@@ -441,26 +441,33 @@ export async function terminarIntento(db: Db, usuarioId: string, intentoId: stri
 
   switch (i.tipo) {
     case 'diagnostico': {
-      // Ubicación por unidad: el valor de cada respuesta pesa la seguridad con que se dio.
+      // Ubicación tema por tema: cada tema de la ficha tiene al menos una pregunta en el diagnóstico.
+      // El valor de cada respuesta pesa la seguridad con que se dio. Un tema sin preguntas toma el promedio de su unidad.
+      const valorDe = (p: (typeof ps)[number]) => {
+        const r = porPregunta.get(p.id);
+        return r ? valorDiagnostico(r.correcta, r.seguridad) : 0;
+      };
+      const promedio = (xs: number[]) => xs.reduce((s, v) => s + v, 0) / (xs.length || 1);
       const ubicacion = [];
       for (const u of porUnidad) {
         const delaUnidad = ps.filter((p) => infoTema.get(p.temaId)!.unidadId === u.id);
-        const valores = delaUnidad.map((p) => {
-          const r = porPregunta.get(p.id);
-          return r ? valorDiagnostico(r.correcta, r.seguridad) : 0;
-        });
-        const promedio = valores.reduce((s, v) => s + v, 0) / (valores.length || 1);
-        const nivel = Math.round(promedio * NIVEL_MAX_DIAGNOSTICO);
-        ubicacion.push({unidadId: u.id, nombre: u.nombre, nivel, categoria: categoriaDe(promedio)});
+        const promUnidad = promedio(delaUnidad.map(valorDe));
+        ubicacion.push({unidadId: u.id, nombre: u.nombre, nivel: Math.round(promUnidad * NIVEL_MAX_DIAGNOSTICO), categoria: categoriaDe(promUnidad)});
         if (primeraVez) {
           const temasDeUnidad = await db.select({id: temas.id}).from(temas).where(eq(temas.unidadId, u.id));
           for (const t of temasDeUnidad) {
+            const delTema = delaUnidad.filter((p) => p.temaId === t.id);
+            const nivel = Math.round((delTema.length ? promedio(delTema.map(valorDe)) : promUnidad) * NIVEL_MAX_DIAGNOSTICO);
             const d = await dominioDe(db, usuarioId, t.id);
             if (!d || d.estado === 'sin-empezar') await fijarDominio(db, usuarioId, t.id, {nivel});
           }
         }
       }
       res.ubicacion = ubicacion;
+      // Lo que falló en el diagnóstico vuelve al día siguiente en su repaso, ya con la explicación.
+      if (primeraVez) {
+        for (const p of ps) if (!porPregunta.get(p.id)?.correcta) await actualizarRepaso(db, usuarioId, p.id, false, ahora);
+      }
       break;
     }
     case 'diagnostico-tema': {

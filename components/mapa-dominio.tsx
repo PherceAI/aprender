@@ -18,7 +18,7 @@ export interface UnidadMapa {
   temas: TemaMapa[];
 }
 
-export function MapaDominio({unidades, revelar = false, enlazar = false, compacto = false}: {unidades: UnidadMapa[]; revelar?: boolean; enlazar?: boolean; compacto?: boolean}) {
+export function MapaDominio({unidades, revelar = false, enlazar = false, compacto = false, sinCandados = false}: {unidades: UnidadMapa[]; revelar?: boolean; enlazar?: boolean; compacto?: boolean; sinCandados?: boolean}) {
   let i = 0;
   return (
     <div className={`grid gap-x-6 gap-y-4 grid-cols-[minmax(0,1fr)] ${compacto ? 'sm:grid-cols-[repeat(2,minmax(0,1fr))]' : 'sm:grid-cols-[repeat(2,minmax(0,1fr))] xl:grid-cols-[repeat(3,minmax(0,1fr))]'} ${revelar ? 'revelar' : ''}`}>
@@ -30,7 +30,7 @@ export function MapaDominio({unidades, revelar = false, enlazar = false, compact
               const estilo = {'--i': i++, backgroundColor: colorDominio(t.nivel, t.estado)} as React.CSSProperties;
               const titulo = `${t.nombre}: ${t.nivel} % · ${NOMBRE_ESTADO[t.estado]}`;
               const cls = `baldosa relative grid h-9 w-9 place-items-center rounded-[9px] ${t.nivel >= 70 || t.estado === 'dominado' ? 'text-on-accent' : 'text-ink-3'}`;
-              const dentro = !t.abierto && <Lock size={12} strokeWidth={2.2} aria-hidden className="opacity-60" />;
+              const dentro = !t.abierto && !sinCandados && <Lock size={12} strokeWidth={2.2} aria-hidden className="opacity-60" />;
               return enlazar ? (
                 <Link key={t.id} href={`/curso/${t.id}`} title={titulo} aria-label={titulo} className={`${cls} hover:scale-110`} style={estilo}>
                   {dentro}

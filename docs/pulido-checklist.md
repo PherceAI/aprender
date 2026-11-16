@@ -18,9 +18,10 @@ Checklist de lo que pidieron el dueño y su cuñado después de probar la demo. 
 - [ ] Google: va al final (parte 8).
 
 ## 3. Diagnóstico más profundo
-- [ ] Pasar de 18 a unas 40 preguntas, repartidas según el peso de cada tema en el examen (99 ítems en total: 39 generales y 60 disciplinares).
-- [ ] Escribir las preguntas nuevas a partir de los subtemas del PDF.
-- [ ] Al terminar, entregar un informe claro: en qué está fuerte, en qué está débil, por dónde empezar y por qué.
+- [x] Pasar de 18 a 40 preguntas: al menos una por cada uno de los 31 temas de la ficha y una más en los temas con más subtemas (13 de generales y 27 de Ciencias Naturales).
+- [x] Escribir las 22 preguntas nuevas a partir de los subtemas del PDF (contenido/diagnostico-ampliado.ts). Las debe revisar el docente experto.
+- [x] Informe claro al terminar: aciertos totales y por prueba, los 31 temas, lo que ya trae, lo que debe reforzar y qué sigue en 3 pasos. El resultado se calcula tema por tema.
+- [x] Lo que falla en el diagnóstico vuelve al día siguiente en su repaso, con la explicación.
 
 ## 4. Experiencia después del diagnóstico (lo que más confundió)
 - [ ] Flujo progresivo y obvio: siempre un «siguiente paso» claro, sin pestañas mezcladas.

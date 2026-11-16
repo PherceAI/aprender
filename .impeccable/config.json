@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "instrument sans",
+        "createdAt": "2026-11-16T04:28:23.258Z",
+        "reason": "PRODUCT.md brand commitment: el dueño fijó una sola familia, Instrument Sans"
+      }
+    ]
+  }
+}

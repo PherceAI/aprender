@@ -44,10 +44,10 @@ test('la pregunta que recibe el docente no trae la respuesta', async () => {
   }
 });
 
-test('diagnóstico: 18 preguntas por unidad, sin retroalimentación, se retoma y ubica al docente', async () => {
+test('diagnóstico: 40 preguntas, sin retroalimentación, se retoma y ubica al docente tema por tema', async () => {
   const {db, uid} = await preparar();
   const v = await iniciarIntento(db, uid, 'diagnostico', null, AHORA);
-  assert.equal(v.preguntas.length, 18);
+  assert.equal(v.preguntas.length, 40);
   assert.equal(v.retroalimentacion, 'ninguna');
   const r = await responder(db, uid, v.id, v.preguntas[0].id, {elegida: 0, seguridad: 'lo-se'}, AHORA);
   assert.deepEqual(r, {registrada: true});
@@ -72,6 +72,8 @@ test('diagnóstico: 18 preguntas por unidad, sin retroalimentación, se retoma y
   const doms = await db.select().from(dominio).where(eq(dominio.usuarioId, uid));
   assert.ok(doms.every((d) => d.estado !== 'dominado'), 'el diagnóstico nunca da un tema por dominado');
   assert.equal(doms.find((d) => d.temaId === 'teorias-aprendizaje')!.nivel, 70);
+  // Cada tema se ubica con sus propias preguntas, no con el promedio de la unidad.
+  assert.equal(doms.find((d) => d.temaId === 'planificacion-curricular')!.nivel, 0);
 });
 
 test('adivinar vale menos que saber', async () => {

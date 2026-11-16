@@ -110,9 +110,11 @@ test('dibujo: laboratorio y zonas conocidas', () => {
   assert.ok(errores((c) => c.preguntas.push(mal)).some((x) => x.includes('cloroplasto')));
 });
 
-test('el diagnóstico tiene exactamente 2 preguntas por unidad', () => {
-  const e = errores((c) => c.preguntas.push(pregunta({id: 'd3', usos: ['diagnostico']})));
-  assert.ok(e.some((x) => x.includes('u1') && x.includes('diagnóstico')), e.join('\n'));
+test('cada tema necesita al menos una pregunta de diagnóstico', () => {
+  const e = errores((c) => {
+    c.preguntas = c.preguntas.filter((p) => !p.usos.includes('diagnostico'));
+  });
+  assert.ok(e.some((x) => x.includes('diagnóstico')), e.join(String.fromCharCode(10)));
 });
 
 test('un tema abierto necesita lecciones con contenido y preguntas propias', () => {

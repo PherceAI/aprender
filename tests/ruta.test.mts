@@ -1,4 +1,5 @@
 import {test} from 'node:test';
+import {MAX_REPASO_DIA} from '../lib/repaso.ts';
 import assert from 'node:assert/strict';
 import {inArray} from 'drizzle-orm';
 import {crearDbPrueba, type Db} from '../lib/db/index.ts';
@@ -107,7 +108,7 @@ test('el mapa del curso y el perfil reflejan lo estudiado', async () => {
   assert.equal(p.temas.length, 31);
   assert.equal(p.especialidad, 'Ciencias Naturales');
   assert.ok(p.preparacion > 0);
-  assert.equal(p.totales.respondidas, 28);
+  assert.equal(p.totales.respondidas, 50);
   assert.equal(p.totales.lecciones, 1);
   assert.ok(p.errores.length > 0 && p.errores[0].respuesta);
   assert.equal(p.pruebas.length, 1);
@@ -117,6 +118,7 @@ test('el mapa del curso y el perfil reflejan lo estudiado', async () => {
   assert.equal(h.racha.dias, 1);
   assert.equal(h.siguiente.tipo, 'nada');
   assert.equal(h.repasoPendiente, 0, 'lo fallado vuelve mañana, no hoy');
-  assert.equal((await hoyDe(db, uid, enDias(1))).repasoPendiente, 1);
+  // Mañana vuelven lo fallado en la prueba y lo fallado en el diagnóstico (con tope diario).
+  assert.equal((await hoyDe(db, uid, enDias(1))).repasoPendiente, MAX_REPASO_DIA);
   await vistaIntento(db, uid, (await iniciarIntento(db, uid, 'repaso', null, enDias(1))).id);
 });

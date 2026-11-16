@@ -46,9 +46,11 @@ test('todo el contenido pasa el validador', () => {
   assert.deepEqual(validarContenido(CONTENIDO), []);
 });
 
-test('el diagnóstico de Ciencias Naturales tiene 18 preguntas y usa formatos interactivos', () => {
+test('el diagnóstico tiene 40 preguntas, toca los 31 temas y usa formatos interactivos', () => {
   const diag = CONTENIDO.preguntas.filter((p) => p.usos.includes('diagnostico'));
-  assert.equal(diag.length, 18);
+  assert.equal(diag.length, 40);
+  const temas = CONTENIDO.bloques.flatMap((b) => b.unidades.flatMap((u) => u.temas));
+  for (const t of temas) assert.ok(diag.some((p) => p.temaId === t.id), `el tema ${t.id} no tiene pregunta de diagnóstico`);
   const formatos = new Set(diag.map((p) => p.formato));
   for (const f of ['simple', 'completamiento', 'seleccion', 'ordenamiento', 'emparejamiento']) assert.ok(formatos.has(f as never), `falta ${f}`);
   assert.ok(diag.some((p) => p.dibujo), 'el diagnóstico necesita al menos una pregunta sobre un dibujo');

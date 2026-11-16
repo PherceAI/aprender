@@ -1,6 +1,6 @@
 import type {Metadata} from 'next';
 import {redirect} from 'next/navigation';
-import {Hand, ShieldCheck} from 'lucide-react';
+import {FileText, Hand, Pause, ShieldCheck} from 'lucide-react';
 import {requerirUsuario} from '@/lib/auth/cookies';
 import {getDb} from '@/lib/db';
 import {diagnosticoHecho} from '@/lib/ruta';
@@ -11,8 +11,10 @@ import {BotonIniciar} from '@/components/boton-iniciar';
 export const metadata: Metadata = {title: 'Diagnóstico'};
 
 const PUNTOS = [
-  {icono: ShieldCheck, texto: 'No es un examen. No hay nota ni se aprueba o reprueba: es para conocerte.'},
-  {icono: Hand, texto: 'Vas a tocar, ordenar y unir, como en la plataforma entera.'},
+  {icono: ShieldCheck, texto: 'No es un examen: no se aprueba ni se reprueba. Es para saber qué temas ya dominas.'},
+  {icono: FileText, texto: 'Toca los 31 temas de la ficha oficial del Ineval, en los mismos formatos del examen.'},
+  {icono: Pause, texto: 'Si te interrumpen, sales y al volver sigues donde te quedaste.'},
+  {icono: Hand, texto: 'Al final ves tu resultado tema por tema y por dónde empezar.'},
 ];
 
 export default async function Diagnostico() {
@@ -27,7 +29,7 @@ export default async function Diagnostico() {
       </div>
       <div className="rise flex flex-1 flex-col justify-center py-10">
         <h1 className="text-[32px] leading-[1.1] font-medium tracking-[-0.04em] text-ink sm:text-[40px]">Primero, veamos dónde estás.</h1>
-        <p className="mt-3 text-[17px] leading-relaxed text-ink-2">18 preguntas, 2 de cada unidad. Unos 15 minutos. Con esto armamos tu ruta.</p>
+        <p className="mt-3 text-[17px] leading-relaxed text-ink-2">40 preguntas, unos 30 minutos. Con esto armamos tu ruta.</p>
         <ul className="mt-8 flex flex-col gap-4">
           {PUNTOS.map((p) => (
             <li key={p.texto} className="flex gap-3.5">

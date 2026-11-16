@@ -61,15 +61,13 @@ export function validarContenido(c: Contenido): string[] {
 
   for (const p of c.preguntas) validarPregunta(p, temaIds, leccionTema, err);
 
-  // Diagnóstico de entrada: exactamente 2 preguntas por unidad
-  const temaUnidad = new Map(unidades.flatMap((u) => u.temas.map((t) => [t.id, u.id] as const)));
-  const diagPorUnidad = new Map(unidades.map((u) => [u.id, 0]));
+  // Diagnóstico de entrada: al menos una pregunta por cada tema de la ficha, para ubicar al docente tema por tema.
+  const diagPorTema = new Map<string, number>(unidades.flatMap((u) => u.temas.map((t) => [t.id, 0] as const)));
   for (const p of c.preguntas) {
-    const u = temaUnidad.get(p.temaId);
-    if (u && p.usos.includes('diagnostico')) diagPorUnidad.set(u, (diagPorUnidad.get(u) ?? 0) + 1);
+    if (p.usos.includes('diagnostico') && diagPorTema.has(p.temaId)) diagPorTema.set(p.temaId, diagPorTema.get(p.temaId)! + 1);
   }
-  for (const [u, n] of diagPorUnidad) {
-    if (n !== 2) err(`Unidad «${u}»: el diagnóstico necesita exactamente 2 preguntas y tiene ${n}`);
+  for (const [t, n] of diagPorTema) {
+    if (n < 1) err(`Tema «${t}»: el diagnóstico necesita al menos una pregunta`);
   }
 
   // Temas abiertos: lecciones con contenido y preguntas propias suficientes
