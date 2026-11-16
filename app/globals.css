@@ -83,7 +83,7 @@
   --dom-3: #ff8556;
   --dom-4: #f0360a;
   --sombra-card: 0 0 1px rgb(0 0 0 / 0.03), 0 1px 2px rgb(0 0 0 / 0.05);
-  --sombra-float: 0 0 1px rgb(0 0 0 / 0.04), 0 2px 4px rgb(0 0 0 / 0.04), 0 12px 32px -8px rgb(0 0 0 / 0.1);
+  --sombra-float: 0 1px 2px rgb(0 0 0 / 0.05);
   color-scheme: light;
 }
 
@@ -123,7 +123,7 @@
   --dom-3: #b8451c;
   --dom-4: #ff5a2e;
   --sombra-card: 0 0 0 1px rgb(255 255 255 / 0.02);
-  --sombra-float: 0 12px 32px -8px rgb(0 0 0 / 0.6);
+  --sombra-float: none;
   color-scheme: dark;
 }
 

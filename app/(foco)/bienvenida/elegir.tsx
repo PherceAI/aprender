@@ -25,7 +25,7 @@ export function ElegirEspecialidad({especialidades}: {especialidades: {id: strin
             onClick={() => iniciar(() => accionElegirEspecialidad(e.id))}
             className={`group flex items-center gap-4 rounded-card border p-4 text-left transition-[border-color,transform,box-shadow] ${
               e.activa
-                ? 'border-line bg-surface shadow-card hover:border-accent-ink hover:shadow-float active:translate-y-px'
+                ? 'border-line bg-surface shadow-card hover:border-accent-ink active:translate-y-px'
                 : 'cursor-not-allowed border-line border-dashed bg-transparent'
             }`}
           >

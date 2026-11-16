@@ -41,7 +41,7 @@ export default async function Inicio() {
       </div>
 
       <div className="grid grid-cols-[minmax(0,1fr)] gap-6 xl:grid-cols-[minmax(0,1.75fr)_minmax(0,1fr)]">
-        <section className="relative overflow-hidden rounded-[20px] bg-[linear-gradient(120deg,#f0360a_0%,#c2410c_100%)] p-6 text-white shadow-float sm:p-8">
+        <section className="relative overflow-hidden rounded-[20px] bg-[linear-gradient(120deg,#f0360a_0%,#c2410c_100%)] p-6 text-white sm:p-8">
           <div className="pointer-events-none absolute -top-16 -right-10 h-56 w-56 rounded-full bg-white/10" />
           <div className="pointer-events-none absolute -right-20 -bottom-24 h-64 w-64 rounded-full bg-white/10" />
           <div className="relative flex items-center gap-6">
@@ -111,7 +111,7 @@ export default async function Inicio() {
             {tarjetas.map((t, i) => {
               const avance = Math.round((t.completadas / Math.max(1, t.lecciones)) * 100);
               return (
-                <Link key={t.id} href={`/curso/${t.id}`} className="card overflow-hidden transition-shadow hover:shadow-float">
+                <Link key={t.id} href={`/curso/${t.id}`} className="card overflow-hidden">
                   <div className="relative h-24 bg-[linear-gradient(135deg,#ffb08f_0%,#f0360a_100%)]" style={{opacity: 1 - i * 0.18}}>
                     <span className="absolute -bottom-[18px] left-4 grid h-11 w-11 place-items-center rounded-[12px] bg-surface text-accent shadow-card">
                       {t.abierto ? <BookCheck size={20} /> : <Lock size={18} />}

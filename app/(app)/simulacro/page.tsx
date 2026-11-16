@@ -28,7 +28,7 @@ export default async function Simulacro() {
       <p className="mt-1.5 max-w-[60ch] text-[15.5px] text-ink-2">Practica con reloj y en el formato del examen real: 4 opciones, una correcta, y la corrección al final.</p>
 
       <div className="mt-8 grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[1.4fr_1fr]">
-        <section className="rounded-card bg-destacado p-6 text-on-destacado shadow-float sm:p-7">
+        <section className="rounded-card bg-destacado p-6 text-on-destacado sm:p-7">
           <p className="text-[14px] font-semibold opacity-70">Para practicar a diario</p>
           <h2 className="mt-2 text-[26px] font-semibold tracking-[-0.025em]">Simulacro corto</h2>
           <div className="mt-4 flex flex-wrap gap-2.5 text-[14px] font-medium">
