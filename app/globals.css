@@ -276,3 +276,22 @@ h3 {
     transition-duration: 1ms !important;
   }
 }
+
+/* Piezas que flotan suave en la portada */
+.flotar {
+  animation: flotar 7s ease-in-out infinite;
+}
+.flotar-b {
+  animation: flotar 8s ease-in-out -3s infinite;
+}
+@keyframes flotar {
+  50% {
+    transform: translateY(-8px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .flotar,
+  .flotar-b {
+    animation: none;
+  }
+}

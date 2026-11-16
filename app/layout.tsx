@@ -25,8 +25,8 @@ export const viewport: Viewport = {
   ],
 };
 
-// Pone el tema antes de pintar (sin parpadeo): lo elegido por el docente o, si no eligió, el del sistema.
-const TEMA = `try{var t=localStorage.getItem('tema');if(t!=='claro'&&t!=='oscuro'){t=matchMedia('(prefers-color-scheme: dark)').matches?'oscuro':'claro'}document.documentElement.dataset.tema=t}catch(e){}`;
+// Pone el tema antes de pintar (sin parpadeo): lo elegido por el docente; si no eligió, claro (decisión del dueño).
+const TEMA = `try{var t=localStorage.getItem('tema');if(t!=='oscuro'){t='claro'}document.documentElement.dataset.tema=t}catch(e){document.documentElement.dataset.tema='claro'}`;
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
