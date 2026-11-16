@@ -153,8 +153,27 @@ export const intentos = pgTable(
     terminado: timestamp({withTimezone: true}),
     limiteSeg: integer(),
     puntaje: smallint(),
+    /** Preparación antes y después de terminarlo (para mostrar cuánto subió, igual en cada recarga). */
+    prepAntes: smallint(),
+    prepDespues: smallint(),
+    /** Nivel antes y después de cada tema que tocó: [{id, nombre, antes, despues}]. */
+    cambios: jsonb().$type<{id: string; nombre: string; antes: number; despues: number}[]>(),
   },
   (t) => [index('intentos_usuario').on(t.usuarioId, t.tipo)]
+);
+
+/** La preparación del docente al final de cada día que estudió: su evolución en «Mi progreso». */
+export const preparacionDias = pgTable(
+  'preparacion_dias',
+  {
+    usuarioId: text()
+      .notNull()
+      .references(() => usuarios.id, {onDelete: 'cascade'}),
+    /** Día de Ecuador, AAAA-MM-DD. */
+    dia: text().notNull(),
+    preparacion: smallint().notNull(),
+  },
+  (t) => [primaryKey({columns: [t.usuarioId, t.dia]})]
 );
 
 export const respuestas = pgTable(

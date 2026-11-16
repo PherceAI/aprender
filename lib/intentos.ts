@@ -19,12 +19,15 @@ import {
   fijarDominio,
   dominioDe,
   marcarAprendiendo,
+  nivelesDe,
+  preparacion,
   NIVEL_MAX_DIAGNOSTICO,
   UMBRAL_DOMINIO,
   valorDiagnostico,
   type Categoria,
 } from './dominio';
 import {actualizarRepaso, pendientesDeRepaso} from './repaso';
+import {anotarPreparacion, type Avance} from './avance';
 import {barajar, newId} from './util';
 
 // El motor de preguntas: diagnóstico, práctica, prueba del tema, repaso y simulacro.
@@ -394,6 +397,8 @@ export interface Resultado {
   dominado?: boolean;
   /** Diagnóstico del tema: si puede saltarlo («Ya lo sé»). */
   puedeSaltar?: boolean;
+  /** Cuánto subió: preparación y nivel de cada tema, antes y después (se guarda la primera vez). */
+  avance?: Avance;
   /** Corrección pregunta por pregunta (no en los diagnósticos). */
   correccion?: {pregunta: Pregunta; elegida: number | null; correcta: boolean}[];
 }
@@ -435,6 +440,10 @@ export async function terminarIntento(db: Db, usuarioId: string, intentoId: stri
   const res: Resultado = {intentoId: i.id, tipo: i.tipo, referencia: i.referencia, puntaje, aciertos, total, porUnidad, porTema};
 
   const primeraVez = !i.terminado;
+  // Foto de antes: preparación y nivel de los temas que toca (para mostrar cuánto subió).
+  const especialidadId = primeraVez ? await especialidadDe(db, usuarioId) : null;
+  const prepAntes = especialidadId ? await preparacion(db, usuarioId, especialidadId) : 0;
+  const nivelesAntes = primeraVez ? await nivelesDe(db, usuarioId, temaIds) : null;
   if (primeraVez) {
     await db.update(intentos).set({terminado: ahora, puntaje}).where(eq(intentos.id, i.id));
   }
@@ -509,6 +518,16 @@ export async function terminarIntento(db: Db, usuarioId: string, intentoId: stri
       }
       break;
     }
+  }
+
+  if (primeraVez && especialidadId && nivelesAntes) {
+    const nivelesDespues = await nivelesDe(db, usuarioId, temaIds);
+    const cambios = porTema.map((t) => ({id: t.id, nombre: t.nombre, antes: nivelesAntes.get(t.id)?.nivel ?? 0, despues: nivelesDespues.get(t.id)?.nivel ?? 0}));
+    const prepDespues = await anotarPreparacion(db, usuarioId, especialidadId, ahora);
+    await db.update(intentos).set({prepAntes, prepDespues, cambios}).where(eq(intentos.id, i.id));
+    res.avance = {preparacionAntes: prepAntes, preparacionDespues: prepDespues, temas: cambios};
+  } else if (i.prepAntes !== null && i.prepDespues !== null && i.cambios) {
+    res.avance = {preparacionAntes: i.prepAntes, preparacionDespues: i.prepDespues, temas: i.cambios};
   }
 
   if (RETROALIMENTACION[i.tipo] !== 'ninguna') {
