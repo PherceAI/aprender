@@ -1,6 +1,7 @@
 import type {Metadata, Viewport} from 'next';
 import {Instrument_Sans} from 'next/font/google';
 import './globals.css';
+import {RegistrarSW} from '@/components/instalar';
 
 const instrument = Instrument_Sans({
   subsets: ['latin'],
@@ -19,10 +20,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: [
-    {media: '(prefers-color-scheme: light)', color: '#f2f4f8'},
-    {media: '(prefers-color-scheme: dark)', color: '#0d1017'},
-  ],
+  themeColor: '#ffffff',
 };
 
 // Pone el tema antes de pintar (sin parpadeo): lo elegido por el docente; si no eligió, claro (decisión del dueño).
@@ -34,7 +32,10 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
       <head>
         <script dangerouslySetInnerHTML={{__html: TEMA}} />
       </head>
-      <body className="min-h-dvh font-sans">{children}</body>
+      <body className="min-h-dvh font-sans">
+        {children}
+        <RegistrarSW />
+      </body>
     </html>
   );
 }

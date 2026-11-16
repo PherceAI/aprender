@@ -136,9 +136,9 @@ export function Reproductor(props: {
   const marcarListo = useCallback((n: number) => setListo((l) => (l[n] ? l : {...l, [n]: true})), []);
 
   return (
-    <div className="flex min-h-dvh flex-col bg-bg">
+    <div className="flex min-h-dvh flex-col bg-surface">
       {/* Barra superior */}
-      <header className="sticky top-0 z-20 border-b border-line bg-bg/95 backdrop-blur-md">
+      <header className="sticky top-0 z-20 border-b border-line bg-surface/95 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-[1180px] items-center gap-3 px-3 sm:gap-4 sm:px-6">
           <Link href={`/curso/${tema.id}`} aria-label="Salir de la lección" className="grid h-10 w-10 shrink-0 place-items-center rounded-[12px] border border-line text-ink-2 hover:bg-surface-2">
             <X size={19} />
@@ -189,7 +189,7 @@ export function Reproductor(props: {
 
       {/* Barra inferior */}
       {p.tipo !== 'final' && (
-        <footer className="fixed inset-x-0 bottom-0 z-20 border-t border-line bg-bg/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md">
+        <footer className="fixed inset-x-0 bottom-0 z-20 border-t border-line bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md">
           <div className="mx-auto flex max-w-[1080px] items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
             <button type="button" onClick={() => ir(i - 1)} disabled={i === 0} className="inline-flex h-12 items-center gap-2 rounded-full border border-line px-5 text-[15px] font-semibold text-ink disabled:opacity-40">
               <ArrowLeft size={18} /> <span className="hidden sm:inline">Atrás</span>

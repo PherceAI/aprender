@@ -38,3 +38,16 @@ Una sola familia: **Instrument Sans** (decisión del dueño). Cifras con `tabula
 ## Movimiento
 
 Un momento con autor: la revelación del mapa de dominio tras el diagnóstico (baldosas que se tiñen en cascada). Lo demás, transiciones cortas de 160–240 ms con salida exponencial. Todo se apaga con `prefers-reduced-motion`.
+
+## Panel con color (16 nov, pedido del dueño: «muy plano, muy blanco»)
+
+- **Fondo:** en el panel (todo lo que tiene barra lateral), gris azulado claro (#f4f5f8), para que las tarjetas blancas resalten. La portada, las lecciones y las preguntas siguen sobre blanco.
+- **Barra lateral:** se pliega a solo íconos, con el logo centrado y dos grupos, «Aprender» y «Seguimiento». Se recuerda en la cookie `barra`.
+- **Color e ilustración por unidad** (`lib/visual.ts`). Cada unidad tiene su color y una ilustración 3D de Microsoft Fluent Emoji (licencia MIT, en `public/ilustraciones`). Los mismos se repiten en Inicio, Mi ruta y Mi progreso.
+- **Tarjetas «héroe» en naranja degradado:** llevan la ilustración a la derecha y, en el Inicio, el símbolo de Pragma de fondo como marca de agua (al dueño le gustó).
+- **Preguntas:** siguen la referencia del dueño:
+  - barra superior en píldora con el tema y «1 / N»;
+  - «Pregunta N» y un título grande;
+  - opciones de 64 px con la letra en un cuadro;
+  - el dibujo en una tarjeta grande a la izquierda;
+  - abajo, «Consejo» y «Comprobar».

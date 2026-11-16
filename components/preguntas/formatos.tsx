@@ -55,8 +55,8 @@ export function Opciones({p, marcado, setMarcado, bloqueado, correccion}: Omit<F
           : esMal
             ? 'border-bad bg-bad-soft text-ink'
             : sel
-              ? 'border-accent-ink bg-accent-soft text-ink shadow-[0_0_0_3px_color-mix(in_srgb,var(--accent)_60%,transparent)]'
-              : 'border-line bg-surface text-ink hover:border-ink-3';
+              ? 'border-accent bg-accent-soft text-ink shadow-[0_6px_16px_-10px_rgba(224,51,11,0.6)]'
+              : 'border-line bg-surface text-ink shadow-[0_1px_2px_rgba(20,24,40,0.04)] hover:border-[#f6b39a] hover:bg-[#fffaf7]';
         return (
           <button
             key={i}
@@ -65,16 +65,21 @@ export function Opciones({p, marcado, setMarcado, bloqueado, correccion}: Omit<F
             aria-checked={sel}
             disabled={bloqueado}
             onClick={() => setMarcado({elegida: i})}
-            className={`flex min-h-14 items-center gap-3.5 rounded-ctl border-[1.5px] px-3.5 py-3 text-left text-[15.5px] leading-snug transition-[border-color,background-color,box-shadow] active:translate-y-px disabled:cursor-default ${tono}`}
+            className={`flex min-h-[64px] items-center gap-4 rounded-[16px] border-[1.5px] px-4 py-3 text-left text-[16.5px] leading-snug transition-[border-color,background-color,box-shadow] active:translate-y-px disabled:cursor-default ${tono}`}
           >
             <span
-              className={`grid h-8 w-8 shrink-0 place-items-center rounded-[9px] text-[13px] font-bold ${
+              className={`grid h-10 w-10 shrink-0 place-items-center rounded-[12px] text-[15px] font-bold ${
                 esCorrecta ? 'bg-ok text-surface' : esMal ? 'bg-bad text-surface' : sel ? 'bg-accent text-on-accent' : 'bg-surface-2 text-ink-2'
               }`}
             >
               {esCorrecta ? <Check size={16} strokeWidth={3} /> : esMal ? <X size={16} strokeWidth={3} /> : LETRAS[i]}
             </span>
-            <span>{o}</span>
+            <span className="min-w-0 flex-1">{o}</span>
+            {sel && !correccion && (
+              <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-accent text-white">
+                <Check size={15} strokeWidth={3} />
+              </span>
+            )}
           </button>
         );
       })}
@@ -94,8 +99,8 @@ export function SobreDibujo(props: Omit<FormatoProps, 'comoExamen'>) {
     else estados[z] = i === elegida ? 'activa' : 'normal';
   });
   return (
-    <div className="grid grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-[1.2fr_1fr] md:items-start">
-      <div className="rounded-[16px] bg-surface-2 p-3">
+    <div className="grid grid-cols-[minmax(0,1fr)] gap-5 md:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] md:items-center md:gap-8">
+      <div className="rounded-[24px] border border-line bg-surface p-4 shadow-[0_18px_40px_-28px_rgba(20,24,40,0.35)] sm:p-6">
         <Celula
           lab={lab}
           estados={estados}
@@ -209,7 +214,7 @@ export function Seleccionar({p, marcado, setMarcado, bloqueado, correccion}: Omi
               else n.add(i);
               setMarcado(n.size ? {interactiva: [...n].sort((a, b) => a - b)} : null);
             }}
-            className={`flex min-h-13 items-center gap-3.5 rounded-ctl border-[1.5px] px-3.5 py-2.5 text-left text-[15.5px] text-ink transition-colors active:translate-y-px ${tono}`}
+            className={`flex min-h-[60px] items-center gap-4 rounded-[16px] border-[1.5px] px-4 py-3 text-left text-[16.5px] text-ink shadow-[0_1px_2px_rgba(20,24,40,0.04)] transition-colors active:translate-y-px ${tono}`}
           >
             <span className={`grid h-6 w-6 shrink-0 place-items-center rounded-[7px] border-[1.5px] ${on ? 'border-accent-ink bg-accent text-on-accent' : 'border-ink-3'}`}>
               {on && <Check size={14} strokeWidth={3} />}
@@ -243,7 +248,7 @@ export function Ordenar({p, marcado, setMarcado, bloqueado, correccion}: Omit<Fo
                 const n = pos >= 0 ? orden.filter((x) => x !== i) : [...orden, i];
                 setMarcado(n.length ? {interactiva: n} : null);
               }}
-              className={`flex min-h-13 items-center gap-3.5 rounded-ctl border-[1.5px] px-3.5 py-2.5 text-left text-[15.5px] text-ink transition-colors active:translate-y-px ${tono}`}
+              className={`flex min-h-[60px] items-center gap-4 rounded-[16px] border-[1.5px] px-4 py-3 text-left text-[16.5px] text-ink shadow-[0_1px_2px_rgba(20,24,40,0.04)] transition-colors active:translate-y-px ${tono}`}
             >
               <span className={`num grid h-8 w-8 shrink-0 place-items-center rounded-full text-[14px] font-bold ${pos >= 0 ? 'bg-accent text-on-accent' : 'border-[1.5px] border-dashed border-ink-3 text-transparent'}`}>
                 {pos >= 0 ? pos + 1 : '·'}
@@ -288,7 +293,7 @@ export function Emparejar({p, marcado, setMarcado, bloqueado, correccion}: Omit<
         return (
           <div
             key={fila}
-            className={`flex flex-col gap-2.5 rounded-ctl border-[1.5px] p-3 sm:flex-row sm:items-center sm:justify-between ${
+            className={`flex flex-col gap-2.5 rounded-[16px] border-[1.5px] p-4 sm:flex-row sm:items-center sm:justify-between ${
               correccion ? (bien ? 'border-ok bg-ok-soft' : 'border-bad bg-bad-soft') : parejas[fila] >= 0 ? 'border-accent-ink bg-surface' : 'border-line bg-surface'
             }`}
           >

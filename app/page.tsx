@@ -71,7 +71,7 @@ export default async function Portada() {
   if (await sesionActual()) redirect('/inicio');
 
   return (
-    <div className="min-h-dvh bg-bg">
+    <div className="min-h-dvh bg-surface">
       {/* Fondo cálido de la portada, como el degradado suave de la referencia */}
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 -z-0 h-[900px] bg-[radial-gradient(60%_50%_at_15%_10%,#ffe8dd_0%,transparent_70%),radial-gradient(50%_45%_at_90%_20%,#ffeef0_0%,transparent_70%)] dark:opacity-20" />
 

@@ -6,6 +6,7 @@ import {getDb} from '@/lib/db';
 import {perfilDe} from '@/lib/perfil';
 import {planDe} from '@/lib/acceso';
 import {SIMULACRO_CORTO} from '@/lib/intentos';
+import {ILUSTRACION} from '@/lib/visual';
 import {BotonIniciar} from '@/components/boton-iniciar';
 
 export const metadata: Metadata = {title: 'Simulacros'};
@@ -30,14 +31,16 @@ export default async function Simulacros() {
   return (
     <div className="rise flex flex-col gap-6">
       <div>
-        <h1 className="text-[30px] font-semibold tracking-[-0.04em] text-ink sm:text-[36px]">Simulacros</h1>
+        <h1 className="text-[28px] font-semibold tracking-[-0.04em] text-ink sm:text-[34px]">Simulacros</h1>
         <p className="mt-1.5 max-w-[60ch] text-[16px] text-ink-2">Mídete como en el examen real: con reloj, 4 opciones por pregunta y la corrección explicada al final.</p>
       </div>
 
       <div className="grid grid-cols-[minmax(0,1fr)] gap-5 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-        <section className="relative overflow-hidden rounded-[22px] bg-[linear-gradient(120deg,#e0330b_0%,#f04a1c_100%)] p-6 text-white sm:p-8">
-          <span aria-hidden className="pointer-events-none absolute -top-20 -right-12 h-60 w-60 rounded-full bg-white/10" />
-          <div className="relative">
+        <section className="relative overflow-hidden rounded-[24px] bg-[linear-gradient(125deg,#d9300a_0%,#ec4416_60%,#f25d2a_100%)] p-6 text-white sm:p-8">
+          <span aria-hidden className="pointer-events-none absolute -top-20 right-24 h-60 w-60 rounded-full bg-white/10" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={ILUSTRACION.reloj} alt="" aria-hidden className="pointer-events-none absolute top-1/2 right-6 hidden w-[150px] -translate-y-1/2 drop-shadow-[0_18px_30px_rgba(0,0,0,0.25)] sm:block" />
+          <div className="relative sm:max-w-[64%]">
             <p className="flex items-center gap-2 text-[14px] font-medium text-white/90">
               <Timer size={16} /> Para practicar seguido
             </p>
@@ -81,6 +84,20 @@ export default async function Simulacros() {
           </ul>
         </section>
       </div>
+
+      <section className="grid grid-cols-[repeat(2,minmax(0,1fr))] gap-3 lg:grid-cols-[repeat(4,minmax(0,1fr))]">
+        {[
+          ['99', 'preguntas en el examen real'],
+          ['165', 'minutos en total'],
+          ['4', 'opciones, una correcta'],
+          ['5', 'formatos de pregunta'],
+        ].map(([n, t]) => (
+          <div key={t} className="card p-4">
+            <p className="text-[24px] leading-none font-semibold tracking-[-0.03em] text-accent">{n}</p>
+            <p className="mt-1.5 text-[13px] leading-snug text-ink-2">{t}</p>
+          </div>
+        ))}
+      </section>
 
       <section className="card p-5 sm:p-6">
         <h2 className="text-[18px] font-semibold text-ink">Tus simulacros</h2>
