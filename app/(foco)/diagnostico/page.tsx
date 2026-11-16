@@ -1,6 +1,6 @@
 import type {Metadata} from 'next';
 import {redirect} from 'next/navigation';
-import {Gauge, Hand, ShieldCheck} from 'lucide-react';
+import {Hand, ShieldCheck} from 'lucide-react';
 import {requerirUsuario} from '@/lib/auth/cookies';
 import {getDb} from '@/lib/db';
 import {diagnosticoHecho} from '@/lib/ruta';
@@ -13,7 +13,6 @@ export const metadata: Metadata = {title: 'Diagnóstico'};
 const PUNTOS = [
   {icono: ShieldCheck, texto: 'No es un examen. No hay nota ni se aprueba o reprueba: es para conocerte.'},
   {icono: Hand, texto: 'Vas a tocar, ordenar y unir, como en la plataforma entera.'},
-  {icono: Gauge, texto: 'Después de cada respuesta dinos qué tan seguro estás. Así sabemos qué dominas de verdad.'},
 ];
 
 export default async function Diagnostico() {

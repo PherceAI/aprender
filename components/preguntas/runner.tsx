@@ -98,8 +98,7 @@ export function Runner({intento, titulo, salir}: {intento: IntentoUI; titulo: st
   };
 
   const comprobar = () => {
-    if (intento.tipo === 'diagnostico') setPidiendoSeguridad(true);
-    else enviar();
+    enviar();
   };
 
   const pedirPorQue = async () => {

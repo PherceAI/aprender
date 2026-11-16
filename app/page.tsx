@@ -10,7 +10,7 @@ import {CONTENIDO} from '@/contenido';
 // Página pública: qué es y para quién, en una mirada. Entra con «Iniciar sesión».
 
 const PASOS = [
-  {icono: Gauge, titulo: 'Te conocemos primero', texto: '18 preguntas cortas y, en cada una, qué tan seguro estás. Así sabemos qué dominas de verdad.'},
+  {icono: Gauge, titulo: 'Te conocemos primero', texto: '18 preguntas cortas, 2 por unidad, para saber desde dónde partes.'},
   {icono: Route, titulo: 'Tu ruta, no la de todos', texto: 'Empiezas por lo que más te falta y por lo que más pesa en el examen.'},
   {icono: Repeat, titulo: 'Lo que fallas vuelve', texto: 'Cada error regresa al día siguiente y luego a los 3, 7, 14 y 30 días, hasta que lo dominas.'},
   {icono: Timer, titulo: 'Simulacro como el real', texto: 'Mismos formatos, mismo tiempo por pregunta y corrección con explicación al final.'},
