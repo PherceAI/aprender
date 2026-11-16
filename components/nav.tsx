@@ -31,8 +31,8 @@ export function NavLateral({items}: {items: ItemNav[]}) {
             key={it.href}
             href={it.href}
             aria-current={on ? 'page' : undefined}
-            className={`flex h-11 items-center gap-3 rounded-ctl px-3 text-[15px] font-medium transition-colors ${
-              on ? 'bg-accent-soft text-accent-ink' : 'text-ink-2 hover:bg-surface-2 hover:text-ink'
+            className={`flex h-12 items-center gap-3 rounded-[12px] px-4 text-[15px] font-medium transition-colors ${
+              on ? 'bg-accent text-on-accent shadow-[0_6px_16px_-6px_var(--accent)]' : 'text-ink-2 hover:bg-surface-2 hover:text-ink'
             }`}
           >
             <Icono size={19} strokeWidth={on ? 2.2 : 1.9} />

@@ -29,9 +29,9 @@ export default async function LayoutApp({children}: {children: React.ReactNode})
   const items = u.rol === 'admin' ? ADMIN : DOCENTE;
 
   return (
-    <div className="min-h-dvh lg:grid lg:grid-cols-[272px_1fr]">
+    <div className="min-h-dvh">
       {/* Barra lateral flotante (referencia DoDo): tarjeta redondeada con la persona arriba. */}
-      <div className="sticky top-0 hidden h-dvh lg:block">
+      <div className="fixed inset-y-0 left-0 z-30 hidden w-[272px] lg:block">
         <aside className="flex h-full flex-col border-r border-line bg-surface px-4 py-6">
           <Marca className="px-2" />
           <div className="mt-7 flex flex-col items-center text-center">
@@ -53,7 +53,7 @@ export default async function LayoutApp({children}: {children: React.ReactNode})
         </aside>
       </div>
 
-      <div className="min-w-0">
+      <div className="min-w-0 lg:pl-[272px]">
         <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-line bg-bg/90 px-4 backdrop-blur-md lg:hidden">
           <Marca />
           <div className="flex items-center">

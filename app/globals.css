@@ -129,13 +129,13 @@
 
 html {
   -webkit-text-size-adjust: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
   scrollbar-color: var(--line) transparent;
   background: var(--bg);
 }
 
 body {
-  overflow-x: hidden;
+  overflow-x: clip;
   background: var(--bg);
   color: var(--ink);
   -webkit-font-smoothing: antialiased;

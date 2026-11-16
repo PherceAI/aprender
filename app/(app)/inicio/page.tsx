@@ -1,13 +1,13 @@
 import type {Metadata} from 'next';
 import Link from 'next/link';
 import {redirect} from 'next/navigation';
-import {ArrowRight, Flame, Lock, Repeat, Timer} from 'lucide-react';
+import {ArrowRight, BookCheck, Flame, ListChecks, Lock, Play, Repeat, Target, Timer, type LucideIcon} from 'lucide-react';
 import {requerirDocente} from '@/lib/auth/cookies';
 import {getDb} from '@/lib/db';
 import {hoyDe, rutaDe} from '@/lib/ruta';
+import {perfilDe} from '@/lib/perfil';
 import {mapaCurso} from '@/lib/curso';
-import {Anillo, Barra, EtiquetaEstado, btn} from '@/components/ui';
-import {MapaDominio} from '@/components/mapa-dominio';
+import {Anillo} from '@/components/ui';
 import {BotonIniciar} from '@/components/boton-iniciar';
 
 export const metadata: Metadata = {title: 'Inicio'};
@@ -15,145 +15,160 @@ export const metadata: Metadata = {title: 'Inicio'};
 export default async function Inicio() {
   const u = await requerirDocente();
   const db = await getDb();
-  const [hoy, ruta, mapa] = await Promise.all([hoyDe(db, u.id), rutaDe(db, u.id), mapaCurso(db, u.id)]);
+  const [hoy, ruta, perfil, mapa] = await Promise.all([hoyDe(db, u.id), rutaDe(db, u.id), perfilDe(db, u.id), mapaCurso(db, u.id)]);
   if (hoy.siguiente.tipo === 'diagnostico') redirect('/diagnostico');
-  const nombre = u.nombre.split(' ')[0];
   const s = hoy.siguiente;
-  const unidades = mapa.bloques.flatMap((b) => b.unidades);
+  const temas = mapa.bloques.flatMap((b) => b.unidades.flatMap((un) => un.temas.map((t) => ({...t, unidad: un.nombre}))));
+  const temaActual = s.tipo === 'leccion' || s.tipo === 'prueba-tema' ? temas.find((t) => t.id === s.temaId) : null;
+  const avanceTema = temaActual ? Math.round((temaActual.completadas / Math.max(1, temaActual.lecciones)) * 100) : 0;
+  const dominados = perfil.temas.filter((t) => t.estado === 'dominado').length;
+  const tarjetas = ruta.slice(0, 3).map((r) => temas.find((t) => t.id === r.temaId)!).filter(Boolean);
+
+  const stats: {icono: LucideIcon; valor: string; texto: string}[] = [
+    {icono: Target, valor: `${dominados}`, texto: 'temas dominados de 31'},
+    {icono: BookCheck, valor: `${perfil.totales.lecciones}`, texto: 'lecciones vistas'},
+    {icono: ListChecks, valor: `${perfil.totales.respondidas}`, texto: 'preguntas respondidas'},
+    {icono: Flame, valor: `${hoy.racha.dias}`, texto: hoy.racha.dias === 1 ? 'día de racha' : 'días de racha'},
+  ];
 
   return (
-    <div className="rise flex flex-col gap-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="text-[30px] leading-[1.08] font-medium tracking-[-0.04em] text-ink sm:text-[40px]">
-            Hola, {nombre}.<br />
-            ¿Qué <span className="text-resalte">aprendemos</span> hoy?
-          </h1>
-        </div>
-        <div className={`inline-flex h-10 items-center gap-2 rounded-full px-4 text-[14px] font-semibold ${hoy.racha.dias ? 'bg-warm-soft text-warm' : 'bg-surface text-ink-3'}`}>
-          <Flame size={18} />
-          {hoy.racha.dias === 1 ? '1 día de racha' : hoy.racha.dias ? `${hoy.racha.dias} días seguidos` : 'Empieza tu racha hoy'}
-        </div>
+    <div className="rise flex flex-col gap-7">
+      <div className="border-l-[3px] border-accent pl-4">
+        <h1 className="text-[30px] leading-tight font-semibold tracking-[-0.035em] text-ink sm:text-[36px]">
+          ¡Hola, <span className="text-accent">{u.nombre.split(' ')[0]}</span>!
+        </h1>
+        <p className="mt-1 text-[16px] text-ink-2">Continúa con tu preparación y sigue avanzando hacia tu evaluación.</p>
       </div>
 
-      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[1.7fr_1fr]">
-        <div className="flex flex-col gap-6">
-          {/* Lo que toca ahora */}
-          <section className="rounded-card bg-destacado p-6 text-on-destacado shadow-float sm:p-7">
-            <p className="text-[14px] font-semibold opacity-70">{s.tipo === 'leccion' ? 'Continúa donde quedaste' : s.tipo === 'prueba-tema' ? 'Ya viste las lecciones' : 'Vas al día'}</p>
-            <h2 className="mt-2 text-[24px] leading-tight font-semibold tracking-[-0.025em] sm:text-[28px]">
-              {s.tipo === 'leccion' ? s.titulo : s.tipo === 'prueba-tema' ? `Prueba de ${s.temaNombre}` : 'Repasa o haz un simulacro'}
-            </h2>
-            <p className="mt-1.5 text-[15px] opacity-75">
-              {s.tipo === 'leccion'
-                ? `${s.temaNombre} · Lección ${s.numero} de ${s.de} · ${s.minutos} min`
-                : s.tipo === 'prueba-tema'
-                  ? '10 preguntas. Con 80 % el tema queda dominado.'
-                  : 'Los demás temas se abren pronto.'}
-            </p>
-            <div className="mt-5">
-              {s.tipo === 'leccion' ? (
-                <Link href={`/leccion/${s.leccionId}`} className="inline-flex h-12 items-center gap-2 rounded-ctl bg-boton-destacado px-5 text-[15px] font-semibold text-on-boton-destacado transition-transform active:translate-y-px">
-                  Seguir aprendiendo <ArrowRight size={18} />
-                </Link>
-              ) : s.tipo === 'prueba-tema' ? (
-                <BotonIniciar tipo="prueba-tema" referencia={s.temaId} texto="Hacer la prueba" className="!bg-boton-destacado !text-on-boton-destacado" />
-              ) : (
-                <Link href="/simulacro" className="inline-flex h-12 items-center gap-2 rounded-ctl bg-boton-destacado px-5 text-[15px] font-semibold text-on-boton-destacado">
-                  Ir al simulacro <ArrowRight size={18} />
-                </Link>
-              )}
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 xl:grid-cols-[minmax(0,1.75fr)_minmax(0,1fr)]">
+        <section className="relative overflow-hidden rounded-[20px] bg-[linear-gradient(120deg,#f0360a_0%,#c2410c_100%)] p-6 text-white shadow-float sm:p-8">
+          <div className="pointer-events-none absolute -top-16 -right-10 h-56 w-56 rounded-full bg-white/10" />
+          <div className="pointer-events-none absolute -right-20 -bottom-24 h-64 w-64 rounded-full bg-white/10" />
+          <div className="relative flex items-center gap-6">
+            <div className="hidden h-28 w-28 shrink-0 place-items-center rounded-[20px] bg-white/15 sm:grid">
+              <Play size={40} fill="currentColor" />
             </div>
-          </section>
-
-          {/* Bloques y repaso */}
-          <div className="grid grid-cols-[minmax(0,1fr)] gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            {mapa.bloques.map((b) => (
-              <div key={b.id} className="card flex items-center gap-3.5 p-4">
-                <Anillo valor={b.nivel} tam={60} grosor={7} etiqueta={b.nombre} />
-                <div className="min-w-0">
-                  <p className="text-[14px] leading-snug font-semibold text-ink">{b.nombre.replace('Conocimientos de ', '')}</p>
-                  <p className="text-[12.5px] text-ink-3">{b.unidades.reduce((n, x) => n + x.temas.filter((t) => t.estado === 'dominado').length, 0)} temas dominados</p>
+            <div className="min-w-0 flex-1">
+              <p className="text-[14px] font-medium text-white/80">{s.tipo === 'leccion' ? 'Continúa tu aprendizaje' : s.tipo === 'prueba-tema' ? 'Ya viste las lecciones' : 'Vas al día'}</p>
+              <h2 className="mt-1 text-[24px] leading-tight font-semibold tracking-[-0.025em] sm:text-[28px]">
+                {s.tipo === 'leccion' ? s.temaNombre : s.tipo === 'prueba-tema' ? `Prueba: ${s.temaNombre}` : 'Repasa o haz un simulacro'}
+              </h2>
+              <p className="mt-1 text-[15px] text-white/85">
+                {s.tipo === 'leccion' ? `Lección ${s.numero} · ${s.titulo}` : s.tipo === 'prueba-tema' ? '10 preguntas. Con 80 % el tema queda dominado.' : 'Los demás temas se abren pronto.'}
+              </p>
+              {temaActual && (
+                <div className="mt-4 flex max-w-[420px] items-center gap-3">
+                  <div className="h-2 flex-1 overflow-hidden rounded-full bg-white/25">
+                    <div className="h-full rounded-full bg-white" style={{width: `${avanceTema}%`}} />
+                  </div>
+                  <span className="num text-[14px] font-semibold">{avanceTema}%</span>
                 </div>
+              )}
+              <div className="mt-5">
+                {s.tipo === 'leccion' ? (
+                  <Link href={`/leccion/${s.leccionId}`} className="inline-flex h-12 items-center gap-2 rounded-full bg-white px-6 text-[15px] font-semibold text-[#d42d06] transition-transform active:translate-y-px">
+                    <Play size={16} fill="currentColor" /> Continuar clase
+                  </Link>
+                ) : s.tipo === 'prueba-tema' ? (
+                  <BotonIniciar tipo="prueba-tema" referencia={s.temaId} texto="Hacer la prueba" className="!rounded-full !bg-white !text-[#d42d06]" />
+                ) : (
+                  <Link href="/simulacro" className="inline-flex h-12 items-center gap-2 rounded-full bg-white px-6 text-[15px] font-semibold text-[#d42d06]">
+                    Ir al simulacro <ArrowRight size={18} />
+                  </Link>
+                )}
               </div>
-            ))}
-            <div className="card flex flex-col justify-between gap-3 p-4">
-              <div className="flex items-center gap-2.5">
-                <span className="grid h-9 w-9 place-items-center rounded-ctl bg-accent-soft text-accent-ink">
-                  <Repeat size={18} />
-                </span>
-                <div>
-                  <p className="text-[14px] font-semibold text-ink">Repaso de hoy</p>
-                  <p className="text-[12.5px] text-ink-3">{hoy.repasoPendiente ? `${hoy.repasoPendiente} preguntas` : 'Nada pendiente'}</p>
-                </div>
-              </div>
-              {hoy.repasoPendiente > 0 && <BotonIniciar tipo="repaso" texto="Repasar" variante="secondary" className="h-10 w-full" />}
             </div>
           </div>
+        </section>
 
-          {/* La ruta */}
-          <section className="card p-5 sm:p-6">
-            <div className="flex items-center justify-between gap-3">
-              <h2 className="text-[18px] font-semibold tracking-[-0.02em] text-ink">Tu ruta</h2>
-              <Link href="/curso" className="text-[14px] font-semibold text-accent-ink hover:underline">
-                Ver el curso
-              </Link>
-            </div>
-            <ol className="mt-4 flex flex-col gap-1">
-              {ruta.slice(0, 5).map((t, i) => (
-                <li key={t.temaId}>
-                  <Link href={`/curso/${t.temaId}`} className="grid grid-cols-[28px_1fr_auto] items-center gap-3 rounded-ctl px-2 py-2.5 hover:bg-surface-2 sm:grid-cols-[28px_1fr_140px_auto]">
-                    <span className="num grid h-7 w-7 place-items-center rounded-full bg-surface-2 text-[13px] font-bold text-ink-2">{i + 1}</span>
-                    <span className="min-w-0">
-                      <span className="block truncate text-[15px] font-medium text-ink">{t.nombre}</span>
-                      <span className="block truncate text-[12.5px] text-ink-3">{t.unidadNombre}</span>
-                    </span>
-                    <span className="hidden items-center gap-2 sm:flex">
-                      <Barra valor={t.nivel} className="flex-1" />
-                      <span className="num w-9 text-right text-[12.5px] font-semibold text-ink-3">{t.nivel}%</span>
-                    </span>
-                    {t.abierto ? <EtiquetaEstado estado={t.estado} /> : <Lock size={16} className="text-ink-3" aria-label="Próximamente" />}
-                  </Link>
+        <section className="card p-6">
+          <h2 className="text-[18px] font-semibold tracking-[-0.02em] text-ink">Tu progreso general</h2>
+          <div className="mt-5 flex items-center gap-6">
+            <Anillo valor={hoy.preparacion} tam={124} grosor={12} etiqueta="Preparación" />
+            <ul className="flex min-w-0 flex-col gap-3">
+              {stats.map((x) => (
+                <li key={x.texto} className="flex items-center gap-2.5 text-[14px] text-ink-2">
+                  <x.icono size={18} className="shrink-0 text-accent" />
+                  <span className="num font-semibold text-ink">{x.valor}</span>
+                  <span className="truncate">{x.texto}</span>
                 </li>
               ))}
-            </ol>
-          </section>
-        </div>
+            </ul>
+          </div>
+          <p className="mt-4 text-[13px] text-ink-3">El anillo es tu preparación: el dominio de los 31 temas, pesado como en el examen.</p>
+        </section>
+      </div>
 
-        <div className="flex flex-col gap-6">
-          <section className="card flex flex-col items-center p-6 text-center">
-            <p className="text-[14px] font-semibold text-ink-2">Tu preparación</p>
-            <div className="mt-4">
-              <Anillo valor={hoy.preparacion} tam={156} grosor={14} etiqueta="Preparación" />
-            </div>
-            <p className="mt-4 max-w-[30ch] text-[13.5px] leading-relaxed text-ink-3">Es el dominio de tus 31 temas, pesado como en el examen.</p>
-          </section>
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 xl:grid-cols-[minmax(0,1.75fr)_minmax(0,1fr)]">
+        <section>
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-[22px] font-semibold tracking-[-0.025em] text-ink">Tu ruta</h2>
+            <Link href="/curso" className="inline-flex items-center gap-1 text-[14px] font-semibold text-accent">
+              Ver todo <ArrowRight size={16} />
+            </Link>
+          </div>
+          <div className="grid grid-cols-[minmax(0,1fr)] gap-4 sm:grid-cols-3">
+            {tarjetas.map((t, i) => {
+              const avance = Math.round((t.completadas / Math.max(1, t.lecciones)) * 100);
+              return (
+                <Link key={t.id} href={`/curso/${t.id}`} className="card overflow-hidden transition-shadow hover:shadow-float">
+                  <div className="relative h-24 bg-[linear-gradient(135deg,#ffb08f_0%,#f0360a_100%)]" style={{opacity: 1 - i * 0.18}}>
+                    <span className="absolute -bottom-[18px] left-4 grid h-11 w-11 place-items-center rounded-[12px] bg-surface text-accent shadow-card">
+                      {t.abierto ? <BookCheck size={20} /> : <Lock size={18} />}
+                    </span>
+                  </div>
+                  <div className="p-4 pt-7">
+                    <p className="truncate text-[15.5px] font-semibold text-ink">{t.nombre}</p>
+                    <p className="truncate text-[12.5px] text-ink-3">{t.unidad}</p>
+                    <div className="mt-3 flex items-center gap-2">
+                      <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-line-2">
+                        <div className="h-full rounded-full bg-accent" style={{width: `${t.abierto ? avance : 0}%`}} />
+                      </div>
+                      <span className="text-[12px] text-ink-3">{t.abierto ? `${avance}%` : 'Pronto'}</span>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
 
-          <section className="card p-5">
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-[16px] font-semibold text-ink">Mapa de dominio</h2>
-              <Link href="/perfil" className="text-[13px] font-semibold text-accent-ink hover:underline">
-                Detalle
-              </Link>
-            </div>
-            <MapaDominio unidades={unidades} enlazar compacto />
-          </section>
-
-          <section className="card p-5">
-            <div className="flex items-center gap-2.5">
-              <span className="grid h-9 w-9 place-items-center rounded-ctl bg-accent-soft text-accent-ink">
+        <section className="card p-5">
+          <h2 className="text-[18px] font-semibold tracking-[-0.02em] text-ink">Para hoy</h2>
+          <ul className="mt-3 flex flex-col divide-y divide-line">
+            <li className="flex items-center gap-3 py-3">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] bg-accent-soft text-accent">
+                <Repeat size={18} />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-[14.5px] font-semibold text-ink">Repaso de hoy</p>
+                <p className="text-[12.5px] text-ink-3">{hoy.repasoPendiente ? `${hoy.repasoPendiente} preguntas que fallaste` : 'Nada pendiente'}</p>
+              </div>
+              {hoy.repasoPendiente > 0 && <BotonIniciar tipo="repaso" texto="Repasar" variante="secondary" className="!h-9 !px-3 !text-[13px]" />}
+            </li>
+            <li className="flex items-center gap-3 py-3">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] bg-accent-soft text-accent">
                 <Timer size={18} />
               </span>
-              <div>
-                <p className="text-[15px] font-semibold text-ink">Simulacro</p>
-                <p className="text-[12.5px] text-ink-3">{hoy.ultimoSimulacro ? `Último: ${hoy.ultimoSimulacro.puntaje} %` : 'Aún no haces uno'}</p>
+              <div className="min-w-0 flex-1">
+                <p className="text-[14.5px] font-semibold text-ink">Simulacro corto</p>
+                <p className="text-[12.5px] text-ink-3">{hoy.ultimoSimulacro ? `Último: ${hoy.ultimoSimulacro.puntaje} %` : '15 preguntas · 20 min'}</p>
               </div>
-            </div>
-            <Link href="/simulacro" className={`${btn.secondary} mt-4 h-10 w-full`}>
-              Practicar con tiempo
-            </Link>
-          </section>
-        </div>
+              <Link href="/simulacro" className="rounded-full bg-accent-soft px-3 py-1.5 text-[12.5px] font-semibold text-accent-ink">
+                Ir
+              </Link>
+            </li>
+            <li className="flex items-center gap-3 py-3">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] bg-accent-soft text-accent">
+                <Flame size={18} />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-[14.5px] font-semibold text-ink">{hoy.racha.hoyHecho ? 'Racha al día' : 'Mantén tu racha'}</p>
+                <p className="text-[12.5px] text-ink-3">{hoy.racha.hoyHecho ? 'Ya estudiaste hoy. ¡Bien!' : 'Estudia algo hoy para no perderla'}</p>
+              </div>
+            </li>
+          </ul>
+        </section>
       </div>
     </div>
   );
