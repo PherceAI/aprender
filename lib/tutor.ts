@@ -20,7 +20,7 @@ export function tutorDisponible(): boolean {
 }
 
 /** Llamada a Gemini por su API REST. El modelo se puede cambiar con GEMINI_MODEL. */
-export function llamarGemini(clave = process.env.GEMINI_API_KEY ?? '', modelo = process.env.GEMINI_MODEL || 'gemini-2.5-flash'): Llamador {
+export function llamarGemini(clave = process.env.GEMINI_API_KEY ?? '', modelo = process.env.GEMINI_MODEL || 'gemini-3.8-flash'): Llamador {
   return async (sistema, mensajes) => {
     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent`, {
       method: 'POST',
@@ -33,8 +33,8 @@ export function llamarGemini(clave = process.env.GEMINI_API_KEY ?? '', modelo = 
       signal: AbortSignal.timeout(30_000),
     });
     if (!res.ok) throw new Error(`El tutor no respondió (${res.status})`);
-    const j = (await res.json()) as {candidates?: {content?: {parts?: {text?: string}[]}}[]};
-    const texto = j.candidates?.[0]?.content?.parts?.map((p) => p.text ?? '').join('').trim();
+    const j = (await res.json()) as {candidates?: {content?: {parts?: {text?: string; thought?: boolean}[]}}[]};
+    const texto = j.candidates?.[0]?.content?.parts?.filter((p) => !p.thought).map((p) => p.text ?? '').join('').trim();
     if (!texto) throw new Error('El tutor no respondió');
     return texto;
   };

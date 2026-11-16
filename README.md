@@ -24,5 +24,5 @@ Sin `DATABASE_URL` usa PGlite (Postgres dentro del proceso). Con `DATABASE_URL` 
 - `SESSION_SECRET`: obligatoria; firma las sesiones.
 - `ADMIN_CORREO`, `ADMIN_CLAVE` (y `ADMIN_NOMBRE`): cuenta de administración. Se crea o actualiza al arrancar.
 - `DEMO_CORREO`, `DEMO_CLAVE` (y `DEMO_NOMBRE`): cuenta del docente de demo.
-- `GEMINI_API_KEY` (y `GEMINI_MODEL`, por defecto `gemini-2.5-flash`): tutor con IA. Sin clave, el tutor se muestra como no disponible.
+- `GEMINI_API_KEY` (y `GEMINI_MODEL`, por defecto `gemini-3.8-flash`): tutor con IA. Sin clave, el tutor se muestra como no disponible.
 - `DATA_DIR=/data`: volumen persistente para los videos.
