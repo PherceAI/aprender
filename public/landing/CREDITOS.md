@@ -3,3 +3,5 @@ Fotos de Unsplash (licencia Unsplash: uso comercial libre, sin atribución oblig
 - docente-aula.jpg: https://unsplash.com/photos/1590650213165-c1fef80648c4
 - docente-libros.jpg: https://unsplash.com/photos/1657846118184-ee8fb692517f
 - docente-celular.jpg: https://unsplash.com/photos/1758598497259-b51e6ed6c73c
+
+- docente-recorte.png: la misma foto de docente-hero.jpg, recortada sin fondo para la portada.
