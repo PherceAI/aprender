@@ -1,11 +1,11 @@
 import type {Metadata} from 'next';
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
-import {ArrowLeft, Check, CheckCircle2, Circle, FileText, Lock, Play, Target, Trophy} from 'lucide-react';
+import {ArrowLeft, Check, CheckCircle2, Circle, FileText, Gift, Lock, Play, Target, Trophy} from 'lucide-react';
 import {requerirDocente} from '@/lib/auth/cookies';
 import {getDb} from '@/lib/db';
 import {temaDetalle} from '@/lib/curso';
-import {leccionesGratis, planDe} from '@/lib/acceso';
+import {LECCIONES_GRATIS, estadoAcceso} from '@/lib/acceso';
 import {enlaceFicha, paginaDeTema} from '@/lib/ficha';
 import {ErrorAcademia} from '@/lib/intentos';
 import {Anillo, btn} from '@/components/ui';
@@ -27,8 +27,8 @@ export default async function Tema({params}: {params: Promise<{tema: string}>}) 
     if (e instanceof ErrorAcademia) notFound();
     throw e;
   }
-  const [plan, gratis] = await Promise.all([planDe(db, u.id), leccionesGratis(db)]);
-  const bloqueada = (id: string) => plan === 'gratis' && !gratis.has(id);
+  const acceso = await estadoAcceso(db, u.id);
+  const plan = acceso.plan;
   const hechas = t.lecciones.filter((l) => l.completada).length;
   const todas = hechas === t.lecciones.length;
   const siguiente = t.lecciones.find((l) => !l.completada) ?? t.lecciones[0];
@@ -96,10 +96,19 @@ export default async function Tema({params}: {params: Promise<{tema: string}>}) 
               <h2 className="flex items-center gap-3 text-[18px] font-semibold text-ink">
                 <PasoNum n={1} hecho={paso > 1} /> Aprende con las lecciones
               </h2>
-              <span className="num text-[13.5px] font-semibold text-ink-2">
+              <span className="num shrink-0 text-[13.5px] font-semibold whitespace-nowrap text-ink-2">
                 {hechas} de {t.lecciones.length}
               </span>
             </div>
+
+            {plan === 'gratis' && (
+              <p className="mt-3 flex items-start gap-2 rounded-[12px] bg-accent-soft px-3.5 py-2.5 text-[14px] leading-snug text-accent-ink">
+                <Gift size={17} className="mt-px shrink-0" />
+                {acceso.restantes > 0
+                  ? `Con tu cuenta gratis eliges ${LECCIONES_GRATIS} lecciones de cualquier tema. Te ${acceso.restantes === 1 ? 'queda 1' : `quedan ${acceso.restantes}`}.`
+                  : `Ya usaste tus ${LECCIONES_GRATIS} lecciones gratis. Con el acceso completo se abre todo.`}
+              </p>
+            )}
 
             {t.video && (
               <div className="mt-5 overflow-hidden rounded-[16px] border border-line">
@@ -110,7 +119,8 @@ export default async function Tema({params}: {params: Promise<{tema: string}>}) 
 
             <ol className="mt-4 flex flex-col gap-1">
               {t.lecciones.map((l, i) => {
-                const lock = bloqueada(l.id);
+                const estado = acceso.de(l.id);
+                const lock = estado === 'bloqueada';
                 return (
                   <li key={l.id}>
                     <Link href={`/leccion/${l.id}`} className="flex items-start gap-3 rounded-[12px] px-3 py-3 hover:bg-surface-2">
@@ -125,6 +135,8 @@ export default async function Tema({params}: {params: Promise<{tema: string}>}) 
                       </span>
                       {lock ? (
                         <span className="shrink-0 rounded-full bg-accent-soft px-2 py-0.5 text-[11.5px] font-semibold text-accent-ink">Acceso completo</span>
+                      ) : estado === 'por-elegir' ? (
+                        <span className="shrink-0 rounded-full border border-line px-2 py-0.5 text-[11.5px] font-semibold text-ink-2">Gratis</span>
                       ) : (
                         <span className="num shrink-0 text-[12.5px] text-ink-3">{l.minutos} min</span>
                       )}

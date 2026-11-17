@@ -9,6 +9,7 @@ import {
   ChartNoAxesColumnIncreasing,
   ChevronLeft,
   ChevronRight,
+  ClipboardList,
   Crown,
   FileText,
   House,
@@ -24,7 +25,7 @@ import {BotonInstalar} from './instalar';
 
 // Barra lateral de computadora: se pliega a solo íconos y recuerda la elección (cookie, sin parpadeo al cargar).
 
-export type ItemBarra = {href: string; texto: string; icono: 'inicio' | 'ruta' | 'repaso' | 'simulacro' | 'progreso' | 'admin'; grupo: 'Aprender' | 'Seguimiento'};
+export type ItemBarra = {href: string; texto: string; icono: 'inicio' | 'ruta' | 'repaso' | 'simulacro' | 'progreso' | 'evaluacion' | 'admin'; grupo: 'Aprender' | 'Seguimiento'};
 
 const ICONOS: Record<ItemBarra['icono'], LucideIcon> = {
   inicio: House,
@@ -32,6 +33,7 @@ const ICONOS: Record<ItemBarra['icono'], LucideIcon> = {
   repaso: Repeat,
   simulacro: Timer,
   progreso: ChartNoAxesColumnIncreasing,
+  evaluacion: ClipboardList,
   admin: ChartLine,
 };
 

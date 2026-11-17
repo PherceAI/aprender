@@ -95,5 +95,5 @@ export function Barra({valor, className = ''}: {valor: number; className?: strin
 }
 
 export function Aviso() {
-  return <p className="text-[12px] leading-relaxed text-ink-3">Pragma no es el Ineval ni habla en su nombre. El temario sale de la ficha técnica pública 2026.</p>;
+  return <p className="text-[12px] leading-relaxed text-ink-3">Pragma no es el Ineval ni habla en su nombre. El temario sale de la ficha técnica pública del Ineval.</p>;
 }

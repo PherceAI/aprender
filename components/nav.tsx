@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import {usePathname} from 'next/navigation';
-import {ChartLine, ChartNoAxesColumnIncreasing, House, Repeat, Route, Timer, type LucideIcon} from 'lucide-react';
+import {ChartLine, ChartNoAxesColumnIncreasing, ClipboardList, House, Repeat, Route, Timer, type LucideIcon} from 'lucide-react';
 
-export type ItemNav = {href: string; texto: string; corto?: string; icono: 'inicio' | 'ruta' | 'repaso' | 'simulacro' | 'progreso' | 'admin'};
+export type ItemNav = {href: string; texto: string; corto?: string; icono: 'inicio' | 'ruta' | 'repaso' | 'simulacro' | 'progreso' | 'evaluacion' | 'admin'};
 
 const ICONOS: Record<ItemNav['icono'], LucideIcon> = {
   inicio: House,
@@ -12,6 +12,7 @@ const ICONOS: Record<ItemNav['icono'], LucideIcon> = {
   repaso: Repeat,
   simulacro: Timer,
   progreso: ChartNoAxesColumnIncreasing,
+  evaluacion: ClipboardList,
   admin: ChartLine,
 };
 

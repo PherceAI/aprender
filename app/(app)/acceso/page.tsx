@@ -24,7 +24,7 @@ export default async function Acceso() {
     <div className="rise mx-auto max-w-[640px]">
       <h1 className="text-[30px] font-semibold tracking-[-0.04em] text-ink sm:text-[36px]">{plan === 'completo' ? 'Tienes el acceso completo' : 'Acceso completo'}</h1>
       <p className="mt-1.5 text-[16px] text-ink-2">
-        {plan === 'completo' ? 'Todo Pragma está abierto para ti.' : `Hoy tienes el diagnóstico y las primeras ${LECCIONES_GRATIS} lecciones. Con un solo pago, sin mensualidades, se abre todo:`}
+        {plan === 'completo' ? 'Todo Pragma está abierto para ti.' : `Hoy tienes el diagnóstico y ${LECCIONES_GRATIS} lecciones a tu elección, de cualquier tema. Con un solo pago, sin mensualidades, se abre todo:`}
       </p>
       <ul className="card mt-6 flex flex-col gap-3.5 p-6">
         {INCLUYE.map((x) => (

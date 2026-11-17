@@ -126,7 +126,7 @@ export const usuarios = pgTable(
     correo: text().notNull(),
     claveHash: text().notNull(),
     rol: text({enum: ['docente', 'admin']}).notNull().default('docente'),
-    /** «gratis»: se registró solo y ve las primeras lecciones. «completo»: pagó o la cuenta la creó el administrador. */
+    /** «gratis»: se registró solo y elige 3 lecciones de cualquier tema. «completo»: pagó o la cuenta la creó el administrador. */
     plan: text({enum: ['gratis', 'completo']}).notNull().default('completo'),
     especialidadId: text().references(() => especialidades.id),
     creado: timestamp({withTimezone: true}).notNull().defaultNow(),
@@ -249,6 +249,21 @@ export const progresoLecciones = pgTable(
   (t) => [primaryKey({columns: [t.usuarioId, t.leccionId]})]
 );
 
+/** Las lecciones que un docente con cuenta gratis eligió abrir (hasta LECCIONES_GRATIS, de cualquier tema). */
+export const leccionesElegidas = pgTable(
+  'lecciones_elegidas',
+  {
+    usuarioId: text()
+      .notNull()
+      .references(() => usuarios.id, {onDelete: 'cascade'}),
+    leccionId: text()
+      .notNull()
+      .references(() => lecciones.id, {onDelete: 'cascade'}),
+    elegida: timestamp({withTimezone: true}).notNull().defaultNow(),
+  },
+  (t) => [primaryKey({columns: [t.usuarioId, t.leccionId]})]
+);
+
 export const notas = pgTable(
   'notas',
   {
@@ -278,4 +293,30 @@ export const tutorMensajes = pgTable(
     creado: timestamp({withTimezone: true}).notNull().defaultNow(),
   },
   (t) => [index('tutor_conversacion').on(t.usuarioId, t.leccionId)]
+);
+
+// ───────────── Revisión antes del lanzamiento (se apaga quitando REVISION_CLAVE) ─────────────
+
+export const TIPOS_COMENTARIO = ['mejorar', 'quitar', 'agregar', 'error', 'gusta'] as const;
+
+/** Comentarios que deja el revisor (el docente experto) anclados a una parte de una pantalla. */
+export const comentariosRevision = pgTable(
+  'comentarios_revision',
+  {
+    id: serial().primaryKey(),
+    autor: text().notNull(),
+    /** La pantalla: ruta con su búsqueda, p. ej. /curso/anatomia-celular. */
+    ruta: text().notNull(),
+    /** Selector CSS de la parte comentada; vacío = la pantalla entera. */
+    ancla: text().notNull().default(''),
+    /** El texto que se veía en esa parte, para reconocerla aunque cambie el diseño. */
+    muestra: text().notNull().default(''),
+    tipo: text({enum: TIPOS_COMENTARIO}).notNull(),
+    texto: text().notNull(),
+    /** Ancho de la pantalla al comentar (para saber si fue en teléfono o computadora). */
+    ancho: integer().notNull().default(0),
+    resuelto: boolean().notNull().default(false),
+    creado: timestamp({withTimezone: true}).notNull().defaultNow(),
+  },
+  (t) => [index('comentarios_revision_ruta').on(t.ruta)]
 );

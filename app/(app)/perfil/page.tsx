@@ -71,7 +71,12 @@ export default async function MiProgreso() {
         <h1 className="text-[28px] font-semibold tracking-[-0.04em] text-ink sm:text-[34px]">
           Mi <span className="text-accent">progreso</span>
         </h1>
-        <p className="mt-1 text-[15.5px] text-ink-2">Así vas en tu preparación para la evaluación docente.</p>
+        <p className="mt-1 text-[15.5px] text-ink-2">
+          Así vas en tu preparación para la evaluación docente.{' '}
+          <Link href="/evaluacion" className="font-semibold whitespace-nowrap text-accent-ink hover:underline lg:hidden">
+            Conoce tu evaluación
+          </Link>
+        </p>
       </div>
 
       <div className="grid grid-cols-[minmax(0,1fr)] gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">

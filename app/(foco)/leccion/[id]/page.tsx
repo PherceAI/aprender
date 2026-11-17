@@ -9,6 +9,8 @@ import {ErrorAcademia} from '@/lib/intentos';
 import {historialTutor, tutorDisponible} from '@/lib/tutor';
 import {enlaceFicha, paginaDeTema} from '@/lib/ficha';
 import {AccesoCompleto} from '@/components/acceso-completo';
+import {ElegirLeccion} from '@/components/elegir-leccion';
+import {estadoAcceso} from '@/lib/acceso';
 import {Reproductor, type Control} from '@/components/leccion/reproductor';
 
 export const metadata: Metadata = {title: 'Lección'};
@@ -27,6 +29,12 @@ export default async function Leccion({params}: {params: Promise<{id: string}>})
     throw e;
   }
   if (l === 'tema-cerrado') redirect(`/curso/${id.replace(/-\d+$/, '')}`);
+  if (l === 'por-elegir') {
+    const [t, acceso] = await Promise.all([temaDetalle(db, u.id, id.replace(/-\d+$/, '')), estadoAcceso(db, u.id)]);
+    const info = t.lecciones.find((x) => x.id === id);
+    if (!info) notFound();
+    return <ElegirLeccion leccion={info} tema={{id: t.id, nombre: t.nombre}} restantes={acceso.restantes} />;
+  }
   if (l === 'bloqueada') {
     return (
       <div className="px-4">

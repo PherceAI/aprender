@@ -29,6 +29,20 @@
       "when": 1794805548018,
       "tag": "0003_avance",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794878010644,
+      "tag": "0004_lecciones-elegidas",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794880072125,
+      "tag": "0005_revision",
+      "breakpoints": true
     }
   ]
 }

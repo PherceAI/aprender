@@ -1,8 +1,11 @@
 import type {Metadata} from 'next';
+import Link from 'next/link';
+import {MessageSquareText} from 'lucide-react';
 import {accionCambiarPlan} from '@/app/acciones';
 import {requerirAdmin} from '@/lib/auth/cookies';
 import {getDb} from '@/lib/db';
 import {docentesConAvance, resumenAdmin, temasYVideos} from '@/lib/admin';
+import {claveRevision, todosLosComentarios} from '@/lib/revision';
 import {CrearDocente} from './crear-docente';
 import {Videos} from './videos';
 
@@ -16,7 +19,8 @@ function fecha(d: Date | null) {
 export default async function Admin() {
   await requerirAdmin();
   const db = await getDb();
-  const [r, docentes, temas] = await Promise.all([resumenAdmin(db), docentesConAvance(db), temasYVideos(db)]);
+  const [r, docentes, temas, pendientes] = await Promise.all([resumenAdmin(db), docentesConAvance(db), temasYVideos(db), todosLosComentarios(db, true)]);
+  const verRevision = Boolean(claveRevision()) || pendientes.length > 0;
   const cifras = [
     {v: r.docentes, t: 'docentes'},
     {v: r.activos7, t: 'activos esta semana'},
@@ -39,6 +43,20 @@ export default async function Admin() {
           </div>
         ))}
       </div>
+
+      {verRevision && (
+        <Link href="/admin/revision" className="card flex items-center gap-4 p-4 hover:bg-surface-2 sm:p-5">
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-accent-soft text-accent">
+            <MessageSquareText size={20} />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-[16px] font-semibold text-ink">Comentarios de revisión</span>
+            <span className="text-[13.5px] text-ink-2">
+              <span className="num">{pendientes.length}</span> pendientes · el enlace para el revisor está aquí
+            </span>
+          </span>
+        </Link>
+      )}
 
       <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[1.5fr_1fr]">
         <section className="card overflow-hidden">

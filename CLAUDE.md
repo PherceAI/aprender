@@ -7,7 +7,7 @@ Este es un proyecto aparte de PherceStudio y no se mezcla con él. Responde siem
 ## Qué es
 Es una academia en línea para que los **docentes** de Ecuador (no los estudiantes) se preparen para la Evaluación del Desempeño Docente del Ineval.
 - La idea es del cuñado del dueño, docente de Ciencias Naturales en Riobamba. La competencia vende cursos a unos $200; aquí la idea es ser más barato, más didáctico y más interactivo.
-- Empieza con Ciencias Naturales EGB Superior, solo la Dimensión 1. Las demás materias se agregan sobre el mismo núcleo.
+- Empieza con Ciencias Naturales EGB Superior, solo la Dimensión 1. **El examen es en 2027**; las dimensiones 2, 3 y 4 ya se aplicaron, así que no se preparan. Las demás materias se agregan sobre el mismo núcleo.
 - VISION.md manda. En fuentes/ está el PDF del Ineval.
 - Es un clon de la app de exámenes del Hotel Zeus (evaluaciones-zeus). **La app del hotel no se toca.**
 - Inspiración: la UX de Platzi, y la racha y el repaso estilo Duolingo.
@@ -28,7 +28,7 @@ Es una academia en línea para que los **docentes** de Ecuador (no los estudiant
 ## Decisiones del 15 nov (noche)
 - La plataforma se llama **Pragma**. El logo del dueño está en public/marca/: el símbolo va en el naranja de la plataforma y el ícono de la app es naranja con el símbolo blanco.
 - La landing sigue las referencias del dueño: academia con fotos de docentes (Unsplash, créditos en public/landing/CREDITOS.md), pasos con íconos, especialidades, «aprende más inteligente», preguntas frecuentes y banner final. Poco texto. Rechazó las versiones tipográficas y planas.
-- Modelo de negocio: entra gratis (diagnóstico y 2 lecciones). El resto, las pruebas de tema y los simulacros se desbloquean con un **pago único** que el administrador activa en el panel. La regla está en lib/acceso.ts.
+- Modelo de negocio: entra gratis (diagnóstico y 3 lecciones a su elección, de cualquier tema). El resto, las pruebas de tema y los simulacros se desbloquean con un **pago único** que el administrador activa en el panel. La regla está en lib/acceso.ts.
 - Para diseñar: correr Impeccable completo y Taste Skill, y mostrar opciones o referencias antes de programar.
 - El checklist de pulido está en docs/pulido-checklist.md.
 

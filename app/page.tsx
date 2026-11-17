@@ -10,28 +10,71 @@ import {
   ClipboardCheck,
   FileCheck,
   Globe,
-  GraduationCap,
   Leaf,
   Play,
   Plus,
   Repeat,
+  Smartphone,
   Trophy,
   UserPlus,
+  Wallet,
   type LucideIcon,
 } from 'lucide-react';
 import {sesionActual} from '@/lib/auth/cookies';
-import {enlaceFicha} from '@/lib/ficha';
 import {Aviso, Marca} from '@/components/ui';
 import {TemaToggle} from '@/components/tema-toggle';
+import {ConoceEvaluacion} from '@/components/conoce-evaluacion';
+import {PreguntaMuestra, type Muestra} from '@/components/pregunta-muestra';
+import {CONTENIDO} from '@/contenido';
 import fotoHero from '@/public/landing/docente-hero.jpg';
-import fotoAula from '@/public/landing/docente-aula.jpg';
 import fotoCelular from '@/public/landing/docente-celular.jpg';
 import fotoLibros from '@/public/landing/docente-libros.jpg';
 
-// Portada pública. Sigue las referencias del dueño (landing de academia con fotos, pasos con íconos,
-// especialidades en mosaicos y banner final), en el naranja del hotel. Fotos de Unsplash: ver public/landing/CREDITOS.md.
+// Portada pública con estilo de academia (referencia del dueño, 16 nov): portada con foto y tarjetas,
+// lo que respalda, cursos, una pregunta para probar, «Conoce tu evaluación», especialidades, método y banner.
+// Sin precios, valoraciones ni cifras de alumnos inventadas. Fotos de Unsplash: ver public/landing/CREDITOS.md.
 
 const REGISTRO = '/registro';
+
+const RESPALDO: {icono: LucideIcon; titulo: string; texto: string}[] = [
+  {icono: FileCheck, titulo: 'Ficha técnica oficial', texto: 'El temario del Ineval, tema por tema'},
+  {icono: ClipboardCheck, titulo: 'Diagnóstico personal', texto: '40 preguntas para saber dónde estás'},
+  {icono: Smartphone, titulo: 'A tu ritmo', texto: 'En el celular o la computadora'},
+  {icono: Wallet, titulo: 'Un solo pago', texto: 'Sin mensualidades'},
+];
+
+const CURSOS: {nombre: string; estado: string; texto: string; meta: string; img: string; fondo: string; bloques?: [string, number][]}[] = [
+  {
+    nombre: 'Ciencias Naturales',
+    estado: 'Disponible · EGB Superior',
+    texto: 'Todo lo que pide la prueba de tu especialidad, con lecciones interactivas y un laboratorio de la célula.',
+    meta: '21 temas · 60 preguntas y 120 minutos en el examen',
+    img: '/ilustraciones/microscope.png',
+    fondo: 'linear-gradient(135deg,#ccf3dc,#7fd8a4)',
+    bloques: [
+      ['Los seres vivos y su ambiente', 9],
+      ['Cuerpo humano y salud', 5],
+      ['Materia y energía', 2],
+      ['La Tierra y el Universo', 5],
+    ],
+  },
+  {
+    nombre: 'Conocimientos pedagógicos',
+    estado: 'Incluido para todas las especialidades',
+    texto: 'Teorías del aprendizaje, DUA, planificación, evaluación, metodologías y técnicas.',
+    meta: '6 temas · parte de la prueba de 39 preguntas',
+    img: '/ilustraciones/books.png',
+    fondo: 'linear-gradient(135deg,#ffd6ea,#f39ac6)',
+  },
+  {
+    nombre: 'Conocimientos digitales',
+    estado: 'Incluido para todas las especialidades',
+    texto: 'Recursos abiertos, medios y herramientas digitales, y uso seguro de internet.',
+    meta: '4 temas · parte de la prueba de 39 preguntas',
+    img: '/ilustraciones/laptop.png',
+    fondo: 'linear-gradient(135deg,#d4e2ff,#93b4fb)',
+  },
+];
 
 const PASOS: {icono: LucideIcon; titulo: string; texto: string}[] = [
   {icono: UserPlus, titulo: 'Entra gratis', texto: 'Crea tu cuenta en un minuto.'},
@@ -43,7 +86,6 @@ const PASOS: {icono: LucideIcon; titulo: string; texto: string}[] = [
 
 const ESPECIALIDADES: {icono: LucideIcon; nombre: string; estado: string; fondo: string; color: string; activa?: boolean}[] = [
   {icono: Leaf, nombre: 'Ciencias Naturales', estado: 'Disponible', fondo: '#fff1ea', color: '#f0360a', activa: true},
-  {icono: GraduationCap, nombre: 'Conocimientos generales', estado: 'Incluido', fondo: '#fff6e5', color: '#c2700a', activa: true},
   {icono: Calculator, nombre: 'Matemática', estado: 'Muy pronto', fondo: '#eef6ff', color: '#2563eb'},
   {icono: BookOpen, nombre: 'Lengua y Literatura', estado: 'Muy pronto', fondo: '#fdf0f6', color: '#c0267a'},
   {icono: Globe, nombre: 'Estudios Sociales', estado: 'Muy pronto', fondo: '#ecfbf4', color: '#15803d'},
@@ -57,30 +99,45 @@ const VENTAJAS = [
   'En tu celular o en tu computadora',
 ];
 
+const CIFRAS: [string, string][] = [
+  ['31', 'temas de la ficha'],
+  ['5', 'formatos de pregunta'],
+  ['40', 'preguntas de diagnóstico'],
+  ['3', 'lecciones gratis'],
+];
+
 const FAQ: {p: string; r: string}[] = [
-  {p: '¿Cuánto cuesta?', r: 'Empiezas gratis con las primeras lecciones. Para desbloquear todo haces un solo pago, sin mensualidades.'},
-  {p: '¿Es del Ineval?', r: 'No. Somos una plataforma independiente que prepara con el temario público de su ficha técnica 2026.'},
-  {p: '¿Qué parte de la evaluación prepara?', r: 'Las dos pruebas con respuestas correctas: Conocimientos generales y Conocimientos de tu especialidad.'},
+  {p: '¿Cuánto cuesta?', r: 'Empiezas gratis: haces el diagnóstico y eliges 3 lecciones de cualquier tema. Para desbloquear todo haces un solo pago, sin mensualidades.'},
+  {p: '¿Es del Ineval?', r: 'No. Somos una plataforma independiente que prepara con el temario público de su ficha técnica oficial.'},
+  {p: '¿Qué parte de la evaluación prepara?', r: 'La Dimensión 1, la que falta rendir en 2027: Conocimientos generales (pedagógicos y digitales) y Conocimientos de tu especialidad.'},
   {p: '¿Necesito instalar algo?', r: 'No. Entras desde el navegador y, si quieres, la guardas en tu celular como una app.'},
 ];
 
+// Una pregunta real del banco (formato simple) para probar el método en la portada.
+const MUESTRA: Muestra = (() => {
+  const p = CONTENIDO.preguntas.find((x) => x.id === 'diag-gen-05')!;
+  return {tema: 'Metodologías', enunciado: p.enunciado, opciones: p.opciones as string[], correcta: p.correcta, explicaciones: p.explicaciones as string[]};
+})();
+
 const tarjeta = 'rounded-[24px] border border-[#f1e6e1] bg-surface shadow-[0_1px_2px_rgba(23,23,23,0.04),0_16px_40px_-24px_rgba(240,54,10,0.18)] dark:border-line dark:shadow-none';
-const pildora = 'inline-flex h-12 items-center justify-center gap-2 rounded-full px-6 text-[15.5px] font-semibold transition-transform active:translate-y-px';
+const pildora = 'inline-flex h-12 items-center justify-center gap-2 rounded-full px-6 text-[15.5px] font-semibold whitespace-nowrap transition-transform active:translate-y-px';
+const flotante = 'rounded-[16px] border border-line bg-surface shadow-[0_18px_40px_-20px_rgba(120,40,10,0.35)] dark:shadow-none';
 
 export default async function Portada() {
   if (await sesionActual()) redirect('/inicio');
 
   return (
-    <div className="min-h-dvh bg-surface">
-      {/* Fondo cálido de la portada, como el degradado suave de la referencia */}
+    <div className="min-h-dvh overflow-x-clip bg-surface">
+      {/* Fondo cálido de la portada */}
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 -z-0 h-[900px] bg-[radial-gradient(60%_50%_at_15%_10%,#ffe8dd_0%,transparent_70%),radial-gradient(50%_45%_at_90%_20%,#ffeef0_0%,transparent_70%)] dark:opacity-20" />
 
       <header className="relative z-20">
         <div className="mx-auto flex h-[72px] max-w-[1200px] items-center justify-between gap-4 px-4 sm:px-6">
           <Marca />
           <nav className="hidden items-center gap-8 text-[15px] font-medium text-ink-2 md:flex" aria-label="Secciones">
+            <a href="#cursos" className="hover:text-ink">Cursos</a>
+            <a href="#evaluacion" className="hover:text-ink">Tu evaluación</a>
             <a href="#como-funciona" className="hover:text-ink">Cómo funciona</a>
-            <a href="#especialidades" className="hover:text-ink">Especialidades</a>
             <a href="#preguntas" className="hover:text-ink">Preguntas</a>
           </nav>
           <div className="flex items-center gap-2">
@@ -88,7 +145,7 @@ export default async function Portada() {
             <Link href="/ingresar" className="hidden h-10 items-center rounded-full px-4 text-[14.5px] font-semibold text-ink hover:bg-surface-2 sm:inline-flex">
               Iniciar sesión
             </Link>
-            <Link href={REGISTRO} className={`${pildora} h-10 bg-accent px-4 text-[14px] whitespace-nowrap text-white sm:px-5 sm:text-[14.5px]`}>
+            <Link href={REGISTRO} className={`${pildora} h-10 bg-accent px-4 text-[14px] text-white sm:px-5 sm:text-[14.5px]`}>
               Empieza gratis
             </Link>
           </div>
@@ -96,78 +153,145 @@ export default async function Portada() {
       </header>
 
       <main className="relative z-10">
-        {/* Portada */}
-        <section className="mx-auto max-w-[1200px] px-4 pt-10 pb-16 text-center sm:px-6 lg:pt-16">
-          <h1 className="rise text-[44px] leading-[1.02] font-semibold tracking-[-0.045em] text-ink sm:text-[72px]">
-            Prepárate. Practica. <span className="text-accent">Domina.</span>
-          </h1>
-          <p className="rise mx-auto mt-5 max-w-[46ch] text-[17px] leading-relaxed text-ink-2 sm:text-[19px]">
-            La plataforma para preparar tu evaluación docente del Ineval, a tu ritmo y desde tu celular.
-          </p>
-          <div className="rise mt-8 flex flex-wrap justify-center gap-3">
-            <Link href={REGISTRO} className={`${pildora} bg-accent text-white`}>
-              Empieza gratis <ArrowRight size={18} />
-            </Link>
-            <a href="#como-funciona" className={`${pildora} border border-line bg-surface text-ink hover:bg-surface-2`}>
-              Cómo funciona
-            </a>
-          </div>
-          <p className="rise mt-4 text-[14.5px] text-ink-2 sm:hidden">
-            ¿Ya tienes cuenta?{' '}
-            <Link href="/ingresar" className="font-semibold text-accent-ink">
-              Inicia sesión
-            </Link>
-          </p>
-
-          <div className="mt-14 grid grid-cols-[minmax(0,1fr)] items-center gap-6 lg:grid-cols-[minmax(0,0.6fr)_minmax(0,1.6fr)_minmax(0,0.6fr)] lg:gap-8">
-            {/* Respaldo */}
-            <div className="order-2 flex flex-col items-center gap-3 lg:order-1 lg:items-start lg:text-left">
-              <span className="grid h-14 w-14 place-items-center rounded-full bg-surface text-accent shadow-[0_8px_24px_-12px_rgba(240,54,10,0.35)] dark:shadow-none">
-                <FileCheck size={24} />
-              </span>
-              <p className="max-w-[24ch] text-[15px] leading-snug font-medium text-ink">Basado en la ficha técnica oficial del Ineval 2026.</p>
-              <a href={enlaceFicha(1)} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-accent-ink hover:underline">
-                Ver la ficha <ArrowRight size={15} />
+        {/* Portada: mensaje a la izquierda, la docente con piezas de la academia a la derecha */}
+        <section className="mx-auto grid max-w-[1200px] grid-cols-[minmax(0,1fr)] items-center gap-14 px-4 pt-8 pb-16 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-10 lg:pt-14">
+          <div className="rise text-center lg:text-left">
+            <h1 className="text-[44px] leading-[1.02] font-semibold tracking-[-0.045em] text-ink sm:text-[64px]">
+              Prepárate. Practica. <span className="text-accent">Domina.</span>
+            </h1>
+            <p className="mx-auto mt-5 max-w-[40ch] text-[17px] leading-relaxed text-ink-2 sm:text-[19px] lg:mx-0">
+              La academia en línea para preparar la Dimensión 1 de tu evaluación docente 2027, a tu ritmo y desde tu celular.
+            </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
+              <Link href={REGISTRO} className={`${pildora} bg-accent text-white`}>
+                Empieza gratis <ArrowRight size={18} />
+              </Link>
+              <a href="#cursos" className={`${pildora} border border-line bg-surface text-ink hover:bg-surface-2`}>
+                Ver los cursos
               </a>
             </div>
+            <p className="mt-4 text-[14.5px] text-ink-2 sm:hidden">
+              ¿Ya tienes cuenta?{' '}
+              <Link href="/ingresar" className="font-semibold text-accent-ink">
+                Inicia sesión
+              </Link>
+            </p>
+          </div>
 
-            {/* La docente estudiando: foto grande con piezas de la plataforma encima */}
-            <div className="relative order-1 lg:order-2">
-              <div className="relative overflow-hidden rounded-[28px] border-[6px] border-surface shadow-[0_30px_60px_-30px_rgba(120,40,10,0.35)] dark:border-line">
-                <Image src={fotoHero} alt="Docente sonriendo en su sala de estudio" priority placeholder="blur" sizes="(min-width: 1024px) 640px, 100vw" className="aspect-[16/10] h-auto w-full object-cover" />
-                <span className="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-[12.5px] font-semibold text-[#171717] backdrop-blur">
-                  <Leaf size={14} className="text-accent" /> Ciencias Naturales
-                </span>
-                <div className="absolute right-4 bottom-4 hidden w-[300px] items-center gap-3 rounded-[16px] bg-white/92 p-3 text-left backdrop-blur sm:flex">
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-accent text-white">
-                    <Play size={16} fill="currentColor" />
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-[13.5px] font-semibold text-[#171717]">Anatomía celular · Lección 2</p>
-                    <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-[#f1e6e1]">
-                      <div className="h-full w-[60%] rounded-full bg-accent" />
-                    </div>
-                  </div>
-                </div>
-              </div>
+          <div className="relative mx-auto w-full max-w-[560px] sm:px-8">
+            <div className="relative overflow-hidden rounded-[32px] border-[6px] border-surface shadow-[0_30px_60px_-30px_rgba(120,40,10,0.35)] dark:border-line">
+              <Image src={fotoHero} alt="Docente sonriendo en su sala de estudio" priority placeholder="blur" sizes="(min-width: 1024px) 560px, 100vw" className="aspect-[4/3.3] h-auto w-full object-cover" />
             </div>
-
-            {/* Lo que cubre */}
-            <div className="order-3 flex justify-center gap-10 lg:flex-col lg:items-end lg:gap-6 lg:text-right">
-              <div>
-                <p className="text-[40px] leading-none font-semibold tracking-[-0.04em] text-ink">31</p>
-                <p className="mt-1 text-[14px] text-ink-2">temas del examen</p>
-              </div>
-              <div>
-                <p className="text-[40px] leading-none font-semibold tracking-[-0.04em] text-ink">5</p>
-                <p className="mt-1 text-[14px] text-ink-2">formatos de pregunta</p>
-              </div>
+            <div className={`${flotante} absolute -top-5 left-0 hidden items-center gap-3 p-3 pr-4 sm:flex`}>
+              <span className="grid h-10 w-10 place-items-center rounded-full bg-accent-soft text-accent">
+                <FileCheck size={19} />
+              </span>
+              <span className="leading-tight">
+                <span className="block text-[13.5px] font-semibold text-ink">Ficha técnica oficial del Ineval</span>
+                <span className="text-[12.5px] text-ink-2">Todo el temario, tema por tema</span>
+              </span>
+            </div>
+            <div className={`${flotante} absolute right-2 -bottom-7 flex items-center gap-3 p-3 pr-5 sm:right-0`}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/ilustraciones/microscope.png" alt="" aria-hidden className="h-12 w-12" />
+              <span className="leading-tight">
+                <span className="block text-[14px] font-semibold text-ink">Ciencias Naturales</span>
+                <span className="text-[12.5px] text-ink-2">EGB Superior · 21 temas</span>
+              </span>
             </div>
           </div>
         </section>
 
+        {/* Lo que respalda a la academia */}
+        <section aria-label="Lo que incluye" className="mx-auto max-w-[1200px] px-4 pb-20 sm:px-6">
+          <ul className="grid grid-cols-[minmax(0,1fr)] gap-x-6 gap-y-5 border-y border-line py-7 sm:grid-cols-[repeat(2,minmax(0,1fr))] lg:grid-cols-[repeat(4,minmax(0,1fr))]">
+            {RESPALDO.map((r) => (
+              <li key={r.titulo} className="flex items-center gap-3.5">
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-accent-soft text-accent">
+                  <r.icono size={20} />
+                </span>
+                <span className="leading-tight">
+                  <span className="block text-[15px] font-semibold text-ink">{r.titulo}</span>
+                  <span className="text-[13.5px] text-ink-2">{r.texto}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* Cursos: la especialidad grande y los dos cursos comunes al lado */}
+        <section id="cursos" className="mx-auto max-w-[1200px] scroll-mt-8 px-4 pb-24 sm:px-6">
+          <h2 className="text-[30px] font-semibold tracking-[-0.035em] text-ink sm:text-[38px]">Cursos de la academia</h2>
+          <p className="mt-2 max-w-[60ch] text-[16.5px] text-ink-2">Tu especialidad, más los conocimientos generales que se evalúan a todos los docentes.</p>
+          <div className="mt-8 grid grid-cols-[minmax(0,1fr)] gap-5 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] lg:grid-rows-[auto_auto]">
+            {CURSOS.map((c, i) => (
+              <article key={c.nombre} className={`${tarjeta} flex flex-col overflow-hidden ${i === 0 ? 'lg:row-span-2' : 'sm:flex-row'}`}>
+                <div className={`grid shrink-0 place-items-center ${i === 0 ? 'h-[200px] lg:h-[260px]' : 'h-[140px] sm:h-auto sm:w-[170px]'}`} style={{background: c.fondo}}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={c.img} alt="" aria-hidden className={`${i === 0 ? 'h-32 w-32 lg:h-40 lg:w-40' : 'h-20 w-20 sm:h-24 sm:w-24'} drop-shadow-[0_14px_22px_rgba(0,0,0,0.18)]`} />
+                </div>
+                <div className="flex flex-1 flex-col p-5 sm:p-6">
+                  <p className="text-[13px] font-semibold text-ok">{c.estado}</p>
+                  <h3 className="mt-1 text-[21px] leading-tight font-semibold tracking-[-0.02em] text-ink">{c.nombre}</h3>
+                  <p className="mt-1.5 text-[15px] leading-relaxed text-ink-2">{c.texto}</p>
+                  {c.bloques && (
+                    <ul className="mt-4 grid grid-cols-[repeat(2,minmax(0,1fr))] gap-2">
+                      {c.bloques.map(([b, n]) => (
+                        <li key={b} className="rounded-[12px] bg-surface-2 px-3 py-2.5 text-[13.5px] leading-snug font-medium text-ink">
+                          {b}
+                          <span className="num block font-normal text-ink-3">{n} temas</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  <p className="num mt-auto pt-4 text-[13.5px] font-medium text-ink-2">{c.meta}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* Prueba el método con una pregunta real */}
+        <section className="mx-auto grid max-w-[1200px] grid-cols-[minmax(0,1fr)] items-center gap-8 px-4 pb-24 sm:px-6 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-14">
+          <div>
+            <h2 className="text-[30px] leading-[1.08] font-semibold tracking-[-0.035em] text-ink sm:text-[40px]">
+              Pruébalo ahora: aquí se aprende <span className="text-accent">respondiendo</span>
+            </h2>
+            <p className="mt-4 max-w-[44ch] text-[16.5px] leading-relaxed text-ink-2">
+              Eliges, ves al instante por qué es la correcta, y lo que fallas vuelve en tu repaso hasta que lo dominas.
+            </p>
+            <Link href={REGISTRO} className={`${pildora} mt-7 hidden bg-accent text-white lg:inline-flex`}>
+              Empieza gratis <ArrowRight size={18} />
+            </Link>
+          </div>
+          <PreguntaMuestra p={MUESTRA} />
+        </section>
+
+        {/* Conoce tu evaluación */}
+        <section id="evaluacion" className="mx-auto max-w-[1200px] scroll-mt-8 px-4 pb-24 sm:px-6">
+          <div className={`${tarjeta} p-5 sm:p-8`}>
+            <ConoceEvaluacion />
+          </div>
+        </section>
+
+        {/* Especialidades */}
+        <section id="especialidades" className="mx-auto max-w-[1200px] scroll-mt-8 px-4 pb-24 sm:px-6">
+          <h2 className="text-[26px] font-semibold tracking-[-0.03em] text-ink sm:text-[30px]">Especialidades</h2>
+          <div className="mt-6 grid grid-cols-[repeat(2,minmax(0,1fr))] gap-3 sm:grid-cols-[repeat(4,minmax(0,1fr))]">
+            {ESPECIALIDADES.map((e) => (
+              <div key={e.nombre} className="flex flex-col items-center rounded-[18px] px-3 py-6 text-center dark:!bg-surface-2" style={{backgroundColor: e.fondo}}>
+                <span className="grid h-12 w-12 place-items-center rounded-[14px] bg-white shadow-[0_6px_16px_-8px_rgba(0,0,0,0.15)]" style={{color: e.color}}>
+                  <e.icono size={22} />
+                </span>
+                <p className="mt-3 text-[14.5px] leading-snug font-semibold text-ink">{e.nombre}</p>
+                <p className={`mt-1 text-[12.5px] font-medium ${e.activa ? 'text-ok' : 'text-ink-3'}`}>{e.estado}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* Cómo funciona */}
-        <section id="como-funciona" className="mx-auto max-w-[1200px] scroll-mt-8 px-4 pb-20 sm:px-6">
+        <section id="como-funciona" className="mx-auto max-w-[1200px] scroll-mt-8 px-4 pb-24 sm:px-6">
           <div className={`${tarjeta} px-6 py-10 sm:px-10`}>
             <h2 className="text-center text-[26px] font-semibold tracking-[-0.03em] text-ink sm:text-[30px]">Tu camino, paso a paso</h2>
             <ol className="mt-8 grid grid-cols-[minmax(0,1fr)] gap-5 sm:mt-10 sm:grid-cols-2 sm:gap-8 lg:grid-cols-5 lg:gap-4">
@@ -189,56 +313,22 @@ export default async function Portada() {
           </div>
         </section>
 
-        {/* Foto + mensaje */}
-        <section className="mx-auto grid max-w-[1200px] grid-cols-[minmax(0,1fr)] items-center gap-10 px-4 pb-24 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16">
-          <div className="relative overflow-hidden rounded-[28px] bg-accent-soft">
-            <Image src={fotoAula} alt="Docente en su aula" placeholder="blur" sizes="(min-width: 1024px) 560px, 100vw" className="aspect-[4/3] h-auto w-full object-cover" />
-            <span className="absolute top-5 left-5 inline-flex items-center gap-2 rounded-full bg-white/92 px-4 py-2 text-[13.5px] font-semibold text-[#171717] backdrop-blur">
-              <GraduationCap size={16} className="text-accent" /> Pensado para el docente de aula
-            </span>
-          </div>
-          <div>
-            <h2 className="text-[34px] leading-[1.08] font-semibold tracking-[-0.035em] text-ink sm:text-[44px]">
-              Estudia solo lo que <span className="text-accent">toma el examen</span>
-            </h2>
-            <p className="mt-4 max-w-[46ch] text-[17px] leading-relaxed text-ink-2">Cada lección es un subtema de la ficha oficial. Sin relleno y sin perder tu tiempo.</p>
-            <div className="mt-8 grid grid-cols-3 gap-4 border-t border-line pt-6">
-              {[
-                ['39', 'preguntas de generales'],
-                ['60', 'preguntas de Ciencias'],
-                ['165', 'minutos de examen'],
-              ].map(([n, t]) => (
-                <div key={t}>
-                  <p className="text-[30px] leading-none font-semibold tracking-[-0.03em] text-accent">{n}</p>
-                  <p className="mt-1.5 text-[13.5px] leading-snug text-ink-2">{t}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Especialidades */}
-        <section id="especialidades" className="mx-auto max-w-[1200px] scroll-mt-8 px-4 pb-24 sm:px-6">
-          <div className={`${tarjeta} p-6 sm:p-8`}>
-            <h2 className="text-[24px] font-semibold tracking-[-0.03em] text-ink">Especialidades</h2>
-            <div className="mt-6 grid grid-cols-[repeat(2,minmax(0,1fr))] gap-3 sm:grid-cols-[repeat(3,minmax(0,1fr))] lg:grid-cols-[repeat(5,minmax(0,1fr))]">
-              {ESPECIALIDADES.map((e) => (
-                <div key={e.nombre} className="flex flex-col items-center rounded-[18px] px-3 py-6 text-center dark:!bg-surface-2" style={{backgroundColor: e.fondo}}>
-                  <span className="grid h-12 w-12 place-items-center rounded-[14px] bg-white shadow-[0_6px_16px_-8px_rgba(0,0,0,0.15)]" style={{color: e.color}}>
-                    <e.icono size={22} />
-                  </span>
-                  <p className="mt-3 text-[14.5px] leading-snug font-semibold text-ink">{e.nombre}</p>
-                  <p className={`mt-1 text-[12.5px] font-medium ${e.activa ? 'text-ok' : 'text-ink-3'}`}>{e.estado}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* Aprende más inteligente */}
         <section className="mx-auto max-w-[1200px] px-4 pb-24 sm:px-6">
-          <div className={`${tarjeta} grid grid-cols-[minmax(0,1fr)] items-center gap-10 overflow-hidden p-6 sm:p-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]`}>
-            <div>
+          <div className="grid grid-cols-[minmax(0,1fr)] items-center gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-16">
+            <div className="relative order-2 lg:order-1">
+              <Image src={fotoCelular} alt="Docente estudiando desde su celular" placeholder="blur" sizes="(min-width: 1024px) 600px, 100vw" className="aspect-[16/10] h-auto w-full rounded-[24px] object-cover" />
+              <div className="absolute bottom-4 left-4 flex items-center gap-3 rounded-[16px] bg-white/94 py-2.5 pr-4 pl-2.5 backdrop-blur">
+                <span className="grid h-9 w-9 place-items-center rounded-full bg-accent-soft text-accent">
+                  <Repeat size={16} />
+                </span>
+                <div className="leading-tight">
+                  <p className="text-[13.5px] font-semibold text-[#171717]">Repaso de hoy</p>
+                  <p className="text-[12px] text-[#525252]">Las preguntas que fallaste</p>
+                </div>
+              </div>
+            </div>
+            <div className="order-1 lg:order-2">
               <h2 className="text-[30px] leading-[1.1] font-semibold tracking-[-0.03em] text-ink sm:text-[36px]">
                 Aprende de forma <span className="text-accent">más inteligente</span>
               </h2>
@@ -252,18 +342,6 @@ export default async function Portada() {
                   </li>
                 ))}
               </ul>
-            </div>
-            <div className="relative">
-              <Image src={fotoCelular} alt="Docente estudiando desde su celular" placeholder="blur" sizes="(min-width: 1024px) 600px, 100vw" className="aspect-[16/10] h-auto w-full rounded-[22px] object-cover" />
-              <div className="absolute bottom-4 left-4 flex items-center gap-3 rounded-[16px] bg-white/94 py-2.5 pr-4 pl-2.5 backdrop-blur">
-                <span className="grid h-9 w-9 place-items-center rounded-full bg-accent-soft text-accent">
-                  <Repeat size={16} />
-                </span>
-                <div className="leading-tight">
-                  <p className="text-[13.5px] font-semibold text-[#171717]">Repaso de hoy</p>
-                  <p className="text-[12px] text-[#525252]">4 preguntas que fallaste</p>
-                </div>
-              </div>
             </div>
           </div>
         </section>
@@ -286,18 +364,27 @@ export default async function Portada() {
           </div>
         </section>
 
-        {/* Banner final */}
+        {/* Banner final con las cifras reales de la academia */}
         <section className="mx-auto max-w-[1200px] px-4 pb-16 sm:px-6">
-          <div className="relative grid grid-cols-[minmax(0,1fr)] items-center gap-8 overflow-hidden rounded-[28px] bg-[linear-gradient(115deg,#f0360a_0%,#ff6a3d_100%)] px-6 py-10 sm:px-12 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,0.7fr)] lg:py-0">
-            <div className="text-white lg:py-14">
+          <div className="relative grid grid-cols-[minmax(0,1fr)] items-center gap-8 overflow-hidden rounded-[28px] bg-[linear-gradient(115deg,#d9300a_0%,#f0360a_45%,#ff6a3d_100%)] px-6 py-10 sm:px-12 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,0.7fr)] lg:py-0">
+            <div className="text-white lg:py-12">
               <h2 className="text-[30px] leading-[1.1] font-semibold tracking-[-0.03em] sm:text-[40px]">Empieza hoy tu preparación</h2>
-              <p className="mt-3 text-[17px] text-white/90">Entra gratis y prueba tus primeras lecciones.</p>
-              <div className="mt-7 flex flex-wrap gap-3">
-                <Link href={REGISTRO} className={`${pildora} bg-white text-[#c22a05]`}>
-                  Crear mi cuenta gratis <ArrowRight size={18} />
+              <p className="mt-3 text-[17px] text-white">Haz tu diagnóstico y prueba 3 lecciones a tu elección, sin pagar.</p>
+              <dl className="mt-7 grid grid-cols-[repeat(2,minmax(0,1fr))] gap-x-6 gap-y-4 sm:grid-cols-[repeat(4,minmax(0,1fr))]">
+                {CIFRAS.map(([n, t]) => (
+                  <div key={t}>
+                    <dt className="sr-only">{t}</dt>
+                    <dd className="num text-[32px] leading-none font-semibold tracking-[-0.03em]">{n}</dd>
+                    <dd className="mt-1 text-[13.5px] leading-snug text-white">{t}</dd>
+                  </div>
+                ))}
+              </dl>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link href={REGISTRO} className={`${pildora} bg-white text-[#b8300a]`}>
+                  Empieza gratis <ArrowRight size={18} />
                 </Link>
-                <Link href="/ingresar" className={`${pildora} border border-white/50 text-white hover:bg-white/10`}>
-                  Ya tengo cuenta
+                <Link href="/ingresar" className={`${pildora} border border-white/60 text-white hover:bg-white/10`}>
+                  Iniciar sesión
                 </Link>
               </div>
             </div>

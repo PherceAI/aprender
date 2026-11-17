@@ -22,6 +22,7 @@ const DOCENTE: ItemBarra[] = [
   {href: '/repaso', texto: 'Repaso', icono: 'repaso', grupo: 'Aprender'},
   {href: '/simulacro', texto: 'Simulacros', icono: 'simulacro', grupo: 'Aprender'},
   {href: '/perfil', texto: 'Mi progreso', icono: 'progreso', grupo: 'Seguimiento'},
+  {href: '/evaluacion', texto: 'Tu evaluación', icono: 'evaluacion', grupo: 'Seguimiento'},
 ];
 const ADMIN: ItemBarra[] = [{href: '/admin', texto: 'Panel', icono: 'admin', grupo: 'Aprender'}];
 const CORTOS: Record<string, string> = {'/curso': 'Ruta', '/simulacro': 'Simulacro', '/perfil': 'Progreso'};
@@ -44,7 +45,7 @@ export default async function LayoutApp({children}: {children: React.ReactNode})
   const [plan, pendientes] = esDocente ? await Promise.all([planDe(db, u.id), contarPendientes(db, u.id, new Date())]) : ['completo' as const, 0];
   const insignias = {'/repaso': Math.min(pendientes, 10)};
   const mini = (await cookies()).get('barra')?.value === 'mini';
-  const itemsMovil: ItemNav[] = items.map((i) => ({href: i.href, texto: i.texto, corto: CORTOS[i.href], icono: i.icono}));
+  const itemsMovil: ItemNav[] = items.filter((i) => i.href !== '/evaluacion').map((i) => ({href: i.href, texto: i.texto, corto: CORTOS[i.href], icono: i.icono}));
 
   return (
     <div id="cascaron" className="min-h-dvh bg-bg" style={{'--barra': mini ? '84px' : '264px'} as React.CSSProperties}>

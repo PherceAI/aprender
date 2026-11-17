@@ -18,7 +18,7 @@ export function AccesoCompleto({volver, texto}: {volver: {href: string; texto: s
         </span>
         <h1 className="mt-5 text-[24px] font-semibold tracking-[-0.03em] text-ink">{texto}</h1>
         <p className="mx-auto mt-2 max-w-[42ch] text-[15.5px] leading-relaxed text-ink-2">
-          Con tu cuenta gratis tienes el diagnóstico y las primeras {LECCIONES_GRATIS} lecciones. Desbloquea todo el curso, las pruebas y los simulacros con un solo pago.
+          Con tu cuenta gratis tienes el diagnóstico y {LECCIONES_GRATIS} lecciones a tu elección. Desbloquea todo el curso, las pruebas y los simulacros con un solo pago.
         </p>
         {acceso ? (
           <a href={acceso} target="_blank" rel="noopener noreferrer" className={`${btn.primary} mt-6 px-6`}>

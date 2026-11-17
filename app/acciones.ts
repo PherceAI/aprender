@@ -2,7 +2,7 @@
 
 import {revalidatePath} from 'next/cache';
 import {redirect} from 'next/navigation';
-import {headers} from 'next/headers';
+import {cookies, headers} from 'next/headers';
 import {cerrarSesion, iniciarSesion, requerirAdmin, requerirUsuario} from '@/lib/auth/cookies';
 import {bloqueado, limpiarFallos, registrarFallo} from '@/lib/auth/clave';
 import {getDb} from '@/lib/db';
@@ -11,9 +11,10 @@ import {saltarTema} from '@/lib/dominio';
 import {ErrorAcademia, iniciarIntento, responder, terminarIntento, type Respuesta, type Retro, type TipoIntento} from '@/lib/intentos';
 import {porQueMeEquivoque, preguntarTutor, type RespuestaTutor} from '@/lib/tutor';
 import {elegirEspecialidad, ingresar, registrar} from '@/lib/usuarios';
-import {cambiarPlan, type Plan} from '@/lib/acceso';
+import {cambiarPlan, elegirLeccion, type Plan} from '@/lib/acceso';
 import {crearDocente} from '@/lib/admin';
 import {quitarVideo} from '@/lib/videos';
+import {borrarComentario, claveValida, comentariosDeRuta, COOKIE_REVISION, crearComentario, ErrorRevision, marcarResuelto, type Comentario, type NuevoComentario} from '@/lib/revision';
 
 // Las acciones que llaman las pantallas. La lógica vive en lib/ (parte 2, con pruebas).
 
@@ -116,6 +117,14 @@ export async function accionMarcarLeccion(leccionId: string): Promise<{ok: true}
   return {ok: true};
 }
 
+/** El docente gratis elige esta lección como una de sus lecciones gratis y entra a estudiarla. */
+export async function accionElegirLeccion(leccionId: string) {
+  const u = await requerirUsuario();
+  await elegirLeccion(await getDb(), u.id, leccionId);
+  revalidatePath('/', 'layout');
+  redirect(`/leccion/${leccionId}`);
+}
+
 export async function accionGuardarNota(leccionId: string, texto: string) {
   const u = await requerirUsuario();
   await guardarNota(await getDb(), u.id, leccionId, texto);
@@ -171,4 +180,40 @@ export async function accionQuitarVideo(temaId: string) {
   await requerirAdmin();
   await quitarVideo(await getDb(), temaId);
   revalidatePath('/admin');
+}
+
+// ── Modo revisión (solo con la cookie del enlace del revisor) ──
+
+async function enRevision() {
+  return claveValida((await cookies()).get(COOKIE_REVISION)?.value);
+}
+
+export async function accionComentar(c: NuevoComentario): Promise<{ok: true; lista: Comentario[]} | {error: string}> {
+  if (!(await enRevision())) return {error: 'El modo revisión no está activo'};
+  try {
+    const db = await getDb();
+    await crearComentario(db, c);
+    return {ok: true, lista: await comentariosDeRuta(db, c.ruta)};
+  } catch (e) {
+    if (e instanceof ErrorRevision) return {error: e.message};
+    throw e;
+  }
+}
+
+export async function accionComentariosDeRuta(ruta: string): Promise<Comentario[]> {
+  if (!(await enRevision())) return [];
+  return comentariosDeRuta(await getDb(), ruta);
+}
+
+export async function accionBorrarMiComentario(id: number, autor: string, ruta: string): Promise<Comentario[]> {
+  if (!(await enRevision())) return [];
+  const db = await getDb();
+  await borrarComentario(db, id, autor);
+  return comentariosDeRuta(db, ruta);
+}
+
+export async function accionResolverComentario(id: number, resuelto: boolean) {
+  await requerirAdmin();
+  await marcarResuelto(await getDb(), id, resuelto);
+  revalidatePath('/admin/revision');
 }

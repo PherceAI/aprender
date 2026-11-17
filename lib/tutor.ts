@@ -110,7 +110,7 @@ export async function preguntarTutor(
   if (!pregunta) throw new ErrorAcademia('invalida', 'Escribe tu pregunta');
   const l = await leccion(db, usuarioId, leccionId);
   if (l === 'tema-cerrado') throw new ErrorAcademia('tema-cerrado', 'Este tema estará disponible próximamente');
-  if (l === 'bloqueada') throw new ErrorAcademia('bloqueado', 'Esta lección es parte del acceso completo');
+  if (l === 'bloqueada' || l === 'por-elegir') throw new ErrorAcademia('bloqueado', 'Esta lección es parte del acceso completo');
   const restantes = await conLimite(db, usuarioId, ahora);
 
   const previos = await db

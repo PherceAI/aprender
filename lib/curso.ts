@@ -4,7 +4,7 @@ import type {Db} from './db';
 import {especialidades, intentos, lecciones, notas, progresoLecciones, temas, unidades, usuarios} from './db/schema';
 import {marcarAprendiendo, nivelesDe, temasConPeso, type EstadoDominio} from './dominio';
 import {ErrorAcademia} from './intentos';
-import {puedeVerLeccion} from './acceso';
+import {accesoLeccion, puedeVerLeccion} from './acceso';
 
 // Lo que el docente ve del curso: especialidades, el mapa con su dominio, cada tema y cada lección.
 
@@ -109,6 +109,7 @@ export async function temaDetalle(db: Db, usuarioId: string, temaId: string) {
 export type LeccionVista =
   | 'tema-cerrado'
   | 'bloqueada'
+  | 'por-elegir'
   | {
       id: string;
       titulo: string;
@@ -127,7 +128,8 @@ export async function leccion(db: Db, usuarioId: string, leccionId: string): Pro
   if (!l) throw new ErrorAcademia('no-encontrado', 'Esa lección no existe');
   const [t] = await db.select().from(temas).where(eq(temas.id, l.temaId));
   if (!t.abierto) return 'tema-cerrado';
-  if (!(await puedeVerLeccion(db, usuarioId, l.id))) return 'bloqueada';
+  const acceso = await accesoLeccion(db, usuarioId, l.id);
+  if (acceso !== 'libre') return acceso;
   const hermanas = await db.select().from(lecciones).where(eq(lecciones.temaId, t.id)).orderBy(asc(lecciones.orden));
   const i = hermanas.findIndex((h) => h.id === l.id);
   const [n] = await db.select().from(notas).where(and(eq(notas.usuarioId, usuarioId), eq(notas.leccionId, l.id)));

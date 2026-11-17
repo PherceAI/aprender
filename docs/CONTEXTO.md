@@ -7,7 +7,7 @@ Lee esto antes de trabajar. Después lee `CLAUDE.md`, `VISION.md`, `PRODUCT.md`,
 - Conocimientos generales: 39 preguntas en 45 min.
 - Conocimientos de la especialidad: 60 preguntas en 120 min.
 
-Hoy tiene Ciencias Naturales de EGB Superior. Es un negocio del dueño con su cuñado, docente de Ciencias Naturales en Riobamba. Compite con cursos de unos $200 que son solo videos. Es independiente: no es del Ineval.
+**El examen es en 2027 y solo se trabaja la Dimensión 1**: las dimensiones 2, 3 y 4 ya se aplicaron (dato del dueño, 16 nov). El PDF de la ficha se titula «2026 - Fase 1»; en la plataforma se dice «ficha técnica oficial» sin año y «examen 2027». Hoy tiene Ciencias Naturales de EGB Superior. Es un negocio del dueño con su cuñado, docente de Ciencias Naturales en Riobamba. Compite con cursos de unos $200 que son solo videos. Es independiente: no es del Ineval.
 
 ## Dónde está
 - **Carpeta:** `C:\Users\Keybe\Videos\academia-docente`. Es aparte de PherceStudio y no se mezclan.
@@ -20,7 +20,7 @@ Hoy tiene Ciencias Naturales de EGB Superior. Es un negocio del dueño con su cu
 - **Stack:** Next.js 15, Drizzle, Postgres (PGlite en local), Tailwind v4 y Gemini (`gemini-3.8-flash`) para el tutor.
 
 ## Cómo funciona la plataforma
-1. **Entrada:** la landing lleva a registrarse gratis. La cuenta gratis trae el diagnóstico y 2 lecciones. Lo demás se desbloquea con un **pago único**, que el administrador activa en el Panel (`lib/acceso.ts`).
+1. **Entrada:** la landing lleva a registrarse gratis. La cuenta gratis trae el diagnóstico y 3 lecciones que el docente elige de cualquier tema (tabla `lecciones_elegidas`). Con el pago no hay ningún orden obligatorio: todo tema abierto se estudia libremente. Lo demás se desbloquea con un **pago único**, que el administrador activa en el Panel (`lib/acceso.ts`).
 2. **Diagnóstico:** el docente elige su especialidad y hace un diagnóstico de **40 preguntas**, al menos una por cada uno de los 31 temas. Al final ve un informe tema por tema.
 3. **Inicio:** muestra un solo «siguiente paso», «Tu meta de hoy», los pasos del método y la actividad de la semana.
 4. **Cada tema:**
@@ -35,6 +35,12 @@ Hoy tiene Ciencias Naturales de EGB Superior. Es un negocio del dueño con su cu
 6. **Simulacros:** como el examen real.
 7. **Ficha oficial:** el PDF está en `public/ficha-tecnica-ccnn.pdf` y cada tema enlaza a su página exacta (`lib/ficha.ts`).
 8. **App instalable (PWA):** tiene service worker, página sin conexión y el botón «Instalar la app».
+
+9. **Modo revisión (temporal, antes del lanzamiento):**
+   - Se enciende con la variable `REVISION_CLAVE` (8+ caracteres) y el enlace `/revision?clave=...`, que está en Panel → «Comentarios de revisión».
+   - En ese navegador aparece el botón «Comentar» en todas las pantallas: el revisor toca una parte y deja «mejorar, quitar, agregar, error o me gusta».
+   - Los comentarios se ven en `/admin/revision` (tabla `comentarios_revision`, lógica en `lib/revision.ts`).
+   - Para apagarlo: borrar `REVISION_CLAVE` en Coolify y desplegar.
 
 ## Cómo trabaja el dueño (importante)
 - **Siempre en español.** Va parte por parte y decide él lo importante. Tiene pocos créditos, así que hay que trabajar en tandas eficientes.

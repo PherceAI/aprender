@@ -1,7 +1,10 @@
 import type {Metadata, Viewport} from 'next';
 import {Instrument_Sans} from 'next/font/google';
 import './globals.css';
+import {cookies} from 'next/headers';
 import {RegistrarSW} from '@/components/instalar';
+import {ModoRevision} from '@/components/modo-revision';
+import {claveValida, COOKIE_REVISION} from '@/lib/revision';
 
 const instrument = Instrument_Sans({
   subsets: ['latin'],
@@ -26,7 +29,9 @@ export const viewport: Viewport = {
 // Pone el tema antes de pintar (sin parpadeo): lo elegido por el docente; si no eligió, claro (decisión del dueño).
 const TEMA = `try{var t=localStorage.getItem('tema');if(t!=='oscuro'){t='claro'}document.documentElement.dataset.tema=t}catch(e){document.documentElement.dataset.tema='claro'}`;
 
-export default function RootLayout({children}: {children: React.ReactNode}) {
+export default async function RootLayout({children}: {children: React.ReactNode}) {
+  // Modo revisión: solo en el navegador que abrió el enlace del revisor y mientras exista REVISION_CLAVE.
+  const revision = claveValida((await cookies()).get(COOKIE_REVISION)?.value);
   return (
     <html lang="es" className={instrument.variable} suppressHydrationWarning>
       <head>
@@ -35,6 +40,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
       <body className="min-h-dvh font-sans">
         {children}
         <RegistrarSW />
+        {revision && <ModoRevision />}
       </body>
     </html>
   );
