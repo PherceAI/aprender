@@ -4,7 +4,7 @@ import './globals.css';
 import {cookies} from 'next/headers';
 import {RegistrarSW} from '@/components/instalar';
 import {ModoRevision} from '@/components/modo-revision';
-import {claveValida, COOKIE_REVISION} from '@/lib/revision';
+import {COOKIE_REVISION, puedeComentar} from '@/lib/revision';
 
 const instrument = Instrument_Sans({
   subsets: ['latin'],
@@ -31,7 +31,7 @@ const TEMA = `try{var t=localStorage.getItem('tema');if(t!=='oscuro'){t='claro'}
 
 export default async function RootLayout({children}: {children: React.ReactNode}) {
   // Modo revisión: solo en el navegador que abrió el enlace del revisor y mientras exista REVISION_CLAVE.
-  const revision = claveValida((await cookies()).get(COOKIE_REVISION)?.value);
+  const revision = puedeComentar((await cookies()).get(COOKIE_REVISION)?.value);
   return (
     <html lang="es" className={instrument.variable} suppressHydrationWarning>
       <head>

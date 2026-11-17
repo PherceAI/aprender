@@ -1,12 +1,12 @@
 import {NextResponse, type NextRequest} from 'next/server';
-import {claveValida, COOKIE_REVISION} from '@/lib/revision';
+import {claveValida, COOKIE_REVISION, URL_PUBLICA} from '@/lib/revision';
 
 // /revision?clave=...  activa el modo revisión en este navegador (30 días) y lleva a la portada.
 // /revision?salir=1    lo desactiva. Sin REVISION_CLAVE configurada, el enlace no hace nada.
 
 export async function GET(req: NextRequest) {
   const url = req.nextUrl;
-  const inicio = new URL('/', url);
+  const inicio = new URL('/', URL_PUBLICA);
   if (url.searchParams.get('salir')) {
     const r = NextResponse.redirect(inicio);
     r.cookies.delete(COOKIE_REVISION);

@@ -14,7 +14,7 @@ import {elegirEspecialidad, ingresar, registrar} from '@/lib/usuarios';
 import {cambiarPlan, elegirLeccion, type Plan} from '@/lib/acceso';
 import {crearDocente} from '@/lib/admin';
 import {quitarVideo} from '@/lib/videos';
-import {borrarComentario, claveValida, comentariosDeRuta, COOKIE_REVISION, crearComentario, ErrorRevision, marcarResuelto, type Comentario, type NuevoComentario} from '@/lib/revision';
+import {borrarComentario, puedeComentar, comentariosDeRuta, COOKIE_REVISION, crearComentario, ErrorRevision, marcarResuelto, type Comentario, type NuevoComentario} from '@/lib/revision';
 
 // Las acciones que llaman las pantallas. La lógica vive en lib/ (parte 2, con pruebas).
 
@@ -185,7 +185,7 @@ export async function accionQuitarVideo(temaId: string) {
 // ── Modo revisión (solo con la cookie del enlace del revisor) ──
 
 async function enRevision() {
-  return claveValida((await cookies()).get(COOKIE_REVISION)?.value);
+  return puedeComentar((await cookies()).get(COOKIE_REVISION)?.value);
 }
 
 export async function accionComentar(c: NuevoComentario): Promise<{ok: true; lista: Comentario[]} | {error: string}> {

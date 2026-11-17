@@ -1,11 +1,10 @@
 import type {Metadata} from 'next';
 import Link from 'next/link';
-import {headers} from 'next/headers';
 import {ArrowLeft, Check, Monitor, RotateCcw, Smartphone} from 'lucide-react';
 import {accionResolverComentario} from '@/app/acciones';
 import {requerirAdmin} from '@/lib/auth/cookies';
 import {getDb} from '@/lib/db';
-import {claveRevision, todosLosComentarios, type Comentario} from '@/lib/revision';
+import {claveRevision, revisionPublica, todosLosComentarios, URL_PUBLICA, type Comentario} from '@/lib/revision';
 
 export const metadata: Metadata = {title: 'Comentarios de revisión'};
 
@@ -26,8 +25,8 @@ function fecha(d: Date) {
 export default async function Revision() {
   await requerirAdmin();
   const clave = claveRevision();
-  const h = await headers();
-  const origen = `${h.get('x-forwarded-proto') ?? 'http'}://${h.get('x-forwarded-host') ?? h.get('host')}`;
+  const origen = URL_PUBLICA;
+  const abierta = revisionPublica();
   const lista = await todosLosComentarios(await getDb());
   const pendientes = lista.filter((c) => !c.resuelto).length;
 
@@ -48,6 +47,11 @@ export default async function Revision() {
 
       <section className="card p-5">
         <h2 className="text-[16px] font-semibold text-ink">Enlace para el revisor</h2>
+        {abierta && (
+          <p className="mt-1 rounded-[10px] bg-accent-soft px-3 py-2 text-[14px] font-medium text-accent-ink">
+            Modo abierto: ahora cualquier visitante ve el botón «Comentar», sin enlace. Para cerrarlo, borra REVISION_PUBLICA en Coolify y vuelve a desplegar.
+          </p>
+        )}
         {clave ? (
           <>
             <p className="mt-1 text-[14px] text-ink-2">Envíaselo. Al abrirlo, en su navegador aparece el botón «Comentar» en todas las pantallas, desde la portada hasta el final.</p>

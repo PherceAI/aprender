@@ -13,6 +13,19 @@ export type Comentario = typeof comentariosRevision.$inferSelect;
 
 const MAX_TEXTO = 2000;
 
+/** La dirección pública (detrás del proxy de Coolify el servidor se ve como 0.0.0.0:3000). */
+export const URL_PUBLICA = process.env.URL_PUBLICA?.trim() || (process.env.NODE_ENV === 'production' ? 'https://aprender.automationpherce.cloud' : 'http://localhost:3200');
+
+/** Modo revisión abierto: el botón «Comentar» aparece para todos los visitantes (REVISION_PUBLICA=1). */
+export function revisionPublica(): boolean {
+  return process.env.REVISION_PUBLICA?.trim() === '1';
+}
+
+/** ¿Este visitante puede comentar? Con el modo abierto, todos; si no, solo quien abrió el enlace del revisor. */
+export function puedeComentar(cookie: string | undefined | null): boolean {
+  return revisionPublica() || claveValida(cookie);
+}
+
 export function claveRevision(): string | null {
   const c = process.env.REVISION_CLAVE?.trim();
   return c && c.length >= 8 ? c : null;
