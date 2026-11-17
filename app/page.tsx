@@ -48,9 +48,9 @@ const RESPALDO: {icono: LucideIcon; titulo: string; texto: string}[] = [
 
 // En pantallas grandes: arriba a la izquierda (sobre la cabeza no), y abajo sobre la camiseta.
 const TARJETAS_HERO: {icono: LucideIcon; titulo: string; texto: string; lugar: string}[] = [
-  {icono: ClipboardList, titulo: 'Ficha técnica oficial', texto: 'Todo el temario del Ineval', lugar: 'xl:top-[4%] xl:-left-12'},
-  {icono: GraduationCap, titulo: 'Ciencias Naturales', texto: 'EGB Superior · 21 temas', lugar: 'xl:bottom-[10%] xl:-left-16'},
-  {icono: BarChart3, titulo: 'Preguntas tipo examen', texto: 'Con su explicación', lugar: 'xl:-right-12 xl:bottom-[-2%]'},
+  {icono: ClipboardList, titulo: 'Ficha técnica oficial', texto: 'Todo el temario del Ineval', lugar: 'top-[1%] left-0 sm:-left-6 xl:-left-12'},
+  {icono: GraduationCap, titulo: 'Ciencias Naturales', texto: 'EGB Superior · 21 temas', lugar: 'bottom-[12%] left-0 sm:-left-8 xl:-left-16'},
+  {icono: BarChart3, titulo: 'Preguntas tipo examen', texto: 'Con su explicación', lugar: 'right-0 bottom-[-2%] xl:-right-12'},
 ];
 
 const CCNN_INCLUYE = ['4 bloques del temario', '21 temas de la ficha', 'Lecciones interactivas y laboratorio', 'Práctica y prueba de cada tema'];
@@ -190,15 +190,15 @@ export default async function Portada() {
                 <span className="mt-4 h-5 w-1.5 rounded-full bg-accent/40" />
               </div>
             </div>
-            <ul className="mt-5 flex flex-wrap justify-center gap-2.5 xl:contents">
+            <ul className="contents">
               {TARJETAS_HERO.map((t) => (
-                <li key={t.titulo} className={`${flotante} flex items-center gap-3 p-2.5 pr-4 xl:absolute xl:p-3 xl:pr-5 ${t.lugar}`}>
-                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[10px] bg-accent-soft text-accent xl:h-10 xl:w-10">
+                <li key={t.titulo} className={`${flotante} absolute flex items-center gap-2 p-2 pr-3 sm:gap-3 sm:p-3 sm:pr-5 ${t.lugar}`}>
+                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-[10px] bg-accent-soft text-accent sm:h-10 sm:w-10">
                     <t.icono size={18} />
                   </span>
                   <span className="leading-tight">
-                    <span className="block text-[13px] font-semibold text-ink xl:text-[13.5px]">{t.titulo}</span>
-                    <span className="text-[12px] text-ink-2 xl:text-[12.5px]">{t.texto}</span>
+                    <span className="block text-[12px] font-semibold text-ink sm:text-[13.5px]">{t.titulo}</span>
+                    <span className="hidden text-[12.5px] text-ink-2 sm:block">{t.texto}</span>
                   </span>
                 </li>
               ))}
