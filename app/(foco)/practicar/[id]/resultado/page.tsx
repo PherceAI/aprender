@@ -10,13 +10,13 @@ import {TITULO_INTENTO} from '@/lib/vista';
 import {destinoResultado} from '@/lib/resultado';
 import {Anillo, Marca, btn} from '@/components/ui';
 import {BotonIniciar} from '@/components/boton-iniciar';
+import {RevisionRespuestas} from '@/components/revision-respuestas';
 import {SaltarBoton} from './saltar';
 
 export const metadata: Metadata = {title: 'Resultado'};
 
 // Resultado de una práctica, prueba, repaso o simulacro: cuánto acertó, cuánto subió y qué hace ahora.
 
-const LETRAS = 'ABCD';
 
 export default async function Resultado({params}: {params: Promise<{id: string}>}) {
   const {id} = await params;
@@ -132,38 +132,7 @@ export default async function Resultado({params}: {params: Promise<{id: string}>
         </section>
       )}
 
-      {r.correccion && (
-        <section className="mt-8">
-          <h2 className="mb-1 text-[17px] font-semibold text-ink">Pregunta por pregunta</h2>
-          <p className="mb-3 text-[14px] text-ink-2">Toca una pregunta para ver la respuesta y por qué.</p>
-          <div className="flex flex-col gap-2.5">
-            {r.correccion.map(({pregunta: p, elegida, correcta}, i) => (
-              <details key={p.id} className="card group p-4 open:pb-5" open={!correcta && i < 3}>
-                <summary className="flex cursor-pointer list-none items-start gap-3">
-                  <span className={`mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full ${correcta ? 'bg-ok-soft text-ok' : 'bg-bad-soft text-bad'}`}>
-                    {correcta ? <Check size={15} strokeWidth={3} /> : <X size={15} strokeWidth={3} />}
-                  </span>
-                  <span className="text-[15px] leading-snug font-medium text-ink">{p.enunciado.replace('____', '___')}</span>
-                </summary>
-                <div className="mt-3 pl-10 text-[14.5px] leading-relaxed">
-                  <p className="text-ink">
-                    <span className="font-semibold text-ok">Correcta: </span>
-                    {LETRAS[p.correcta]}) {p.opciones[p.correcta]}
-                  </p>
-                  {!correcta && elegida !== null && (
-                    <p className="mt-1 text-ink-2">
-                      <span className="font-semibold text-bad">Elegiste: </span>
-                      {LETRAS[elegida]}) {p.opciones[elegida]}
-                    </p>
-                  )}
-                  <p className="mt-2 text-ink-2">{p.explicaciones[p.correcta].replace(/^Correcto:\s*/, '')}</p>
-                  {!correcta && elegida !== null && <p className="mt-1.5 text-ink-2">Tu opción: {p.explicaciones[elegida]}</p>}
-                </div>
-              </details>
-            ))}
-          </div>
-        </section>
-      )}
+      {r.correccion && <RevisionRespuestas correccion={r.correccion} />}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import {tema} from '../estructura-helpers';
+import {HERRAMIENTAS, MEDIOS, REA, RIESGOS} from './digitales';
 import type {Bloque} from '../tipos';
 
 // Ficha técnica Ineval 2026, sección 4.1: Conocimientos generales (pedagógicos y digitales).
@@ -53,26 +54,16 @@ export const GENERALES: Bloque = {
       id: 'gen-digitales',
       nombre: 'Recursos digitales abiertos, medios digitales, herramientas tecnológicas digitales',
       temas: [
-        tema('rea', 'Recursos educativos digitales abiertos', [
-          ['Cómo evaluar un recurso abierto', 'Definir los criterios para evaluar los recursos educativos digitales abiertos: accesibilidad, reusabilidad, adaptabilidad, interactividad y portabilidad.'],
-        ]),
-        tema('medios-digitales', 'Medios digitales', [
-          ['Multimodalidad e hipertextualidad', 'Reconocer las características y usos de los medios digitales relacionados con multimodalidad o hipertextualidad.'],
-        ]),
-        tema('herramientas-digitales', 'Herramientas tecnológicas digitales', [
-          ['Herramientas sincrónicas y asincrónicas', 'Reconocer las características de las herramientas tecnológicas digitales sincrónicas y asincrónicas.'],
-          ['Entornos virtuales de aprendizaje', 'Reconocer las características, usos e implementación de los entornos virtuales de aprendizaje.'],
-          ['Ofimática para el docente', 'Usar herramientas de ofimática: hojas de cálculo, presentación multimedia, procesador de texto y correo electrónico.'],
-        ]),
+        REA,
+        MEDIOS,
+        HERRAMIENTAS,
       ],
     },
     {
       id: 'gen-internet',
       nombre: 'Uso seguro de internet',
       temas: [
-        tema('riesgos-digitales', 'Riesgos en entornos digitales', [
-          ['Riesgos en la red y cómo prevenirlos', 'Identificar los riesgos en entornos digitales: acoso cibernético, sexteo, plagio académico, suplantación de identidad, tecnoadicciones, engaño pederasta (grooming), fraude informático (phishing), correo basura (spam) y el uso de antivirus.'],
-        ]),
+        RIESGOS,
       ],
     },
   ],

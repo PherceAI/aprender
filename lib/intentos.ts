@@ -533,7 +533,8 @@ export async function terminarIntento(db: Db, usuarioId: string, intentoId: stri
     res.avance = {preparacionAntes: i.prepAntes, preparacionDespues: i.prepDespues, temas: i.cambios};
   }
 
-  if (RETROALIMENTACION[i.tipo] !== 'ninguna') {
+  // El diagnóstico no corrige mientras se responde (para medir bien), pero al terminar sí muestra la revisión.
+  if (RETROALIMENTACION[i.tipo] !== 'ninguna' || i.tipo === 'diagnostico') {
     res.correccion = ps.map((p) => ({pregunta: p, elegida: porPregunta.get(p.id)?.elegida ?? null, correcta: porPregunta.get(p.id)?.correcta ?? false}));
   }
   return res;

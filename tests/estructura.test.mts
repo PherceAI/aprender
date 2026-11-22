@@ -56,7 +56,13 @@ test('el diagnóstico tiene 40 preguntas, toca los 31 temas y usa formatos inter
   assert.ok(diag.some((p) => p.dibujo), 'el diagnóstico necesita al menos una pregunta sobre un dibujo');
 });
 
-test('el tema abierto de la demo es Anatomía celular', () => {
+test('los temas abiertos tienen lecciones escritas y preguntas para su prueba', () => {
   const abiertos = CONTENIDO.bloques.flatMap((b) => b.unidades.flatMap((u) => u.temas)).filter((t) => t.abierto);
-  assert.deepEqual(abiertos.map((t) => t.id), ['anatomia-celular']);
+  assert.deepEqual(abiertos.map((t) => t.id).sort(), ['anatomia-celular', 'herramientas-digitales', 'medios-digitales', 'rea', 'riesgos-digitales'].sort());
+  for (const t of abiertos) {
+    assert.ok(t.lecciones.every((l) => l.contenido?.length), `${t.id}: todas sus lecciones tienen contenido`);
+    const prueba = CONTENIDO.preguntas.filter((p) => p.temaId === t.id && p.usos.includes('prueba'));
+    assert.ok(prueba.length >= 10, `${t.id}: al menos 10 preguntas para la prueba del tema`);
+    assert.ok(CONTENIDO.preguntas.some((p) => p.temaId === t.id && p.usos.includes('diagnostico-tema')), `${t.id}: tiene «¿Ya lo sabes?»`);
+  }
 });

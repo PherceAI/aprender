@@ -1,10 +1,10 @@
 import {test} from 'node:test';
 import {MAX_REPASO_DIA} from '../lib/repaso.ts';
 import assert from 'node:assert/strict';
-import {inArray} from 'drizzle-orm';
+import {inArray, ne} from 'drizzle-orm';
 import {crearDbPrueba, type Db} from '../lib/db/index.ts';
 import {sembrar} from '../lib/db/sembrar.ts';
-import {preguntas} from '../lib/db/schema.ts';
+import {preguntas, temas} from '../lib/db/schema.ts';
 import {crearUsuario, elegirEspecialidad} from '../lib/usuarios.ts';
 import {iniciarIntento, responder, terminarIntento, vistaIntento} from '../lib/intentos.ts';
 import {completarLeccion, guardarNota, leccion, mapaCurso, temaDetalle} from '../lib/curso.ts';
@@ -17,6 +17,8 @@ const enDias = (d: number) => new Date(AHORA.getTime() + d * 86400_000);
 async function preparar() {
   const db = await crearDbPrueba();
   await sembrar(db);
+  // Estas pruebas miran el motor de la ruta con un solo tema abierto (Anatomía celular).
+  await db.update(temas).set({abierto: false}).where(ne(temas.id, 'anatomia-celular'));
   const u = await crearUsuario(db, {nombre: 'Docente', correo: 'docente@correo.com', clave: '12345678'});
   await elegirEspecialidad(db, u.id, 'ccnn-egb-superior');
   return {db, uid: u.id};

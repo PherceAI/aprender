@@ -65,7 +65,7 @@ test('diagnóstico: 40 preguntas, sin retroalimentación, se retoma y ubica al d
     await responder(db, uid, nuevo.id, p.id, {elegida: i < 2 ? c : (c + 1) % 4, seguridad: 'lo-se'}, AHORA);
   }
   const res = await terminarIntento(db, uid, nuevo.id, AHORA);
-  assert.equal(res.correccion, undefined, 'el diagnóstico no muestra corrección');
+  assert.equal(res.correccion?.length, 40, 'al terminar, el diagnóstico muestra la revisión de cada pregunta (mientras se responde, no)');
   const fund = res.ubicacion!.find((u) => u.unidadId === 'gen-fundamentos')!;
   assert.deepEqual([fund.nivel, fund.categoria], [70, 'fuerte']);
   assert.equal(res.ubicacion!.find((u) => u.unidadId === 'cn-seres-vivos')!.categoria, 'debil');

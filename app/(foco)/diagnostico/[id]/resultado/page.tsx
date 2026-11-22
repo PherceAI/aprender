@@ -1,7 +1,8 @@
 import type {Metadata} from 'next';
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
-import {ArrowRight, BookOpen, Repeat, Sprout, Target, Trophy} from 'lucide-react';
+import {ArrowRight, BookOpen, CheckCheck, ListChecks, MessageCircleQuestion, Repeat, Sprout, Target, Trophy} from 'lucide-react';
+import {RevisionRespuestas} from '@/components/revision-respuestas';
 import {requerirDocente} from '@/lib/auth/cookies';
 import {getDb} from '@/lib/db';
 import {ErrorAcademia, terminarIntento} from '@/lib/intentos';
@@ -14,6 +15,14 @@ import {LeyendaDominio, MapaDominio} from '@/components/mapa-dominio';
 export const metadata: Metadata = {title: 'Tu punto de partida'};
 
 // El informe del diagnóstico: cuánto acertó, tema por tema qué trae y qué le falta, y qué hace ahora.
+
+// Los momentos en que Pragma explica, para que el docente sepa dónde ver su retroalimentación.
+const RETRO = [
+  {icono: CheckCheck, titulo: 'Al responder', texto: 'En práctica, prueba del tema y repaso ves al instante si acertaste y por qué cada opción está bien o mal.'},
+  {icono: ListChecks, titulo: 'Al terminar', texto: 'En el diagnóstico y los simulacros revisas cada pregunta al final, como aquí abajo.'},
+  {icono: Repeat, titulo: 'Después', texto: 'Lo que fallas vuelve en tu repaso a los 1, 3, 7, 14 y 30 días, hasta que lo dominas.'},
+  {icono: MessageCircleQuestion, titulo: 'Cuando tengas dudas', texto: 'El tutor con IA te explica «¿Por qué me equivoqué?» en tus propias palabras.'},
+];
 
 export default async function ResultadoDiagnostico({params}: {params: Promise<{id: string}>}) {
   const {id} = await params;
@@ -172,6 +181,25 @@ export default async function ResultadoDiagnostico({params}: {params: Promise<{i
           </li>
         </ol>
       </section>
+
+      <section className="card mt-8 p-5 sm:p-6">
+        <h2 className="text-[17px] font-semibold text-ink">Así te retroalimenta Pragma</h2>
+        <ul className="mt-3 grid grid-cols-[minmax(0,1fr)] gap-3 sm:grid-cols-2">
+          {RETRO.map((r) => (
+            <li key={r.titulo} className="flex gap-3 rounded-[14px] bg-surface-2 p-3.5">
+              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-accent-soft text-accent">
+                <r.icono size={17} />
+              </span>
+              <span className="min-w-0">
+                <span className="block text-[14.5px] font-semibold text-ink">{r.titulo}</span>
+                <span className="block text-[13.5px] leading-snug text-ink-2">{r.texto}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {res.correccion && <RevisionRespuestas correccion={res.correccion} falladasPrimero titulo="Revisa tus respuestas" />}
 
       <div className="mt-8 flex justify-end">
         <Link href="/inicio" className={`${btn.primary} w-full px-8 sm:w-auto`}>

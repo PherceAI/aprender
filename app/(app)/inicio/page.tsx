@@ -177,7 +177,7 @@ export default async function Inicio() {
         <section id="ruta" className="card scroll-mt-6 p-4 sm:p-6">
           <h2 className="text-[20px] font-semibold tracking-[-0.02em] text-ink">Tu ruta de aprendizaje</h2>
           <p className="mt-0.5 text-[14px] text-ink-2">
-            Los {temas.length} temas de la ficha, por módulo. En cada tema: lecciones, prueba del tema y, con 80 %, queda dominado.
+            Los {temas.length} temas de la ficha, por módulo. El círculo cuenta las lecciones que viste; «tu nivel» viene de tu diagnóstico y de tus pruebas. Los temas que dicen «Pronto» aún no tienen lecciones.
           </p>
           <div className="mt-4">
             <RutaModulos unidades={unidades} actualId={temaActual?.id ?? null} />
