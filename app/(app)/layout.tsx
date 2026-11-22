@@ -18,7 +18,6 @@ import {TemaToggle} from '@/components/tema-toggle';
 
 const DOCENTE: ItemBarra[] = [
   {href: '/inicio', texto: 'Inicio', icono: 'inicio', grupo: 'Aprender'},
-  {href: '/curso', texto: 'Mi ruta', icono: 'ruta', grupo: 'Aprender'},
   {href: '/repaso', texto: 'Repaso', icono: 'repaso', grupo: 'Aprender'},
   {href: '/simulacro', texto: 'Simulacros', icono: 'simulacro', grupo: 'Aprender'},
   {href: '/perfil', texto: 'Mi progreso', icono: 'progreso', grupo: 'Seguimiento'},

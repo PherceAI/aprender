@@ -15,6 +15,7 @@ import {enlaceFicha, paginaDeTema} from '@/lib/ficha';
 import {visualDeUnidad} from '@/lib/visual';
 import {Anillo} from '@/components/ui';
 import {BotonIniciar} from '@/components/boton-iniciar';
+import {RutaModulos} from '@/components/ruta-modulos';
 
 export const metadata: Metadata = {title: 'Inicio'};
 
@@ -43,26 +44,18 @@ export default async function Inicio() {
   ]);
   if (hoy.siguiente.tipo === 'diagnostico') redirect('/diagnostico');
   const s = hoy.siguiente;
+  const unidades = mapa.bloques.flatMap((b) => b.unidades.map((un) => ({...un, bloque: b.nombre})));
   const temas = mapa.bloques.flatMap((b) => b.unidades.flatMap((un) => un.temas.map((t) => ({...t, unidad: un.nombre, unidadId: un.id}))));
   const dominados = perfil.temas.filter((t) => t.estado === 'dominado').length;
-  const tarjetas = ruta.slice(0, 3).map((r) => temas.find((t) => t.id === r.temaId)!).filter(Boolean);
   const temaActual = s.tipo === 'leccion' || s.tipo === 'prueba-tema' ? temas.find((t) => t.id === s.temaId) : null;
   const visual = visualDeUnidad(temaActual?.unidadId ?? '');
   const pag = temaActual ? paginaDeTema(temaActual.id) : null;
   const avanceTema = temaActual ? Math.round((temaActual.completadas / Math.max(1, temaActual.lecciones)) * 100) : 0;
 
-  // Paso del método en que está.
-  const pasoActual = s.tipo === 'leccion' ? 1 : s.tipo === 'prueba-tema' ? 2 : 3;
-  const PASOS = [
-    {titulo: 'Diagnóstico', texto: 'Ya sabemos qué dominas.'},
-    {titulo: 'Lecciones', texto: 'Aprende el tema en pantallas cortas.'},
-    {titulo: 'Prueba del tema', texto: '10 preguntas. Con 80 % lo dominas.'},
-    {titulo: 'Simulacro', texto: 'Mídete como en el examen real.'},
-  ];
 
   // Meta de hoy: tres tareas concretas.
   const tareas = [
-    {texto: 'Estudiar una lección', detalle: meta.leccionHoy ? '¡Hecho!' : s.tipo === 'leccion' ? `Lección ${s.numero} de ${s.temaNombre}` : 'Abre una lección de tu ruta', hecho: meta.leccionHoy, href: s.tipo === 'leccion' ? `/leccion/${s.leccionId}` : '/curso'},
+    {texto: 'Estudiar una lección', detalle: meta.leccionHoy ? '¡Hecho!' : s.tipo === 'leccion' ? `Lección ${s.numero} de ${s.temaNombre}` : 'Abre una lección de tu ruta', hecho: meta.leccionHoy, href: s.tipo === 'leccion' ? `/leccion/${s.leccionId}` : '#ruta'},
     {
       texto: 'Repasar lo que fallaste',
       detalle: meta.repasoHoy ? '¡Hecho!' : meta.repasoPendiente ? `${Math.min(meta.repasoPendiente, 10)} preguntas · unos ${Math.max(2, Math.round(Math.min(meta.repasoPendiente, 10) * 0.7))} min` : 'Nada pendiente hoy',
@@ -180,29 +173,18 @@ export default async function Inicio() {
       </div>
 
       <div className="grid grid-cols-[minmax(0,1fr)] gap-5 xl:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)]">
-        {/* Así avanzas */}
-        <section className="card p-5 sm:p-6">
-          <h2 className="text-[18px] font-semibold tracking-[-0.02em] text-ink">Así avanzas en cada tema</h2>
-          <p className="text-[13.5px] text-ink-2">Completa cada paso para dominar el tema.</p>
-          <ol className="mt-4 grid grid-cols-[repeat(2,minmax(0,1fr))] gap-3 lg:grid-cols-[repeat(4,minmax(0,1fr))]">
-            {PASOS.map((p, i) => {
-              const hecho = i === 0 || i < pasoActual;
-              const aqui = i === pasoActual;
-              return (
-                <li key={p.titulo} className={`relative rounded-[16px] border p-3.5 ${aqui ? 'border-2 border-accent bg-surface' : hecho ? 'border-[#cdeedb] bg-ok-soft' : 'border-line bg-surface-2'}`}>
-                  {aqui && <span className="absolute -top-2.5 right-3 rounded-full bg-accent px-2 py-0.5 text-[11px] font-bold text-white">Estás aquí</span>}
-                  <span className={`grid h-8 w-8 place-items-center rounded-full ${aqui ? 'bg-accent text-white' : hecho ? 'bg-ok text-white' : 'bg-surface text-ink-3'}`}>
-                    {hecho && !aqui ? <Check size={15} strokeWidth={3} /> : aqui ? <Play size={13} fill="currentColor" /> : <Lock size={14} />}
-                  </span>
-                  <p className={`mt-2 text-[12px] font-bold ${aqui ? 'text-accent-ink' : hecho ? 'text-ok' : 'text-ink-3'}`}>Paso {i + 1}</p>
-                  <p className="text-[15px] font-semibold text-ink">{p.titulo}</p>
-                  <p className="mt-0.5 text-[12.5px] leading-snug text-ink-2">{p.texto}</p>
-                </li>
-              );
-            })}
-          </ol>
+        {/* Tu ruta completa (antes «Mi ruta») */}
+        <section id="ruta" className="card scroll-mt-6 p-4 sm:p-6">
+          <h2 className="text-[20px] font-semibold tracking-[-0.02em] text-ink">Tu ruta de aprendizaje</h2>
+          <p className="mt-0.5 text-[14px] text-ink-2">
+            Los {temas.length} temas de la ficha, por módulo. En cada tema: lecciones, prueba del tema y, con 80 %, queda dominado.
+          </p>
+          <div className="mt-4">
+            <RutaModulos unidades={unidades} actualId={temaActual?.id ?? null} />
+          </div>
         </section>
 
+        <div className="flex flex-col gap-5">
         {/* Meta de hoy */}
         <section className="card p-5 sm:p-6">
           <div className="flex items-center justify-between">
@@ -229,49 +211,6 @@ export default async function Inicio() {
             ))}
           </ul>
         </section>
-      </div>
-
-      <div className="grid grid-cols-[minmax(0,1fr)] gap-5 xl:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)]">
-        {/* Tu ruta */}
-        <section className="card p-5 sm:p-6">
-          <div className="mb-4 flex items-baseline justify-between">
-            <div>
-              <h2 className="text-[18px] font-semibold tracking-[-0.02em] text-ink">Tu ruta de aprendizaje</h2>
-              <p className="text-[13.5px] text-ink-2">Los temas que siguen, en el orden que te conviene.</p>
-            </div>
-            <Link href="/curso" className="inline-flex shrink-0 items-center gap-1 text-[14px] font-semibold text-accent-ink">
-              Ver toda <ArrowRight size={16} />
-            </Link>
-          </div>
-          <div className="grid grid-cols-[minmax(0,1fr)] gap-4 sm:grid-cols-3">
-            {tarjetas.map((t) => {
-              const v = visualDeUnidad(t.unidadId);
-              const avance = Math.round((t.completadas / Math.max(1, t.lecciones)) * 100);
-              return (
-                <Link key={t.id} href={`/curso/${t.id}`} className="group overflow-hidden rounded-[18px] border border-line bg-surface transition-transform hover:-translate-y-0.5">
-                  <div className="relative grid h-28 place-items-center" style={{background: v.degradado}}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={v.img} alt="" aria-hidden className={`h-20 w-20 drop-shadow-[0_10px_16px_rgba(0,0,0,0.18)] transition-transform group-hover:scale-105 ${t.abierto ? '' : 'opacity-70 grayscale-[35%]'}`} />
-                    <span className={`absolute top-2.5 left-2.5 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11.5px] font-bold ${t.abierto ? 'bg-white text-[#b8300a]' : 'bg-white/85 text-[#525252]'}`}>
-                      {t.abierto ? (t.completadas ? 'En curso' : 'Disponible') : <><Lock size={11} /> Pronto</>}
-                    </span>
-                  </div>
-                  <div className="p-3.5">
-                    <p className="truncate text-[15px] font-semibold text-ink">{t.nombre}</p>
-                    <p className="truncate text-[12.5px] text-ink-2">{t.unidad}</p>
-                    <div className="mt-2.5 flex items-center gap-2">
-                      <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-line-2">
-                        <div className="h-full rounded-full" style={{width: `${avance}%`, background: v.color}} />
-                      </div>
-                      <span className="text-[12px] font-semibold text-ink-2">{avance} %</span>
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-
         {/* Esta semana */}
         <section className="card p-5 sm:p-6">
           <div className="flex items-baseline justify-between">
@@ -294,6 +233,7 @@ export default async function Inicio() {
           </div>
           <p className="mt-3 text-[13px] text-ink-2">Preguntas que respondiste cada día. Hoy está en naranja.</p>
         </section>
+        </div>
       </div>
     </div>
   );

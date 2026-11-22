@@ -50,7 +50,7 @@ export function ElegirLeccion({
               <Play size={16} fill="currentColor" /> Abrir esta lección
             </button>
           </form>
-          <Link href="/curso" className={`${btn.ghost} rounded-full`}>
+          <Link href="/inicio#ruta" className={`${btn.ghost} rounded-full`}>
             Elegir otra
           </Link>
         </div>

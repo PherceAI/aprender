@@ -38,7 +38,7 @@ export default async function Leccion({params}: {params: Promise<{id: string}>})
   if (l === 'bloqueada') {
     return (
       <div className="px-4">
-        <AccesoCompleto volver={{href: '/curso', texto: 'Volver a mi ruta'}} texto="Esta lección es del acceso completo" />
+        <AccesoCompleto volver={{href: '/inicio#ruta', texto: 'Volver a tu ruta'}} texto="Esta lección es del acceso completo" />
       </div>
     );
   }

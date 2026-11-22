@@ -17,7 +17,7 @@ const ICONOS: Record<ItemNav['icono'], LucideIcon> = {
 };
 
 function activo(path: string, href: string) {
-  if (href === '/curso') return path.startsWith('/curso') || path.startsWith('/leccion');
+  if (href === '/inicio') return path.startsWith('/inicio') || path.startsWith('/curso') || path.startsWith('/leccion');
   return path === href || path.startsWith(`${href}/`);
 }
 

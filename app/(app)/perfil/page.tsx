@@ -88,7 +88,7 @@ export default async function MiProgreso() {
             <p className="mt-2 max-w-[34ch] text-[14.5px] leading-relaxed text-white/90">
               Es tu dominio de los {p.temas.length} temas de la ficha, con el peso que cada prueba tiene en el examen. Sube cada vez que dominas un tema.
             </p>
-            <Link href="/curso" className="mt-5 inline-flex h-11 items-center gap-2 rounded-full bg-white px-5 text-[14.5px] font-semibold text-[#b8300a]">
+            <Link href="/inicio#ruta" className="mt-5 inline-flex h-11 items-center gap-2 rounded-full bg-white px-5 text-[14.5px] font-semibold text-[#b8300a]">
               <Play size={15} fill="currentColor" /> Continuar mi ruta
             </Link>
           </div>

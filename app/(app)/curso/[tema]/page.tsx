@@ -39,8 +39,8 @@ export default async function Tema({params}: {params: Promise<{tema: string}>}) 
 
   return (
     <div className="rise mx-auto flex max-w-[880px] flex-col gap-6">
-      <Link href="/curso" className="inline-flex items-center gap-1.5 text-[14px] font-medium text-ink-3 hover:text-ink">
-        <ArrowLeft size={16} /> Mi ruta
+      <Link href="/inicio#ruta" className="inline-flex items-center gap-1.5 text-[14px] font-medium text-ink-3 hover:text-ink">
+        <ArrowLeft size={16} /> Volver a tu ruta
       </Link>
 
       <div className="flex flex-wrap items-center justify-between gap-5">

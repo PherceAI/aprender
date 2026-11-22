@@ -65,7 +65,7 @@ export default async function Repaso() {
             <div>
               <p className="text-[20px] font-semibold text-ink">Nada pendiente por hoy</p>
               <p className="mt-1 text-[15px] text-ink-2">Cuando falles una pregunta en una práctica o una prueba, vuelve aquí desde mañana.</p>
-              <Link href="/curso" className="mt-4 inline-flex h-11 items-center rounded-full bg-accent px-5 text-[14.5px] font-semibold text-white">
+              <Link href="/inicio#ruta" className="mt-4 inline-flex h-11 items-center rounded-full bg-accent px-5 text-[14.5px] font-semibold text-white">
                 Ir a mi ruta
               </Link>
             </div>
