@@ -5,6 +5,7 @@ import {sesionActual} from '@/lib/auth/cookies';
 import {LECCIONES_GRATIS} from '@/lib/acceso';
 import {Aviso, Marca} from '@/components/ui';
 import {FormRegistro} from './form';
+import {BotonGoogle} from '@/components/boton-google';
 
 export const metadata: Metadata = {title: 'Empieza gratis'};
 
@@ -19,6 +20,7 @@ export default async function Registro() {
         <div className="card mt-7 p-6 sm:p-7">
           <h1 className="text-[24px] font-semibold tracking-[-0.035em] text-ink">Empieza gratis</h1>
           <p className="mt-1 text-[15px] text-ink-2">Haz tu diagnóstico, elige {LECCIONES_GRATIS} lecciones de cualquier tema y prueba un simulacro, sin pagar.</p>
+          <BotonGoogle />
           <FormRegistro />
           <p className="mt-5 text-center text-[14px] text-ink-2">
             ¿Ya tienes cuenta?{' '}
