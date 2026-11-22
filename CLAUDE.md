@@ -28,7 +28,7 @@ Es una academia en línea para que los **docentes** de Ecuador (no los estudiant
 ## Decisiones del 15 nov (noche)
 - La plataforma se llama **Pragma**. El logo del dueño está en public/marca/: el símbolo va en el naranja de la plataforma y el ícono de la app es naranja con el símbolo blanco.
 - La landing sigue las referencias del dueño: academia con fotos de docentes (Unsplash, créditos en public/landing/CREDITOS.md), pasos con íconos, especialidades, «aprende más inteligente», preguntas frecuentes y banner final. Poco texto. Rechazó las versiones tipográficas y planas.
-- Modelo de negocio: entra gratis (diagnóstico y 3 lecciones a su elección, de cualquier tema). El resto, las pruebas de tema y los simulacros se desbloquean con un **pago único** que el administrador activa en el panel. La regla está en lib/acceso.ts.
+- Modelo de negocio (22 nov): entra gratis (diagnóstico, 3 lecciones a su elección y un simulacro una vez). Todo lo demás se desbloquea con un **pago único de $45 con IVA incluido, hasta el examen de 2027**. Se paga por Deuna (QR/link que el admin sube en Panel → Pagos) o transferencia; el admin aprueba el comprobante y se abre todo. Payphone (tarjeta) viene después, con credenciales propias de Pragma. Reglas en lib/acceso.ts y lib/pagos.ts.
 - Para diseñar: correr Impeccable completo y Taste Skill, y mostrar opciones o referencias antes de programar.
 - El checklist de pulido está en docs/pulido-checklist.md.
 

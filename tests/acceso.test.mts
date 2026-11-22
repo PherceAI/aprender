@@ -5,7 +5,7 @@ import {sembrar} from '../lib/db/sembrar.ts';
 import {crearUsuario, elegirEspecialidad, registrar} from '../lib/usuarios.ts';
 import {cambiarPlan, elegirLeccion, estadoAcceso, LECCIONES_GRATIS, planDe} from '../lib/acceso.ts';
 import {completarLeccion, leccion} from '../lib/curso.ts';
-import {ErrorAcademia, iniciarIntento} from '../lib/intentos.ts';
+import {ErrorAcademia, iniciarIntento, terminarIntento} from '../lib/intentos.ts';
 import {eq} from 'drizzle-orm';
 import {temas} from '../lib/db/schema.ts';
 import {CONTENIDO} from '../contenido/index.ts';
@@ -31,7 +31,7 @@ test('quien se registra solo empieza con cuenta gratis; las cuentas del administ
   await assert.rejects(registrar(db, {nombre: 'Otra', correo: 'ANA@correo.ec', clave: 'clave-segura'}), /Ya existe/);
 });
 
-test('la cuenta gratis elige 3 lecciones de cualquier tema y bloquea las demás, las pruebas y el simulacro', async () => {
+test('la cuenta gratis elige 3 lecciones de cualquier tema y bloquea las demás y las pruebas; el simulacro, una sola vez', async () => {
   const {db, ids} = await preparar();
   assert.ok(ids.length > LECCIONES_GRATIS, 'hacen falta más lecciones que las gratis');
   const u = await registrar(db, {nombre: 'Ana Ruiz', correo: 'ana@correo.ec', clave: 'clave-segura'});
@@ -58,6 +58,10 @@ test('la cuenta gratis elige 3 lecciones de cualquier tema y bloquea las demás,
   assert.equal(await elegirLeccion(db, u.id, otra), false);
   assert.equal(await leccion(db, u.id, otra), 'bloqueada');
 
+  // Un simulacro gratis: se puede empezar (y retomar), pero al terminarlo ya no hay otro.
+  const sim = await iniciarIntento(db, u.id, 'simulacro');
+  assert.equal((await iniciarIntento(db, u.id, 'simulacro')).id, sim.id);
+  await terminarIntento(db, u.id, sim.id);
   await assert.rejects(iniciarIntento(db, u.id, 'simulacro'), (e) => e instanceof ErrorAcademia && e.codigo === 'bloqueado');
   await assert.rejects(iniciarIntento(db, u.id, 'prueba-tema', ids[0].replace(/-\d+$/, '')), (e) => e instanceof ErrorAcademia && e.codigo === 'bloqueado');
   // El diagnóstico sí es gratis.

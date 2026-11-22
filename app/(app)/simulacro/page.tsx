@@ -4,7 +4,7 @@ import {Clock, ListChecks, Lock, Timer} from 'lucide-react';
 import {requerirDocente} from '@/lib/auth/cookies';
 import {getDb} from '@/lib/db';
 import {perfilDe} from '@/lib/perfil';
-import {planDe} from '@/lib/acceso';
+import {planDe, simulacroGratisDisponible} from '@/lib/acceso';
 import {SIMULACRO_CORTO} from '@/lib/intentos';
 import {ILUSTRACION} from '@/lib/visual';
 import {BotonIniciar} from '@/components/boton-iniciar';
@@ -25,7 +25,7 @@ function fecha(d: Date) {
 export default async function Simulacros() {
   const u = await requerirDocente();
   const db = await getDb();
-  const [p, plan] = await Promise.all([perfilDe(db, u.id), planDe(db, u.id)]);
+  const [p, plan, gratisDisponible] = await Promise.all([perfilDe(db, u.id), planDe(db, u.id), simulacroGratisDisponible(db, u.id)]);
   const ultimos = p.simulacros.slice(-8);
 
   return (
@@ -55,13 +55,14 @@ export default async function Simulacros() {
             </div>
             <p className="mt-4 max-w-[48ch] text-[15px] leading-relaxed text-white/90">Mezcla temas de las dos pruebas, como el examen. Si se acaba el tiempo, se entrega solo con lo que respondiste.</p>
             <div className="mt-6">
-              {plan === 'gratis' ? (
+              {!gratisDisponible ? (
                 <Link href="/acceso" className="inline-flex h-12 items-center gap-2 rounded-full bg-white px-6 text-[15px] font-semibold text-[#b8300a]">
                   <Lock size={16} /> Desbloquear los simulacros
                 </Link>
               ) : (
-                <BotonIniciar tipo="simulacro" texto="Empezar el simulacro" className="!rounded-full !bg-white !text-[#b8300a]" />
+                <BotonIniciar tipo="simulacro" texto={plan === 'gratis' ? 'Hacer mi simulacro gratis' : 'Empezar el simulacro'} className="!rounded-full !bg-white !text-[#b8300a]" />
               )}
+              {plan === 'gratis' && gratisDisponible && <p className="mt-3 text-[13.5px] text-white">Con tu cuenta gratis puedes hacer un simulacro para conocerlo.</p>}
             </div>
           </div>
         </section>

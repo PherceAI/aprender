@@ -1,7 +1,7 @@
 import {and, arrayOverlaps, asc, eq, inArray, isNull} from 'drizzle-orm';
 import {listaNumeros, listaOrden, listaParejas} from '../contenido/validar';
 import type {Db} from './db';
-import {planDe, puedeVerLeccion} from './acceso';
+import {planDe, puedeVerLeccion, simulacroGratisDisponible} from './acceso';
 import {
   bloques,
   especialidadBloques,
@@ -205,8 +205,11 @@ export async function iniciarIntento(
 ): Promise<VistaIntento> {
   if (tipo === 'diagnostico' || tipo === 'simulacro') referencia = await especialidadDe(db, usuarioId);
   if (tipo === 'repaso') referencia = null;
-  if ((tipo === 'prueba-tema' || tipo === 'simulacro') && (await planDe(db, usuarioId)) === 'gratis') {
-    throw new ErrorAcademia('bloqueado', tipo === 'simulacro' ? 'Los simulacros son parte del acceso completo' : 'La prueba del tema es parte del acceso completo');
+  if (tipo === 'prueba-tema' && (await planDe(db, usuarioId)) === 'gratis') {
+    throw new ErrorAcademia('bloqueado', 'La prueba del tema es parte del acceso completo');
+  }
+  if (tipo === 'simulacro' && !(await simulacroGratisDisponible(db, usuarioId))) {
+    throw new ErrorAcademia('bloqueado', 'Ya hiciste tu simulacro gratis. Los demás son parte del acceso completo');
   }
   if (tipo === 'practica' && referencia && !(await puedeVerLeccion(db, usuarioId, referencia))) {
     throw new ErrorAcademia('bloqueado', 'Esta lección es parte del acceso completo');

@@ -1,11 +1,12 @@
 import type {Metadata} from 'next';
 import Link from 'next/link';
-import {MessageSquareText} from 'lucide-react';
+import {MessageSquareText, Wallet} from 'lucide-react';
 import {accionCambiarPlan} from '@/app/acciones';
 import {requerirAdmin} from '@/lib/auth/cookies';
 import {getDb} from '@/lib/db';
 import {docentesConAvance, resumenAdmin, temasYVideos} from '@/lib/admin';
 import {claveRevision, todosLosComentarios} from '@/lib/revision';
+import {pagosParaRevisar} from '@/lib/pagos';
 import {CrearDocente} from './crear-docente';
 import {Videos} from './videos';
 
@@ -20,6 +21,7 @@ export default async function Admin() {
   await requerirAdmin();
   const db = await getDb();
   const [r, docentes, temas, pendientes] = await Promise.all([resumenAdmin(db), docentesConAvance(db), temasYVideos(db), todosLosComentarios(db, true)]);
+  const pagosPendientes = (await pagosParaRevisar(db)).filter((p) => p.estado === 'pendiente').length;
   const verRevision = Boolean(claveRevision()) || pendientes.length > 0;
   const cifras = [
     {v: r.docentes, t: 'docentes'},
@@ -43,6 +45,18 @@ export default async function Admin() {
           </div>
         ))}
       </div>
+
+      <Link href="/admin/pagos" className={`card flex items-center gap-4 p-4 hover:bg-surface-2 sm:p-5 ${pagosPendientes ? 'border-2 border-accent' : ''}`}>
+        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-accent-soft text-accent">
+          <Wallet size={20} />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block text-[16px] font-semibold text-ink">Pagos</span>
+          <span className="text-[13.5px] text-ink-2">
+            <span className="num">{pagosPendientes}</span> por revisar · tus cuentas y el QR de Deuna
+          </span>
+        </span>
+      </Link>
 
       {verRevision && (
         <Link href="/admin/revision" className="card flex items-center gap-4 p-4 hover:bg-surface-2 sm:p-5">

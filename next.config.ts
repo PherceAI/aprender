@@ -10,6 +10,8 @@ const nextConfig: NextConfig = {
   // PGlite (Postgres en WASM, solo en local) no se empaqueta: se carga tal cual desde node_modules.
   serverExternalPackages: ['@electric-sql/pglite', 'pg'],
   eslint: {ignoreDuringBuilds: true},
+  // Fotos de comprobantes y el QR de Deuna (hasta 6 MB) llegan por acciones del servidor.
+  experimental: {serverActions: {bodySizeLimit: '7mb'}},
 };
 
 export default nextConfig;

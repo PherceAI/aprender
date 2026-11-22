@@ -320,3 +320,38 @@ export const comentariosRevision = pgTable(
   },
   (t) => [index('comentarios_revision_ruta').on(t.ruta)]
 );
+
+// ───────────── Pagos (pago único hasta el examen 2027) ─────────────
+
+export const METODOS_PAGO = ['deuna', 'transferencia', 'tarjeta'] as const;
+export const ESTADOS_PAGO = ['pendiente', 'aprobado', 'rechazado'] as const;
+
+/** Cada intento de pago de un docente. Deuna y transferencia los aprueba el administrador; tarjeta, Payphone. */
+export const pagos = pgTable(
+  'pagos',
+  {
+    id: serial().primaryKey(),
+    usuarioId: text()
+      .notNull()
+      .references(() => usuarios.id, {onDelete: 'cascade'}),
+    metodo: text({enum: METODOS_PAGO}).notNull(),
+    /** En centavos, IVA incluido. */
+    monto: integer().notNull(),
+    estado: text({enum: ESTADOS_PAGO}).notNull().default('pendiente'),
+    /** Número de comprobante o referencia que escribe el docente (o el id de Payphone). */
+    referencia: text().notNull().default(''),
+    /** Nombre del archivo de la foto del comprobante (en el volumen), si la subió. */
+    archivo: text(),
+    /** Motivo del rechazo, para el docente. */
+    nota: text(),
+    creado: timestamp({withTimezone: true}).notNull().defaultNow(),
+    revisado: timestamp({withTimezone: true}),
+  },
+  (t) => [index('pagos_estado').on(t.estado), index('pagos_usuario').on(t.usuarioId)]
+);
+
+/** Ajustes que el administrador cambia desde el panel (datos de cobro). */
+export const ajustes = pgTable('ajustes', {
+  clave: text().primaryKey(),
+  valor: text().notNull(),
+});

@@ -43,7 +43,7 @@ const RESPALDO: {icono: LucideIcon; titulo: string; texto: string}[] = [
   {icono: Target, titulo: 'Contenido alineado', texto: 'a la ficha técnica oficial'},
   {icono: Layers, titulo: 'Diagnóstico personal', texto: 'y una ruta de estudio a tu medida'},
   {icono: Clock, titulo: 'A tu ritmo', texto: 'en el celular o la computadora'},
-  {icono: ShieldCheck, titulo: 'Un solo pago', texto: 'sin mensualidades'},
+  {icono: ShieldCheck, titulo: 'Un solo pago de $45', texto: 'sin mensualidades'},
 ];
 
 // En pantallas grandes: arriba a la izquierda (sobre la cabeza no), y abajo sobre la camiseta.
@@ -93,13 +93,13 @@ const PLANES = [
   {
     nombre: 'Cuenta gratis',
     precio: 'Para empezar hoy, sin tarjeta',
-    incluye: ['Diagnóstico de 40 preguntas', 'Informe de qué dominas y qué reforzar', '3 lecciones a tu elección, de cualquier tema', 'Práctica de esas lecciones'],
+    incluye: ['Diagnóstico de 40 preguntas', 'Informe de qué dominas y qué reforzar', '3 lecciones a tu elección, de cualquier tema', 'Un simulacro para conocerlo'],
     boton: 'Empieza gratis',
     destacado: false,
   },
   {
     nombre: 'Acceso completo',
-    precio: 'Un solo pago, sin mensualidades',
+    precio: '$45, pago único con IVA incluido, hasta el examen de 2027',
     incluye: ['Todas las lecciones de los 31 temas', 'Prueba de cada tema hasta dominarlo', 'Simulacros como el examen real', 'Repaso de lo que fallas y tutor con IA'],
     boton: 'Empieza gratis y desbloquea',
     destacado: true,
@@ -107,7 +107,7 @@ const PLANES = [
 ];
 
 const FAQ: {p: string; r: string}[] = [
-  {p: '¿Cuánto cuesta?', r: 'Empiezas gratis: haces el diagnóstico y eliges 3 lecciones de cualquier tema. Para desbloquear todo haces un solo pago, sin mensualidades.'},
+  {p: '¿Cuánto cuesta?', r: 'Empiezas gratis: haces el diagnóstico, eliges 3 lecciones de cualquier tema y pruebas un simulacro. Para desbloquear todo pagas $45 una sola vez, con IVA incluido, y tienes acceso hasta el examen de 2027. Puedes pagar con Deuna o por transferencia.'},
   {p: '¿Es del Ineval?', r: 'No. Somos una plataforma independiente que prepara con el temario público de su ficha técnica oficial.'},
   {p: '¿Qué parte de la evaluación prepara?', r: 'La Dimensión 1, la que falta rendir en 2027: Conocimientos generales (pedagógicos y digitales) y Conocimientos de tu especialidad.'},
   {p: '¿Necesito instalar algo?', r: 'No. Entras desde el navegador y, si quieres, la guardas en tu celular como una app.'},

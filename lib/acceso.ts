@@ -1,6 +1,6 @@
-import {and, eq} from 'drizzle-orm';
+import {and, eq, isNotNull} from 'drizzle-orm';
 import type {Db} from './db';
-import {lecciones, leccionesElegidas, temas, usuarios} from './db/schema';
+import {intentos, lecciones, leccionesElegidas, temas, usuarios} from './db/schema';
 
 // Cuenta gratis: el docente se registra solo, hace el diagnóstico y elige LECCIONES_GRATIS lecciones
 // de cualquier tema abierto para probar. Lo demás (el resto de lecciones, las pruebas de tema y los
@@ -55,6 +55,17 @@ export async function elegirLeccion(db: Db, usuarioId: string, leccionId: string
   if (acceso === 'bloqueada') return false;
   await db.insert(leccionesElegidas).values({usuarioId, leccionId, elegida: ahora}).onConflictDoNothing();
   return true;
+}
+
+/** Con la cuenta gratis se puede hacer un simulacro completo una vez, para conocerlo. */
+export async function simulacroGratisDisponible(db: Db, usuarioId: string): Promise<boolean> {
+  if ((await planDe(db, usuarioId)) === 'completo') return true;
+  const [hecho] = await db
+    .select({id: intentos.id})
+    .from(intentos)
+    .where(and(eq(intentos.usuarioId, usuarioId), eq(intentos.tipo, 'simulacro'), isNotNull(intentos.terminado)))
+    .limit(1);
+  return !hecho;
 }
 
 export async function cambiarPlan(db: Db, usuarioId: string, plan: Plan) {

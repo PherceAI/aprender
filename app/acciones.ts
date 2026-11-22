@@ -12,6 +12,7 @@ import {ErrorAcademia, iniciarIntento, responder, terminarIntento, type Respuest
 import {porQueMeEquivoque, preguntarTutor, type RespuestaTutor} from '@/lib/tutor';
 import {elegirEspecialidad, ingresar, registrar} from '@/lib/usuarios';
 import {cambiarPlan, elegirLeccion, type Plan} from '@/lib/acceso';
+import {aprobarPago, avisarPago, ErrorPago, guardarArchivo, guardarDatosCobro, rechazarPago} from '@/lib/pagos';
 import {crearDocente} from '@/lib/admin';
 import {quitarVideo} from '@/lib/videos';
 import {borrarComentario, puedeComentar, comentariosDeRuta, COOKIE_REVISION, crearComentario, ErrorRevision, marcarResuelto, type Comentario, type NuevoComentario} from '@/lib/revision';
@@ -216,4 +217,56 @@ export async function accionResolverComentario(id: number, resuelto: boolean) {
   await requerirAdmin();
   await marcarResuelto(await getDb(), id, resuelto);
   revalidatePath('/admin/revision');
+}
+
+// ── Pagos ──
+
+/** El docente avisa que pagó por Deuna o transferencia, con el número y/o la foto del comprobante. */
+export async function accionAvisarPago(_: Estado, form: FormData): Promise<Estado> {
+  const u = await requerirUsuario();
+  try {
+    const foto = form.get('comprobante');
+    const archivo = foto instanceof File && foto.size > 0 ? await guardarArchivo(foto, 'comprobante') : null;
+    await avisarPago(await getDb(), u.id, {metodo: String(form.get('metodo') ?? ''), referencia: String(form.get('referencia') ?? ''), archivo});
+  } catch (e) {
+    if (e instanceof ErrorPago) return {error: e.message};
+    throw e;
+  }
+  revalidatePath('/', 'layout');
+  return {ok: 'Recibimos tu aviso. Revisamos el pago y te abrimos todo apenas lo confirmemos.'};
+}
+
+export async function accionAprobarPago(id: number) {
+  await requerirAdmin();
+  try {
+    await aprobarPago(await getDb(), id);
+  } catch (e) {
+    if (!(e instanceof ErrorPago)) throw e;
+  }
+  revalidatePath('/admin', 'layout');
+}
+
+export async function accionRechazarPago(id: number, form: FormData) {
+  await requerirAdmin();
+  try {
+    await rechazarPago(await getDb(), id, String(form.get('nota') ?? ''));
+  } catch (e) {
+    if (!(e instanceof ErrorPago)) throw e;
+  }
+  revalidatePath('/admin', 'layout');
+}
+
+/** El administrador guarda sus cuentas bancarias, el link y el QR de Deuna. */
+export async function accionGuardarCobro(_: Estado, form: FormData): Promise<Estado> {
+  await requerirAdmin();
+  try {
+    const qr = form.get('qr');
+    const deunaQr = qr instanceof File && qr.size > 0 ? await guardarArchivo(qr, 'qr') : undefined;
+    await guardarDatosCobro(await getDb(), {cuentas: String(form.get('cuentas') ?? ''), deunaLink: String(form.get('deunaLink') ?? ''), deunaQr});
+  } catch (e) {
+    if (e instanceof ErrorPago) return {error: e.message};
+    throw e;
+  }
+  revalidatePath('/', 'layout');
+  return {ok: 'Datos de cobro guardados.'};
 }
