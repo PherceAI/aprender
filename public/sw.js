@@ -1,6 +1,6 @@
 // Service worker de Pragma: guarda lo básico para abrir la app instalada y muestra un aviso si no hay conexión.
 // Las páginas siempre se piden a la red (los datos del docente cambian); solo sin conexión se usa lo guardado.
-const CACHE = 'pragma-v1';
+const CACHE = 'pragma-v2';
 const BASICO = ['/sin-conexion', '/marca/pragma-simbolo.png', '/icons/icon-192.png', '/icons/icon-512.png'];
 
 self.addEventListener('install', (e) => {
@@ -21,6 +21,8 @@ self.addEventListener('fetch', (e) => {
   if (r.method !== 'GET') return;
   const url = new URL(r.url);
   if (url.origin !== location.origin) return;
+  // La API (comprobantes, QR, videos) siempre va a la red: no se guarda en el teléfono.
+  if (url.pathname.startsWith('/api/')) return;
   if (r.mode === 'navigate') {
     e.respondWith(fetch(r).catch(() => caches.match('/sin-conexion')));
     return;

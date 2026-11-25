@@ -11,7 +11,8 @@
     "test": "tsx --test tests/*.test.mts",
     "temario": "tsx scripts/temario.mts",
     "cuentas": "tsx scripts/cuentas.mts",
-    "iconos": "tsx scripts/iconos.mts"
+    "iconos": "tsx scripts/iconos.mts",
+    "verificar": "node scripts/verificar-produccion.mjs"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.16",
