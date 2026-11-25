@@ -192,7 +192,7 @@ export function ModoRevision() {
         <button
           type="button"
           onClick={() => setAbierto(true)}
-          className="fixed bottom-[calc(88px+env(safe-area-inset-bottom))] left-4 z-[70] inline-flex h-12 items-center gap-2 rounded-full bg-[#171717] px-4 text-[14.5px] font-semibold text-white shadow-[0_12px_30px_-10px_rgba(0,0,0,0.45)] lg:right-6 lg:bottom-6 lg:left-auto"
+          className="fixed bottom-[calc(88px+env(safe-area-inset-bottom))] left-4 z-[70] inline-flex h-12 items-center gap-2 rounded-full bg-[#171717] px-4 text-[14.5px] font-semibold text-white shadow-[0_12px_30px_-10px_rgba(0,0,0,0.45)] lg:right-6 lg:bottom-24 lg:left-auto"
         >
           <MessageSquarePlus size={18} /> Comentar
           {lista.length > 0 && <span className="num grid h-6 min-w-6 place-items-center rounded-full bg-accent px-1.5 text-[12.5px]">{lista.length}</span>}

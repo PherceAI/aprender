@@ -6,6 +6,7 @@ import {Aviso, Marca} from '@/components/ui';
 import {FormIngreso} from './form';
 import {BotonGoogle} from '@/components/boton-google';
 import {googleListo} from '@/lib/auth/google';
+import {BotonWhatsApp} from '@/components/whatsapp';
 
 export const metadata: Metadata = {title: 'Iniciar sesión'};
 
@@ -14,6 +15,7 @@ export default async function Ingresar({searchParams}: {searchParams: Promise<{g
   if (await sesionActual()) redirect('/inicio');
   return (
     <div className="grid min-h-dvh place-items-center px-4 py-10">
+      <BotonWhatsApp />
       <div className="rise w-full max-w-[400px]">
         <Link href="/" aria-label="Volver a la portada">
           <Marca grande />

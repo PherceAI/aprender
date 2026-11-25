@@ -13,6 +13,7 @@ import {NavInferior, type ItemNav} from '@/components/nav';
 import {BarraLateral, type ItemBarra} from '@/components/barra-lateral';
 import {BotonInstalar} from '@/components/instalar';
 import {TemaToggle} from '@/components/tema-toggle';
+import {BotonWhatsApp} from '@/components/whatsapp';
 
 // El cascarón de la plataforma: barra lateral plegable en computadora y barra inferior en el teléfono.
 
@@ -75,6 +76,7 @@ export default async function LayoutApp({children}: {children: React.ReactNode})
         <main className="mx-auto w-full max-w-[1320px] px-4 pt-5 pb-28 sm:px-6 lg:px-8 lg:pt-7 lg:pb-12">{children}</main>
       </div>
       <NavInferior items={itemsMovil} insignias={insignias} />
+      {esDocente && <BotonWhatsApp sobreBarra usuario={{nombre: u.nombre, correo: u.correo}} />}
     </div>
   );
 }

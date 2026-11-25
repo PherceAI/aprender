@@ -33,6 +33,7 @@ import {PreguntaMuestra, type Muestra} from '@/components/pregunta-muestra';
 import {CONTENIDO} from '@/contenido';
 import fotoRecorte from '@/public/landing/docente-recorte.png';
 import fotoCelular from '@/public/landing/docente-celular.jpg';
+import {BotonWhatsApp} from '@/components/whatsapp';
 
 // Portada pública (referencia del dueño, 16 nov, segunda versión): academia cálida en naranja.
 // Sin precios, valoraciones ni cifras de alumnos inventadas. Fotos de Unsplash: ver public/landing/CREDITOS.md.
@@ -454,6 +455,7 @@ export default async function Portada() {
           </div>
         </div>
       </footer>
+      <BotonWhatsApp />
     </div>
   );
 }

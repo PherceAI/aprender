@@ -6,6 +6,7 @@ import {LECCIONES_GRATIS} from '@/lib/acceso';
 import {Aviso, Marca} from '@/components/ui';
 import {FormRegistro} from './form';
 import {BotonGoogle} from '@/components/boton-google';
+import {BotonWhatsApp} from '@/components/whatsapp';
 
 export const metadata: Metadata = {title: 'Empieza gratis'};
 
@@ -13,6 +14,7 @@ export default async function Registro() {
   if (await sesionActual()) redirect('/inicio');
   return (
     <div className="grid min-h-dvh place-items-center px-4 py-10">
+      <BotonWhatsApp />
       <div className="rise w-full max-w-[420px]">
         <Link href="/" aria-label="Volver a la portada">
           <Marca grande />
