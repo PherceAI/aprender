@@ -95,11 +95,18 @@ export async function avisarPago(db: Db, usuarioId: string, d: {metodo: string; 
   if ((await planDe(db, usuarioId)) === 'completo') throw new ErrorPago('Ya tienes el acceso completo');
   const [pendiente] = await db.select({id: pagos.id}).from(pagos).where(and(eq(pagos.usuarioId, usuarioId), eq(pagos.estado, 'pendiente')));
   if (pendiente) throw new ErrorPago('Ya tienes un pago en revisión. Te avisamos apenas lo confirmemos.');
-  const [p] = await db
-    .insert(pagos)
-    .values({usuarioId, metodo: d.metodo, monto: PRECIO_CENTAVOS, referencia, archivo: d.archivo ?? null})
-    .returning();
-  return p;
+  try {
+    const [p] = await db
+      .insert(pagos)
+      .values({usuarioId, metodo: d.metodo, monto: PRECIO_CENTAVOS, referencia, archivo: d.archivo ?? null})
+      .returning();
+    return p;
+  } catch (e) {
+    // Dos avisos a la vez: el índice único deja pasar uno solo.
+    const [otro] = await db.select({id: pagos.id}).from(pagos).where(and(eq(pagos.usuarioId, usuarioId), eq(pagos.estado, 'pendiente')));
+    if (otro) throw new ErrorPago('Ya tienes un pago en revisión. Te avisamos apenas lo confirmemos.');
+    throw e;
+  }
 }
 
 export type PagoConDocente = Pago & {nombre: string; correo: string};

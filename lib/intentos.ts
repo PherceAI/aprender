@@ -355,16 +355,21 @@ export async function responder(
     correcta = r.elegida === p.correcta;
   }
 
-  await db.insert(respuestas).values({
-    intentoId,
-    usuarioId,
-    preguntaId,
-    elegida,
-    correcta,
-    seguridad: i.tipo === 'diagnostico' ? (r.seguridad ?? 'lo-se') : (r.seguridad ?? null),
-    segundos: r.segundos === undefined ? null : Math.max(0, Math.round(r.segundos)),
-    creado: ahora,
-  });
+  const guardada = await db
+    .insert(respuestas)
+    .values({
+      intentoId,
+      usuarioId,
+      preguntaId,
+      elegida,
+      correcta,
+      seguridad: i.tipo === 'diagnostico' ? (r.seguridad ?? 'lo-se') : (r.seguridad ?? null),
+      segundos: r.segundos === undefined ? null : Math.max(0, Math.round(r.segundos)),
+      creado: ahora,
+    })
+    .onConflictDoNothing()
+    .returning({id: respuestas.id});
+  if (!guardada.length) throw new ErrorAcademia('repetida', 'Ya respondiste esta pregunta');
 
   if (RETROALIMENTACION[i.tipo] !== 'inmediata') return {registrada: true};
   await actualizarRepaso(db, usuarioId, preguntaId, correcta, ahora);
@@ -442,14 +447,15 @@ export async function terminarIntento(db: Db, usuarioId: string, intentoId: stri
 
   const res: Resultado = {intentoId: i.id, tipo: i.tipo, referencia: i.referencia, puntaje, aciertos, total, porUnidad, porTema};
 
-  const primeraVez = !i.terminado;
   // Foto de antes: preparación y nivel de los temas que toca (para mostrar cuánto subió).
-  const especialidadId = primeraVez ? await especialidadDe(db, usuarioId) : null;
+  const especialidadId = !i.terminado ? await especialidadDe(db, usuarioId) : null;
   const prepAntes = especialidadId ? await preparacion(db, usuarioId, especialidadId) : 0;
-  const nivelesAntes = primeraVez ? await nivelesDe(db, usuarioId, temaIds) : null;
-  if (primeraVez) {
-    await db.update(intentos).set({terminado: ahora, puntaje}).where(eq(intentos.id, i.id));
-  }
+  const nivelesAntes = !i.terminado ? await nivelesDe(db, usuarioId, temaIds) : null;
+  // Idempotente: solo quien logra cerrar el intento (terminado era null) aplica niveles, repaso y avance.
+  const cerrado = i.terminado
+    ? []
+    : await db.update(intentos).set({terminado: ahora, puntaje}).where(and(eq(intentos.id, i.id), isNull(intentos.terminado))).returning({id: intentos.id});
+  const primeraVez = cerrado.length > 0;
 
   switch (i.tipo) {
     case 'diagnostico': {

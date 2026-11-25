@@ -26,11 +26,17 @@ export async function crearUsuario(
   if (!CORREO.test(correo)) throw new Error('El correo no es válido');
   if (d.clave.length < 8) throw new Error('La contraseña debe tener al menos 8 caracteres');
   if (await usuarioPorCorreo(db, correo)) throw new Error('Ya existe una cuenta con ese correo');
-  const [u] = await db
-    .insert(usuarios)
-    .values({id: newId('u'), nombre, correo, claveHash: hashClave(d.clave), rol: d.rol ?? 'docente', plan: d.plan ?? 'completo'})
-    .returning();
-  return publico(u);
+  try {
+    const [u] = await db
+      .insert(usuarios)
+      .values({id: newId('u'), nombre, correo, claveHash: hashClave(d.clave), rol: d.rol ?? 'docente', plan: d.plan ?? 'completo'})
+      .returning();
+    return publico(u);
+  } catch (e) {
+    // Doble envío del registro: el índice único del correo deja pasar uno solo.
+    if (await usuarioPorCorreo(db, correo)) throw new Error('Ya existe una cuenta con ese correo');
+    throw e;
+  }
 }
 
 export async function usuarioPorCorreo(db: Db, correo: string): Promise<Usuario | null> {

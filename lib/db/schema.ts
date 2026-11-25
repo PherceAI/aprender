@@ -347,7 +347,12 @@ export const pagos = pgTable(
     creado: timestamp({withTimezone: true}).notNull().defaultNow(),
     revisado: timestamp({withTimezone: true}),
   },
-  (t) => [index('pagos_estado').on(t.estado), index('pagos_usuario').on(t.usuarioId)]
+  (t) => [
+    index('pagos_estado').on(t.estado),
+    index('pagos_usuario').on(t.usuarioId),
+    // Un solo pago en revisión por docente, aunque toque «Ya pagué» dos veces a la vez.
+    uniqueIndex('pagos_un_pendiente').on(t.usuarioId).where(sql`estado = 'pendiente'`),
+  ]
 );
 
 /** Ajustes que el administrador cambia desde el panel (datos de cobro). */

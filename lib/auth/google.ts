@@ -67,5 +67,12 @@ export async function ingresarConGoogle(db: Db, perfil: PerfilGoogle): Promise<U
     return (await usuarioPorId(db, existente.id))!;
   }
   // Cuenta nueva y gratis; la contraseña es al azar (entra con Google).
-  return registrar(db, {nombre: perfil.nombre, correo: perfil.correo, clave: randomBytes(24).toString('base64url')});
+  try {
+    return await registrar(db, {nombre: perfil.nombre, correo: perfil.correo, clave: randomBytes(24).toString('base64url')});
+  } catch (e) {
+    // Dos regresos de Google a la vez: la cuenta ya la creó el otro.
+    const creada = await usuarioPorCorreo(db, perfil.correo);
+    if (creada?.rol === 'docente') return (await usuarioPorId(db, creada.id))!;
+    throw e;
+  }
 }

@@ -54,6 +54,11 @@ export async function elegirLeccion(db: Db, usuarioId: string, leccionId: string
   if (acceso === 'libre') return true;
   if (acceso === 'bloqueada') return false;
   await db.insert(leccionesElegidas).values({usuarioId, leccionId, elegida: ahora}).onConflictDoNothing();
+  // Dos pestañas eligiendo a la vez: si se pasó del límite, se deshace esta elección.
+  if ((await leccionesElegidasDe(db, usuarioId)).size > LECCIONES_GRATIS) {
+    await db.delete(leccionesElegidas).where(and(eq(leccionesElegidas.usuarioId, usuarioId), eq(leccionesElegidas.leccionId, leccionId)));
+    return false;
+  }
   return true;
 }
 
