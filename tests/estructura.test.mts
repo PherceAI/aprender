@@ -60,10 +60,30 @@ test('el diagnóstico de Ciencias Naturales tiene 40 preguntas, toca los 31 tema
   assert.ok(diag.some((p) => p.dibujo), 'el diagnóstico necesita al menos una pregunta sobre un dibujo');
 });
 
+const PEDAGOGICOS = ['teorias-aprendizaje', 'dua', 'planificacion-curricular', 'evaluacion-educativa', 'metodologias', 'tecnicas'];
+
+test('Conocimientos generales está abierto completo: los 10 temas, para todas las especialidades', () => {
+  const temas = temasDe('generales');
+  assert.equal(temas.length, 10);
+  for (const t of temas) assert.ok(t.abierto, `${t.id} abierto`);
+  for (const t of temas.filter((x) => PEDAGOGICOS.includes(x.id))) {
+    for (const l of t.lecciones) {
+      assert.ok(CONTENIDO.preguntas.filter((p) => p.leccionId === l.id && p.usos.includes('practica')).length >= 3, `${l.id}: práctica`);
+      for (const s of l.contenido ?? []) {
+        if (s.tipo !== 'puntos') continue;
+        for (const p of s.puntos) {
+          const [cabeza, ...resto] = p.split(': ');
+          assert.ok(resto.length && cabeza.length <= 40, `${l.id}: tarjeta «${cabeza}»`);
+        }
+      }
+    }
+  }
+});
+
 test('los temas abiertos tienen lecciones escritas y preguntas para su prueba', () => {
   const abiertos = CONTENIDO.bloques.flatMap((b) => b.unidades.flatMap((u) => u.temas)).filter((t) => t.abierto);
   const matematicaEgb = CONTENIDO.bloques.find((x) => x.id === 'egb-disciplinares')!.unidades.filter((u) => u.asignatura === 'Matemática').flatMap((u) => u.temas.map((t) => t.id));
-  assert.deepEqual(abiertos.map((t) => t.id).sort(), ['anatomia-celular', 'herramientas-digitales', 'medios-digitales', 'rea', 'riesgos-digitales', ...matematicaEgb].sort());
+  assert.deepEqual(abiertos.map((t) => t.id).sort(), ['anatomia-celular', 'herramientas-digitales', 'medios-digitales', 'rea', 'riesgos-digitales', ...PEDAGOGICOS, ...matematicaEgb].sort());
   for (const t of abiertos) {
     assert.ok(t.lecciones.every((l) => l.contenido?.length), `${t.id}: todas sus lecciones tienen contenido`);
     const prueba = CONTENIDO.preguntas.filter((p) => p.temaId === t.id && p.usos.includes('prueba'));

@@ -6,6 +6,7 @@ import {PREGUNTAS_CCNN} from './ccnn-egb-superior/preguntas';
 import {GENERALES} from './generales/estructura';
 import {PREGUNTAS_GENERALES} from './generales/preguntas';
 import {PREGUNTAS_DIGITALES} from './generales/digitales';
+import {PREGUNTAS_PEDAGOGICAS} from './generales/pedagogicos';
 import {DIAGNOSTICO_CCNN, DIAGNOSTICO_GENERALES} from './diagnostico-ampliado';
 import type {Contenido, Especialidad} from './tipos';
 
@@ -30,5 +31,5 @@ const PROXIMAMENTE: Especialidad[] = [
 export const CONTENIDO: Contenido = {
   especialidades: [CCNN, EGB, ...PROXIMAMENTE],
   bloques: [GENERALES, CCNN_DISCIPLINARES, EGB_DISCIPLINARES],
-  preguntas: [...PREGUNTAS_GENERALES, ...PREGUNTAS_DIGITALES, ...DIAGNOSTICO_GENERALES, ...PREGUNTAS_CCNN, ...DIAGNOSTICO_CCNN, ...DIAGNOSTICO_EGB, ...PREGUNTAS_MATEMATICA],
+  preguntas: [...PREGUNTAS_GENERALES, ...PREGUNTAS_DIGITALES, ...PREGUNTAS_PEDAGOGICAS, ...DIAGNOSTICO_GENERALES, ...PREGUNTAS_CCNN, ...DIAGNOSTICO_CCNN, ...DIAGNOSTICO_EGB, ...PREGUNTAS_MATEMATICA],
 };

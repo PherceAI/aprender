@@ -10,15 +10,15 @@ import {eq} from 'drizzle-orm';
 import {temas} from '../lib/db/schema.ts';
 import {CONTENIDO} from '../contenido/index.ts';
 
-// La demo abre un solo tema. Se abren también los dos siguientes para tener lecciones de varios temas, más de las gratis.
+// Se toman los primeros 4 temas abiertos: lecciones de varios temas, más de las gratis.
 async function preparar() {
   const db = await crearDbPrueba();
   await sembrar(db);
   const todos = CONTENIDO.bloques.flatMap((b) => b.unidades.flatMap((u) => u.temas));
   const i = todos.findIndex((t) => t.abierto);
-  const abiertos = todos.slice(i, i + 3);
+  const abiertos = todos.slice(i, i + 4);
   for (const t of abiertos) await db.update(temas).set({abierto: true}).where(eq(temas.id, t.id));
-  const cerrado = todos.find((t, j) => j > i + 2 && t.lecciones.length && !t.abierto)!;
+  const cerrado = todos.find((t, j) => j > i + 3 && t.lecciones.length && !t.abierto)!;
   return {db, ids: abiertos.flatMap((t) => t.lecciones).map((l) => l.id), cerrada: cerrado?.lecciones[0]?.id};
 }
 

@@ -86,5 +86,6 @@ El docente no estudia una enciclopedia: estudia lo que la ficha pregunta, y solo
   - Pantallas nuevas: elegir curso por nombramiento, puntaje Ineval de 0 a 1000 y cambiar de curso desde Mi progreso.
   - Portada con los dos cursos.
   - **Siguiente:** escribir Lengua y Literatura completa (14 lecciones), luego Ciencias Naturales y Ciencias Sociales.
+- **26 nov (noche): Conocimientos generales abierto completo** en todos los cursos. Son los 6 temas pedagógicos: 7 lecciones cortas y 62 preguntas, el 21 % del examen (`contenido/generales/pedagogicos.ts`).
 
 - **Fase 1 (26 nov): hecha.** `contenido/egb-elemental-media/estructura.ts` con las 15 unidades, 34 temas y 63 lecciones. Especialidad `egb-elemental-media`, «próximamente». El validador exige el diagnóstico completo solo a las especialidades activas. Pruebas en `tests/egb.test.mts`.
