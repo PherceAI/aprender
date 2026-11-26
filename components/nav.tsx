@@ -3,6 +3,8 @@
 import {useEffect, useState} from 'react';
 import Link from 'next/link';
 import {usePathname} from 'next/navigation';
+import {BotonInstalar} from './instalar';
+import {TemaToggle} from './tema-toggle';
 import {ArrowLeftRight, CreditCard, FileText, LogOut, Menu, X, ChartLine, ChartNoAxesColumnIncreasing, ClipboardList, House, Repeat, Route, Timer, type LucideIcon} from 'lucide-react';
 
 export type ItemNav = {href: string; texto: string; corto?: string; icono: 'inicio' | 'ruta' | 'repaso' | 'simulacro' | 'progreso' | 'evaluacion' | 'admin'};
@@ -59,62 +61,65 @@ export function NavInferior({items, insignias = {}, mas}: {items: ItemNav[]; ins
   const [abierto, setAbierto] = useState(false);
   useEffect(() => setAbierto(false), [path]);
   const columnas = items.length + (mas ? 1 : 0);
+  const boton = (on: boolean) =>
+    `relative flex h-16 flex-col items-center justify-center gap-1 rounded-[14px] text-[11.5px] font-semibold transition-colors ${on ? 'text-accent-ink' : 'text-ink-3'}`;
   return (
-    <nav
-      aria-label="Principal"
-      className={`fixed inset-x-0 bottom-0 border-t border-line bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md lg:hidden ${abierto ? 'z-[60]' : 'z-30'}`}
-    >
-      {mas && abierto && <HojaMas mas={mas} cerrar={() => setAbierto(false)} />}
-      <div className="mx-auto grid max-w-lg" style={{gridTemplateColumns: `repeat(${columnas}, minmax(0, 1fr))`}}>
-        {items.map((it) => {
-          const Icono = ICONOS[it.icono];
-          const on = activo(path, it.href);
-          const n = insignias[it.href] ?? 0;
-          return (
-            <Link
-              key={it.href}
-              href={it.href}
-              aria-current={on ? 'page' : undefined}
-              className={`relative flex h-16 flex-col items-center justify-center gap-1 text-[11.5px] font-semibold ${on ? 'text-accent-ink' : 'text-ink-3'}`}
-            >
-              <Icono size={22} strokeWidth={on ? 2.2 : 1.8} />
-              {it.corto ?? it.texto}
-              {n > 0 && <span className="num absolute top-2 left-[calc(50%+6px)] grid h-4 min-w-4 place-items-center rounded-full bg-accent px-1 text-[10px] font-bold text-white">{n}</span>}
-            </Link>
-          );
-        })}
-        {mas && (
-          <button
-            type="button"
-            onClick={() => setAbierto((x) => !x)}
-            aria-expanded={abierto}
-            className={`relative flex h-16 flex-col items-center justify-center gap-1 text-[11.5px] font-semibold ${abierto ? 'text-accent-ink' : 'text-ink-3'}`}
-          >
-            {abierto ? <X size={22} /> : <Menu size={22} />}
-            Más
-            {mas.gratis && <span className="absolute top-2.5 left-[calc(50%+7px)] h-2 w-2 rounded-full bg-accent" />}
-          </button>
-        )}
-      </div>
-    </nav>
+    <>
+      {mas && abierto && (
+        <>
+          <button type="button" aria-label="Cerrar el menú" onClick={() => setAbierto(false)} className="fixed inset-0 z-[55] bg-black/35 lg:hidden" />
+          <HojaMas mas={mas} />
+        </>
+      )}
+      <nav
+        aria-label="Principal"
+        className={`fixed inset-x-0 bottom-0 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] lg:hidden ${abierto ? 'z-[57]' : 'z-30'}`}
+      >
+        <div className="mx-auto grid max-w-lg gap-1 px-3" style={{gridTemplateColumns: `repeat(${columnas}, minmax(0, 1fr))`}}>
+          {items.map((it) => {
+            const Icono = ICONOS[it.icono];
+            const on = !abierto && activo(path, it.href);
+            const n = insignias[it.href] ?? 0;
+            return (
+              <Link key={it.href} href={it.href} aria-current={on ? 'page' : undefined} className={boton(on)}>
+                <Icono size={22} strokeWidth={on ? 2.2 : 1.8} />
+                {it.corto ?? it.texto}
+                {n > 0 && <span className="num absolute top-2 left-[calc(50%+6px)] grid h-4 min-w-4 place-items-center rounded-full bg-accent px-1 text-[10px] font-bold text-white">{n}</span>}
+              </Link>
+            );
+          })}
+          {mas && (
+            <button type="button" onClick={() => setAbierto((x) => !x)} aria-expanded={abierto} className={boton(abierto)}>
+              {abierto ? <X size={22} strokeWidth={2.2} /> : <Menu size={22} strokeWidth={1.8} />}
+              Más
+              {mas.gratis && !abierto && <span className="absolute top-2.5 left-[calc(50%+8px)] h-2 w-2 rounded-full bg-accent" />}
+            </button>
+          )}
+        </div>
+      </nav>
+    </>
   );
 }
 
-function HojaMas({mas, cerrar}: {mas: MenuMas; cerrar: () => void}) {
-  const fila = 'flex h-14 items-center gap-3.5 rounded-[14px] px-3 text-[15.5px] font-medium text-ink hover:bg-surface-2';
+function HojaMas({mas}: {mas: MenuMas}) {
+  const fila = 'flex h-14 w-full items-center gap-3.5 rounded-[14px] px-3 text-left text-[15.5px] font-medium text-ink hover:bg-surface-2';
+  const iniciales = mas.nombre.split(/\s+/).filter(Boolean).slice(0, 2).map((p) => p[0]!.toUpperCase()).join('');
   return (
-    <>
-      <button type="button" aria-label="Cerrar el menú" onClick={cerrar} className="fixed inset-0 -z-10 bg-black/30" />
-      <div className="absolute inset-x-0 bottom-full rounded-t-[22px] border-t border-line bg-surface px-3 pt-4 pb-3 shadow-float">
-        <div className="px-3 pb-3">
-          <p className="text-[16px] font-semibold text-ink">{mas.nombre}</p>
-          {mas.curso && <p className="text-[13px] text-ink-2">{mas.curso}</p>}
+    <div className="fixed inset-x-3 bottom-[calc(4.75rem+env(safe-area-inset-bottom))] z-[56] mx-auto max-w-lg rounded-[24px] border border-line bg-surface p-3 shadow-float lg:hidden">
+      <div className="flex items-center gap-3 px-2 pt-1 pb-3">
+        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-accent text-[15px] font-semibold text-white">{iniciales}</span>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-[16px] font-semibold text-ink">{mas.nombre}</p>
+          {mas.curso && <p className="truncate text-[13px] text-ink-2">{mas.curso}</p>}
         </div>
-        {mas.gratis && (
-          <Link href="/acceso" className="mb-1 flex h-14 items-center gap-3.5 rounded-[14px] bg-accent px-3 text-[15.5px] font-semibold text-white">
-            <CreditCard size={20} /> Desbloquear todo · {mas.precio}
-          </Link>
-        )}
+        <TemaToggle compacto />
+      </div>
+      {mas.gratis && (
+        <Link href="/acceso" className="mb-1.5 flex h-14 items-center gap-3.5 rounded-[14px] bg-accent px-3.5 text-[15.5px] font-semibold text-white">
+          <CreditCard size={20} /> Desbloquear todo · {mas.precio}
+        </Link>
+      )}
+      <div className="flex flex-col">
         <Link href="/evaluacion" className={fila}>
           <ClipboardList size={20} className="text-ink-2" /> Tu evaluación
         </Link>
@@ -126,12 +131,13 @@ function HojaMas({mas, cerrar}: {mas: MenuMas; cerrar: () => void}) {
         <Link href="/bienvenida" className={fila}>
           <ArrowLeftRight size={20} className="text-ink-2" /> Cambiar de curso
         </Link>
-        <form action={mas.salir}>
-          <button className={`${fila} w-full text-left`}>
+        <BotonInstalar fila />
+        <form action={mas.salir} className="mt-1 border-t border-line pt-1">
+          <button className={fila}>
             <LogOut size={20} className="text-ink-2" /> Cerrar sesión
           </button>
         </form>
       </div>
-    </>
+    </div>
   );
 }

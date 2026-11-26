@@ -13,8 +13,6 @@ import {especialidadInfo} from '@/lib/evaluacion';
 import {Marca} from '@/components/ui';
 import {NavInferior, type ItemNav} from '@/components/nav';
 import {BarraLateral, type ItemBarra} from '@/components/barra-lateral';
-import {BotonInstalar} from '@/components/instalar';
-import {TemaToggle} from '@/components/tema-toggle';
 import {BotonWhatsApp} from '@/components/whatsapp';
 
 // El cascarón de la plataforma: barra lateral plegable en computadora y barra inferior en el teléfono.
@@ -61,24 +59,21 @@ export default async function LayoutApp({children}: {children: React.ReactNode})
       />
 
       <div className="min-w-0 transition-[padding] duration-200 lg:pl-[var(--barra)]">
-        <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-line bg-surface/90 px-4 backdrop-blur-md lg:hidden">
-          <Link href={esDocente ? '/inicio' : '/admin'}>
-            <Marca />
+        <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-line bg-surface/95 px-4 backdrop-blur-md sm:px-6 lg:hidden">
+          <Link href={esDocente ? '/inicio' : '/admin'} aria-label="Ir al inicio">
+            <Marca grande />
           </Link>
-          <div className="flex items-center">
-            {esDocente && plan === 'gratis' && (
-              <Link href="/acceso" className="mr-1 inline-flex h-8 items-center rounded-full bg-accent px-3 text-[13px] font-semibold text-white">
-                Desbloquear {precioTexto()}
-              </Link>
-            )}
-            <BotonInstalar compacto />
-            <TemaToggle compacto />
+          {esDocente && plan === 'gratis' ? (
+            <Link href="/acceso" className="inline-flex h-10 items-center rounded-full bg-accent px-4 text-[14.5px] font-semibold text-white">
+              Desbloquear {precioTexto()}
+            </Link>
+          ) : !esDocente ? (
             <form action={accionSalir}>
               <button className="grid h-10 w-10 place-items-center rounded-ctl text-ink-3 hover:bg-surface-2 hover:text-ink" aria-label="Cerrar sesión" title="Cerrar sesión">
                 <LogOut size={18} />
               </button>
             </form>
-          </div>
+          ) : null}
         </header>
         <main className="mx-auto w-full max-w-[1320px] px-4 pt-5 pb-28 sm:px-6 lg:px-8 lg:pt-7 lg:pb-12">{children}</main>
       </div>

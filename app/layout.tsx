@@ -30,6 +30,9 @@ export const viewport: Viewport = {
 };
 
 // Pone el tema antes de pintar (sin parpadeo): lo elegido por el docente; si no eligió, claro (decisión del dueño).
+// Guarda el aviso de instalación del navegador apenas llega, aunque la página aún no termine de cargar.
+const AVISO_INSTALAR = `window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();window.__avisoInstalar=e;window.dispatchEvent(new Event('aviso-instalar'))})`;
+
 const TEMA = `try{var t=localStorage.getItem('tema');if(t!=='oscuro'){t='claro'}document.documentElement.dataset.tema=t}catch(e){document.documentElement.dataset.tema='claro'}`;
 
 export default async function RootLayout({children}: {children: React.ReactNode}) {
@@ -39,6 +42,7 @@ export default async function RootLayout({children}: {children: React.ReactNode}
     <html lang="es" className={instrument.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{__html: TEMA}} />
+        <script dangerouslySetInnerHTML={{__html: AVISO_INSTALAR}} />
       </head>
       <body className="min-h-dvh font-sans">
         {children}
