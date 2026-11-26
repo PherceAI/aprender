@@ -14,8 +14,13 @@ import {
   Clock,
   Globe,
   GraduationCap,
+  Brain,
+  Briefcase,
+  Dna,
+  FlaskConical,
   Layers,
   Leaf,
+  School,
   Play,
   Plus,
   Repeat,
@@ -50,11 +55,29 @@ const RESPALDO: {icono: LucideIcon; titulo: string; texto: string}[] = [
 // En pantallas grandes: arriba a la izquierda (sobre la cabeza no), y abajo sobre la camiseta.
 const TARJETAS_HERO: {icono: LucideIcon; titulo: string; texto: string; lugar: string}[] = [
   {icono: ClipboardList, titulo: 'Ficha técnica oficial', texto: 'Todo el temario del Ineval', lugar: 'top-[1%] left-0 sm:-left-6 xl:-left-12'},
-  {icono: GraduationCap, titulo: 'Ciencias Naturales', texto: 'EGB Superior · 21 temas', lugar: 'bottom-[12%] left-0 sm:-left-8 xl:-left-16'},
+  {icono: GraduationCap, titulo: 'EGB 2.º a 7.º y Ciencias Naturales', texto: 'Cursos disponibles', lugar: 'bottom-[12%] left-0 sm:-left-8 xl:-left-16'},
   {icono: BarChart3, titulo: 'Preguntas tipo examen', texto: 'Con su explicación', lugar: 'right-0 bottom-[-2%] xl:-right-12'},
 ];
 
-const CCNN_INCLUYE = ['4 bloques del temario', '21 temas de la ficha', 'Lecciones interactivas y laboratorio', 'Práctica y prueba de cada tema'];
+// Los cursos disponibles (un curso = una especialidad del Ineval). Las cifras salen de las fichas oficiales.
+const CURSOS: {etiqueta: string; nombre: string; nivel: string; texto: string; incluye: string[]; img: string}[] = [
+  {
+    etiqueta: 'Nuevo',
+    nombre: 'Educación General Básica',
+    nivel: 'De 2.º a 7.º año',
+    texto: 'Para docentes de escuela: Matemática, Lengua y Literatura, Ciencias Naturales y Ciencias Sociales en una sola prueba, como en tu examen.',
+    incluye: ['Las 4 asignaturas de la ficha: 34 temas', 'Matemática completa, con lecciones y pruebas', 'Diagnóstico de los 44 temas de tu evaluación', 'Práctica y prueba de cada tema'],
+    img: '/ilustraciones/abacus.png',
+  },
+  {
+    etiqueta: 'Disponible',
+    nombre: 'Ciencias Naturales',
+    nivel: 'EGB Superior (8.º a 10.º)',
+    texto: 'Todo lo que pide la prueba de tu especialidad, con lecciones interactivas y ejemplos de la vida real.',
+    incluye: ['4 bloques del temario: 21 temas', 'Laboratorio interactivo de la célula', 'Diagnóstico de los 31 temas de tu evaluación', 'Práctica y prueba de cada tema'],
+    img: '/ilustraciones/microscope.png',
+  },
+];
 
 const LATERALES = [
   {nombre: 'Conocimientos pedagógicos', texto: 'Teorías del aprendizaje, DUA, planificación, evaluación y más.', img: '/ilustraciones/books.png', fondo: 'bg-[linear-gradient(120deg,#fdf0f6,#fff6f2)]'},
@@ -69,11 +92,16 @@ const PASOS: {icono: LucideIcon; titulo: string; texto: string}[] = [
   {icono: Trophy, titulo: 'Llega listo', texto: 'Simulacros como el examen real.'},
 ];
 
-const ESPECIALIDADES: {icono: LucideIcon; nombre: string; estado: string; fondo: string; color: string; activa?: boolean}[] = [
-  {icono: Leaf, nombre: 'Ciencias Naturales', estado: 'Disponible', fondo: '#fff1ea', color: '#f0360a', activa: true},
-  {icono: Calculator, nombre: 'Matemática', estado: 'Muy pronto', fondo: '#eef6ff', color: '#2563eb'},
-  {icono: BookOpen, nombre: 'Lengua y Literatura', estado: 'Muy pronto', fondo: '#fdf0f6', color: '#c0267a'},
-  {icono: Globe, nombre: 'Estudios Sociales', estado: 'Muy pronto', fondo: '#ecfbf4', color: '#15803d'},
+const ESPECIALIDADES: {icono: LucideIcon; nombre: string; nivel: string; estado: string; fondo: string; color: string; activa?: boolean}[] = [
+  {icono: School, nombre: 'Educación General Básica', nivel: '2.º a 7.º', estado: 'Disponible', fondo: '#fff1ea', color: '#f0360a', activa: true},
+  {icono: Leaf, nombre: 'Ciencias Naturales', nivel: '8.º a 10.º', estado: 'Disponible', fondo: '#fff1ea', color: '#f0360a', activa: true},
+  {icono: Globe, nombre: 'Estudios Sociales', nivel: '8.º a 10.º', estado: 'Muy pronto', fondo: '#ecfbf4', color: '#15803d'},
+  {icono: Dna, nombre: 'Biología', nivel: 'Bachillerato', estado: 'Muy pronto', fondo: '#ecfbf4', color: '#15803d'},
+  {icono: FlaskConical, nombre: 'Química', nivel: 'Bachillerato', estado: 'Muy pronto', fondo: '#f4efff', color: '#7c3aed'},
+  {icono: Brain, nombre: 'Filosofía', nivel: 'Bachillerato', estado: 'Muy pronto', fondo: '#fdf0f6', color: '#c0267a'},
+  {icono: Briefcase, nombre: 'Emprendimiento y Gestión', nivel: 'Bachillerato', estado: 'Muy pronto', fondo: '#fff6e5', color: '#b45309'},
+  {icono: Calculator, nombre: 'Matemática', nivel: '8.º EGB a 3.º BGU', estado: 'Muy pronto', fondo: '#eef6ff', color: '#2563eb'},
+  {icono: BookOpen, nombre: 'Lengua y Literatura', nivel: '8.º EGB a 3.º BGU', estado: 'Muy pronto', fondo: '#fdf0f6', color: '#c0267a'},
 ];
 
 const VENTAJAS = [
@@ -85,23 +113,23 @@ const VENTAJAS = [
 ];
 
 const CIFRAS: {icono: LucideIcon; n: string; t: string}[] = [
-  {icono: BookOpen, n: '31', t: 'temas de la ficha'},
-  {icono: Layers, n: '5', t: 'formatos de pregunta'},
-  {icono: BarChart3, n: '40', t: 'preguntas de diagnóstico'},
+  {icono: BookOpen, n: '2', t: 'cursos: EGB 2.º a 7.º y Ciencias Naturales'},
+  {icono: Layers, n: '5', t: 'formatos de pregunta, como en el examen'},
+  {icono: BarChart3, n: '0–1000', t: 'tu puntaje estimado, calculado como el Ineval'},
 ];
 
 const PLANES = [
   {
     nombre: 'Cuenta gratis',
     precio: 'Para empezar hoy, sin tarjeta',
-    incluye: ['Diagnóstico de 40 preguntas', 'Informe de qué dominas y qué reforzar', '3 lecciones a tu elección, de cualquier tema', 'Un simulacro para conocerlo'],
+    incluye: ['Diagnóstico completo de tu especialidad', 'Tu puntaje estimado y qué temas reforzar', '3 lecciones a tu elección, de cualquier tema', 'Un simulacro para conocerlo'],
     boton: 'Empieza gratis',
     destacado: false,
   },
   {
     nombre: 'Acceso completo',
     precio: '$45, pago único con IVA incluido, hasta el examen de 2027',
-    incluye: ['Todas las lecciones de los 31 temas', 'Prueba de cada tema hasta dominarlo', 'Simulacros como el examen real', 'Repaso de lo que fallas y tutor con IA'],
+    incluye: ['Todos los cursos y sus lecciones, y las nuevas que se abren hasta el examen', 'Prueba de cada tema hasta dominarlo', 'Simulacros como el examen real', 'Repaso de lo que fallas y tutor con IA'],
     boton: 'Empieza gratis y desbloquea',
     destacado: true,
   },
@@ -111,6 +139,7 @@ const FAQ: {p: string; r: string}[] = [
   {p: '¿Cuánto cuesta?', r: 'Empiezas gratis: haces el diagnóstico, eliges 3 lecciones de cualquier tema y pruebas un simulacro. Para desbloquear todo pagas $45 una sola vez, con IVA incluido, y tienes acceso hasta el examen de 2027. Puedes pagar con Deuna o por transferencia.'},
   {p: '¿Es del Ineval?', r: 'No. Somos una plataforma independiente que prepara con el temario público de su ficha técnica oficial.'},
   {p: '¿Qué parte de la evaluación prepara?', r: 'La Dimensión 1, la que falta rendir en 2027: Conocimientos generales (pedagógicos y digitales) y Conocimientos de tu especialidad.'},
+  {p: '¿Qué curso me toca?', r: 'El de la especialidad de tu nombramiento: el Ineval evalúa a cada docente solo en esa, aunque dé varias materias. Si das clases de 2.º a 7.º, es Educación General Básica. Con el pago único tienes todos los cursos y puedes cambiar cuando quieras.'},
   {p: '¿Necesito instalar algo?', r: 'No. Entras desde el navegador y, si quieres, la guardas en tu celular como una app.'},
 ];
 
@@ -230,29 +259,34 @@ export default async function Portada() {
           <h2 className="mt-2 text-[30px] font-semibold tracking-[-0.035em] text-ink sm:text-[38px]">Cursos de la academia</h2>
           <p className="mt-2 max-w-[60ch] text-[16px] text-ink-2">Los conocimientos que se evalúan en la Dimensión 1, con cursos claros y enfocados en tu examen.</p>
           <div className="mt-8 grid grid-cols-[minmax(0,1fr)] gap-5 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
-            <article className="relative grid grid-cols-[minmax(0,1fr)] overflow-hidden rounded-[24px] border border-[#f6dccf] bg-[linear-gradient(125deg,#fff3ec,#ffe6d9)] p-6 sm:grid-cols-[minmax(0,1fr)_200px] sm:p-8 dark:border-line dark:bg-surface-2 dark:bg-none">
-              <div>
-                <span className="inline-flex rounded-full bg-surface px-3 py-1 text-[12.5px] font-semibold text-accent-ink">Curso principal</span>
-                <h3 className="mt-3 text-[28px] leading-tight font-semibold tracking-[-0.03em] text-ink">Ciencias Naturales</h3>
-                <p className="mt-2 max-w-[38ch] text-[15px] leading-relaxed text-ink-2">Todo lo que pide la prueba de tu especialidad (EGB Superior), con lecciones interactivas y ejemplos de la vida real.</p>
-                <ul className="mt-4 flex flex-col gap-2">
-                  {CCNN_INCLUYE.map((x) => (
-                    <li key={x} className="flex items-center gap-2.5 text-[14.5px] text-ink">
-                      <span className="grid h-5 w-5 place-items-center rounded-full bg-accent text-white">
-                        <Check size={12} strokeWidth={3} />
-                      </span>
-                      {x}
-                    </li>
-                  ))}
-                </ul>
-                <Link href={REGISTRO} className={`${pildora} mt-6 h-11 border border-accent bg-surface px-5 text-[15px] text-accent-ink hover:bg-accent-soft`}>
-                  Empezar el curso <ArrowRight size={17} />
-                </Link>
-              </div>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/ilustraciones/microscope.png" alt="" aria-hidden className="mx-auto mt-6 h-40 w-40 self-center drop-shadow-[0_18px_26px_rgba(120,40,10,0.25)] sm:mt-0 sm:h-48 sm:w-48" />
-            </article>
             <div className="grid grid-cols-[minmax(0,1fr)] gap-5">
+              {CURSOS.map((c) => (
+                <article key={c.nombre} className="relative grid grid-cols-[minmax(0,1fr)] overflow-hidden rounded-[24px] border border-[#f6dccf] bg-[linear-gradient(125deg,#fff3ec,#ffe6d9)] p-6 sm:grid-cols-[minmax(0,1fr)_170px] sm:p-8 dark:border-line dark:bg-surface-2 dark:bg-none">
+                  <div>
+                    <span className="inline-flex rounded-full bg-surface px-3 py-1 text-[12.5px] font-semibold text-accent-ink">{c.etiqueta}</span>
+                    <h3 className="mt-3 text-[28px] leading-tight font-semibold tracking-[-0.03em] text-ink">{c.nombre}</h3>
+                    <p className="text-[14.5px] font-semibold text-accent-ink">{c.nivel}</p>
+                    <p className="mt-2 max-w-[44ch] text-[15px] leading-relaxed text-ink-2">{c.texto}</p>
+                    <ul className="mt-4 flex flex-col gap-2">
+                      {c.incluye.map((x) => (
+                        <li key={x} className="flex items-center gap-2.5 text-[14.5px] text-ink">
+                          <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-accent text-white">
+                            <Check size={12} strokeWidth={3} />
+                          </span>
+                          {x}
+                        </li>
+                      ))}
+                    </ul>
+                    <Link href={REGISTRO} className={`${pildora} mt-6 h-11 border border-accent bg-surface px-5 text-[15px] text-accent-ink hover:bg-accent-soft`}>
+                      Empezar el curso <ArrowRight size={17} />
+                    </Link>
+                  </div>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={c.img} alt="" aria-hidden className="mx-auto mt-6 h-36 w-36 self-center drop-shadow-[0_18px_26px_rgba(120,40,10,0.25)] sm:mt-0 sm:h-40 sm:w-40" />
+                </article>
+              ))}
+            </div>
+            <div className="grid grid-cols-[minmax(0,1fr)] content-start gap-5">
               {LATERALES.map((c) => (
                 <Link key={c.nombre} href={REGISTRO} className={`group flex items-center gap-5 rounded-[24px] border border-line p-5 sm:p-6 ${c.fondo} dark:bg-surface-2 dark:bg-none`}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -321,14 +355,15 @@ export default async function Portada() {
           <div className="text-center">
             <p className={ceja}>Especialidades</p>
             <h2 className="mt-2 text-[28px] font-semibold tracking-[-0.03em] text-ink sm:text-[32px]">Elige tu especialidad</h2>
-            <p className="mt-2 text-[15px] text-ink-2">Rutas de estudio enfocadas en tu área.</p>
+            <p className="mt-2 text-[15px] text-ink-2">Elige la de tu nombramiento: es la única en la que te evalúa el Ineval.</p>
           </div>
-          <div className="mt-8 grid grid-cols-[repeat(2,minmax(0,1fr))] gap-3 sm:grid-cols-[repeat(4,minmax(0,1fr))]">
+          <div className="mt-8 grid grid-cols-[repeat(2,minmax(0,1fr))] gap-3 sm:grid-cols-[repeat(3,minmax(0,1fr))]">
             {ESPECIALIDADES.map((e) => (
               <div key={e.nombre} className={`flex flex-col items-center rounded-[18px] px-3 py-5 text-center dark:!bg-surface-2 ${e.activa ? 'border-2 border-accent/40' : 'border border-transparent'}`} style={{backgroundColor: e.fondo}}>
                 <e.icono size={24} style={{color: e.color}} />
                 <p className="mt-2.5 text-[14.5px] leading-snug font-semibold text-ink">{e.nombre}</p>
-                <p className={`mt-1 text-[12.5px] font-medium ${e.activa ? 'text-ok' : 'text-ink-3'}`}>{e.estado}</p>
+                <p className="text-[12.5px] text-ink-2">{e.nivel}</p>
+                <p className={`mt-1 text-[12.5px] font-semibold ${e.activa ? 'text-ok' : 'text-ink-2'}`}>{e.estado}</p>
               </div>
             ))}
           </div>

@@ -1,6 +1,6 @@
 import type {Metadata} from 'next';
 import Link from 'next/link';
-import {BookCheck, ChevronDown, Flame, ListChecks, Play, RefreshCw, Sprout, Target, Check} from 'lucide-react';
+import {ArrowLeftRight, BookCheck, ChevronDown, Flame, ListChecks, Play, RefreshCw, Sprout, Target, Check} from 'lucide-react';
 import {requerirDocente} from '@/lib/auth/cookies';
 import {getDb} from '@/lib/db';
 import {gruposDeTemas, perfilDe} from '@/lib/perfil';
@@ -9,6 +9,8 @@ import {conHoy, historialPreparacion} from '@/lib/avance';
 import {hoyEc} from '@/lib/util';
 import {ILUSTRACION} from '@/lib/visual';
 import {GraficoPreparacion} from '@/components/grafico-preparacion';
+import {PuntajeIneval1Linea} from '@/components/puntaje-ineval';
+import {especialidadInfo} from '@/lib/evaluacion';
 
 export const metadata: Metadata = {title: 'Mi progreso'};
 
@@ -52,6 +54,7 @@ export default async function MiProgreso() {
     .sort((a, b) => b.fecha.getTime() - a.fecha.getTime())
     .slice(0, 6);
 
+  const curso = especialidadInfo(u.especialidadId);
   const titulo = p.preparacion >= 70 ? 'Vas muy bien preparado' : p.preparacion >= 40 ? 'Vas a buen ritmo' : 'Estás comenzando tu preparación';
   const datos = [
     {icono: Target, valor: `${dominados.length} de ${p.temas.length}`, texto: 'temas dominados'},
@@ -79,12 +82,28 @@ export default async function MiProgreso() {
         </p>
       </div>
 
+      {curso && (
+        <section className="card flex items-center gap-3.5 p-4 sm:p-5">
+          <div className="min-w-0 flex-1">
+            <p className="text-[13px] font-semibold text-ink-2">Tu curso</p>
+            <p className="text-[16.5px] leading-snug font-semibold text-ink">{curso.nombre}</p>
+            <p className="text-[13px] text-ink-2">{curso.nivel}</p>
+          </div>
+          <Link href="/bienvenida" className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full border border-line px-3.5 text-[14px] font-semibold text-ink hover:bg-surface-2 sm:px-4">
+            <ArrowLeftRight size={15} /> Cambiar<span className="hidden sm:inline"> de curso</span>
+          </Link>
+        </section>
+      )}
+
       <div className="grid grid-cols-[minmax(0,1fr)] gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
         <section className="relative flex flex-col items-center gap-6 overflow-hidden rounded-[24px] bg-[linear-gradient(125deg,#d9300a_0%,#ec4416_60%,#f25d2a_100%)] p-6 text-white sm:flex-row sm:p-8">
           <span aria-hidden className="pointer-events-none absolute -right-16 -bottom-24 h-64 w-64 rounded-full bg-white/10" />
           <AnilloBlanco valor={p.preparacion} />
           <div className="relative text-center sm:border-l sm:border-white/25 sm:pl-6 sm:text-left">
             <h2 className="text-[24px] leading-tight font-semibold tracking-[-0.03em]">{titulo}</h2>
+            <div className="mt-1.5">
+              <PuntajeIneval1Linea porcentaje={p.preparacion} />
+            </div>
             <p className="mt-2 max-w-[34ch] text-[14.5px] leading-relaxed text-white/90">
               Es tu dominio de los {p.temas.length} temas de la ficha, con el peso que cada prueba tiene en el examen. Sube cada vez que dominas un tema.
             </p>

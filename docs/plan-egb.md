@@ -62,4 +62,12 @@ El motor ya es de datos (VISION 4b): una especialidad nueva es una carpeta en `c
 
 ## Estado
 
+- **26 nov (noche): EGB activa y a la venta.**
+  - Diagnóstico de 47 preguntas (34 de EGB y 13 generales).
+  - **Matemática abierta completa:** 9 temas, 16 lecciones y 92 preguntas, con las cuentas comprobadas con código.
+  - Lengua, Naturales y Sociales: temario cargado y «se abre pronto».
+  - Pantallas nuevas: elegir curso por nombramiento, puntaje Ineval de 0 a 1000 y cambiar de curso desde Mi progreso.
+  - Portada con los dos cursos.
+  - **Siguiente:** escribir Lengua y Literatura completa (14 lecciones), luego Ciencias Naturales y Ciencias Sociales.
+
 - **Fase 1 (26 nov): hecha.** `contenido/egb-elemental-media/estructura.ts` con las 15 unidades, 34 temas y 63 lecciones. Especialidad `egb-elemental-media`, «próximamente». El validador exige el diagnóstico completo solo a las especialidades activas. Pruebas en `tests/egb.test.mts`.

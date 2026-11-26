@@ -83,6 +83,7 @@ export async function temasConPeso(db: Db, especialidadId: string) {
       unidadId: unidades.id,
       unidadNombre: unidades.nombre,
       unidadOrden: unidades.orden,
+      unidadAsignatura: unidades.asignatura,
       bloqueId: bloques.id,
       bloqueNombre: bloques.nombre,
       bloqueOrden: especialidadBloques.orden,

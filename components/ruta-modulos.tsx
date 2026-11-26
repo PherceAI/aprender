@@ -6,7 +6,7 @@ import {visualDeUnidad} from '@/lib/visual';
 // Vive en Inicio (antes era la pantalla «Mi ruta»).
 
 type Tema = {id: string; nombre: string; abierto: boolean; estado: string; nivel: number; completadas: number; lecciones: number};
-type Unidad = {id: string; nombre: string; bloque: string; nivel: number; temas: Tema[]};
+type Unidad = {id: string; nombre: string; bloque: string; asignatura?: string | null; nivel: number; temas: Tema[]};
 
 function estadoDe(t: Tema) {
   // «Dominado» sin lecciones vistas viene del diagnóstico: el docente ya lo sabía.
@@ -16,10 +16,20 @@ function estadoDe(t: Tema) {
   return {texto: 'Disponible', clase: 'bg-accent-soft text-accent-ink'};
 }
 
+/** El grupo de cada módulo: «Conocimientos generales» o la asignatura (EGB 2.º a 7.º tiene cuatro). */
+function grupoDe(un: Unidad): string {
+  if (un.bloque.startsWith('Conocimientos generales')) return 'Conocimientos generales';
+  return un.asignatura ?? un.bloque;
+}
+
 export function RutaModulos({unidades, actualId}: {unidades: Unidad[]; actualId: string | null}) {
+  // Los encabezados de grupo solo hacen falta cuando el curso mezcla asignaturas.
+  const conGrupos = new Set(unidades.map(grupoDe)).size > 2;
   return (
     <div className="flex flex-col gap-3">
       {unidades.map((un, i) => {
+        const grupo = grupoDe(un);
+        const encabezado = conGrupos && (i === 0 || grupoDe(unidades[i - 1]) !== grupo);
         const v = visualDeUnidad(un.id);
         const abiertos = un.temas.filter((t) => t.abierto).length;
         const dominados = un.temas.filter((t) => t.estado === 'dominado').length;
@@ -28,7 +38,9 @@ export function RutaModulos({unidades, actualId}: {unidades: Unidad[]; actualId:
         const vistas = un.temas.reduce((a, t) => a + Math.min(t.completadas, t.lecciones), 0);
         const avance = totalLecciones ? Math.round((vistas / totalLecciones) * 100) : 0;
         return (
-          <details key={un.id} className="group overflow-hidden rounded-[18px] border border-line bg-surface" open={contieneActual}>
+          <div key={un.id} className="flex flex-col gap-3">
+          {encabezado && <h3 className={`text-[14px] font-semibold text-ink-2 ${i === 0 ? '' : 'mt-3'}`}>{grupo}</h3>}
+          <details className="group overflow-hidden rounded-[18px] border border-line bg-surface" open={contieneActual}>
             <summary className="flex cursor-pointer list-none items-center gap-3.5 p-3.5 sm:gap-4 sm:p-4 [&::-webkit-details-marker]:hidden">
               <span className="grid h-12 w-12 shrink-0 place-items-center rounded-[14px] sm:h-14 sm:w-14" style={{background: v.suave}}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -36,7 +48,7 @@ export function RutaModulos({unidades, actualId}: {unidades: Unidad[]; actualId:
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block text-[12px] font-bold" style={{color: v.color}}>
-                  Módulo {i + 1} · {un.bloque.startsWith('Conocimientos generales') ? 'Generales' : 'Ciencias Naturales'}
+                  Módulo {i + 1} · {un.bloque.startsWith('Conocimientos generales') ? 'Generales' : (un.asignatura ?? un.bloque.replace(/^Conocimientos de /, ''))}
                 </span>
                 <span className="line-clamp-2 block text-[15.5px] leading-snug font-semibold text-ink sm:truncate sm:text-[16px]">{un.nombre}</span>
                 <span className="block text-[12.5px] text-ink-2">
@@ -60,6 +72,7 @@ export function RutaModulos({unidades, actualId}: {unidades: Unidad[]; actualId:
               ))}
             </div>
           </details>
+          </div>
         );
       })}
     </div>

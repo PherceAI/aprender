@@ -57,14 +57,14 @@ export default async function Leccion({params}: {params: Promise<{id: string}>})
     ? {enunciado: elegida.enunciado, opciones: elegida.opciones as string[], correcta: elegida.correcta, explicaciones: elegida.explicaciones as string[]}
     : null;
   const numero = t.lecciones.findIndex((x) => x.id === l.id) + 1;
-  const pagina = paginaDeTema(l.tema.id);
+  const pagina = paginaDeTema(l.tema.id, u.especialidadId);
 
   return (
     <Reproductor
       leccion={{id: l.id, titulo: l.titulo, numero, de: t.lecciones.length, objetivo: l.objetivo, contenido: l.contenido, completada: l.completada}}
       tema={{id: l.tema.id, nombre: l.tema.nombre}}
       siguiente={l.siguiente}
-      fichaPagina={pagina ? {pagina, url: enlaceFicha(pagina)} : null}
+      fichaPagina={pagina ? {pagina, url: enlaceFicha(pagina, u.especialidadId)} : null}
       control={control}
       nota={l.nota}
       historial={historial}

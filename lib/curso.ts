@@ -39,7 +39,7 @@ export interface MapaCurso {
     id: string;
     nombre: string;
     nivel: number;
-    unidades: {id: string; nombre: string; nivel: number; temas: TemaEnMapa[]}[];
+    unidades: {id: string; nombre: string; asignatura: string | null; nivel: number; temas: TemaEnMapa[]}[];
   }[];
 }
 
@@ -56,7 +56,7 @@ export async function mapaCurso(db: Db, usuarioId: string): Promise<MapaCurso> {
     let b = mapa.bloques.find((x) => x.id === t.bloqueId);
     if (!b) mapa.bloques.push((b = {id: t.bloqueId, nombre: t.bloqueNombre, nivel: 0, unidades: []}));
     let u = b.unidades.find((x) => x.id === t.unidadId);
-    if (!u) b.unidades.push((u = {id: t.unidadId, nombre: t.unidadNombre, nivel: 0, temas: []}));
+    if (!u) b.unidades.push((u = {id: t.unidadId, nombre: t.unidadNombre, asignatura: t.unidadAsignatura, nivel: 0, temas: []}));
     const delTema = ls.filter((l) => l.temaId === t.temaId);
     u.temas.push({
       id: t.temaId,

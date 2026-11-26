@@ -1,5 +1,9 @@
-import {tema} from '../estructura-helpers';
-import type {Bloque, Especialidad} from '../tipos';
+import {tema as temaBase} from '../estructura-helpers';
+import type {Bloque, Especialidad, Tema} from '../tipos';
+import {LECCIONES_MATEMATICA} from './matematica';
+
+/** Un tema de la ficha; si ya tiene lecciones escritas (hoy, Matemática), se abre con su contenido. */
+const tema = (id: string, nombre: string, lecciones: [titulo: string, objetivo: string][]): Tema => temaBase(id, nombre, lecciones, LECCIONES_MATEMATICA[id]);
 
 // Ficha técnica Ineval 2026, especialidad Educación General Básica (2.º a 7.º año), sección 4.2:
 // Conocimientos disciplinares. Una sola prueba de 60 preguntas que mezcla cuatro asignaturas
@@ -10,8 +14,8 @@ export const EGB: Especialidad = {
   id: 'egb-elemental-media',
   nombre: 'Educación General Básica',
   nivel: 'EGB Elemental y Media (2.º a 7.º)',
-  // Se activa cuando tenga su diagnóstico completo (docs/plan-egb.md, fase 6).
-  estado: 'proximamente',
+  // Activa desde el 26 nov: diagnóstico completo y Matemática abierta (docs/plan-egb.md).
+  estado: 'activa',
   orden: 2,
   bloques: ['generales', 'egb-disciplinares'],
 };

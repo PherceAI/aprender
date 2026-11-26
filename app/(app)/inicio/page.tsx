@@ -49,7 +49,7 @@ export default async function Inicio() {
   const dominados = perfil.temas.filter((t) => t.estado === 'dominado').length;
   const temaActual = s.tipo === 'leccion' || s.tipo === 'prueba-tema' ? temas.find((t) => t.id === s.temaId) : null;
   const visual = visualDeUnidad(temaActual?.unidadId ?? '');
-  const pag = temaActual ? paginaDeTema(temaActual.id) : null;
+  const pag = temaActual ? paginaDeTema(temaActual.id, u.especialidadId) : null;
   const avanceTema = temaActual ? Math.round((temaActual.completadas / Math.max(1, temaActual.lecciones)) * 100) : 0;
 
 
@@ -139,7 +139,7 @@ export default async function Inicio() {
                 </Link>
               )}
               {pag && (
-                <a href={enlaceFicha(pag)} target="_blank" rel="noopener noreferrer" className="inline-flex h-12 items-center gap-2 rounded-full border border-white/45 px-5 text-[14.5px] font-semibold text-white hover:bg-white/10">
+                <a href={enlaceFicha(pag, u.especialidadId)} target="_blank" rel="noopener noreferrer" className="inline-flex h-12 items-center gap-2 rounded-full border border-white/45 px-5 text-[14.5px] font-semibold text-white hover:bg-white/10">
                   <FileText size={16} /> Ficha, pág. {pag}
                 </a>
               )}

@@ -8,6 +8,7 @@ import {getDb} from '@/lib/db';
 import {planDe} from '@/lib/acceso';
 import {contarPendientes} from '@/lib/repaso';
 import {enlaceFicha} from '@/lib/ficha';
+import {especialidadInfo} from '@/lib/evaluacion';
 import {Marca} from '@/components/ui';
 import {NavInferior, type ItemNav} from '@/components/nav';
 import {BarraLateral, type ItemBarra} from '@/components/barra-lateral';
@@ -52,9 +53,9 @@ export default async function LayoutApp({children}: {children: React.ReactNode})
       <BarraLateral
         items={items}
         insignias={insignias}
-        fichaUrl={esDocente ? enlaceFicha(1) : null}
+        fichaUrl={esDocente ? enlaceFicha(1, u.especialidadId) : null}
         plan={plan}
-        usuario={{nombre: u.nombre, iniciales: iniciales(u.nombre), detalle: esDocente ? 'Ciencias Naturales' : 'Administración'}}
+        usuario={{nombre: u.nombre, iniciales: iniciales(u.nombre), detalle: esDocente ? (especialidadInfo(u.especialidadId)?.nombre ?? 'Docente') : 'Administración'}}
         inicialMini={mini}
       />
 

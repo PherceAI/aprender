@@ -34,3 +34,15 @@ test('estimar desde un porcentaje dice el puntaje, el nivel y cuánto falta para
   assert.equal(estimarIneval(-5).calificacion, 0);
   assert.equal(estimarIneval(140).calificacion, 1000);
 });
+
+test('los niveles cubren de 0 a 99 aciertos sin huecos y coinciden con la calificación', async () => {
+  const {NIVELES} = await import('../lib/puntaje.ts');
+  const tramos = [...NIVELES].reverse();
+  assert.equal(tramos[0].aciertos, 0);
+  assert.equal(tramos.at(-1)!.aciertosHasta, 99);
+  for (let i = 1; i < tramos.length; i++) assert.equal(tramos[i].aciertos, tramos[i - 1].aciertosHasta + 1);
+  for (const n of NIVELES) {
+    assert.equal(nivelIneval(calificacionIneval(n.aciertos)), n.nivel);
+    assert.equal(nivelIneval(calificacionIneval(n.aciertosHasta)), n.nivel);
+  }
+});

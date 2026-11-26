@@ -5,6 +5,14 @@ export type Visual = {img: string; color: string; suave: string; degradado: stri
 
 const V = (img: string, color: string, suave: string, degradado: string): Visual => ({img: `/ilustraciones/${img}.png`, color, suave, degradado});
 
+type Tinta = [color: string, suave: string, degradado: string];
+const MATEMATICA: Tinta = ['#2563eb', '#ecf2ff', 'linear-gradient(135deg,#d4e2ff,#93b4fb)'];
+const LENGUA: Tinta = ['#c0267a', '#fdf0f6', 'linear-gradient(135deg,#ffd6ea,#f39ac6)'];
+const NATURALES: Tinta = ['#15803d', '#e9f8ef', 'linear-gradient(135deg,#ccf3dc,#7fd8a4)'];
+const SOCIALES: Tinta = ['#b45309', '#fff6e5', 'linear-gradient(135deg,#ffe9c2,#f8c26b)'];
+const asignatura = ([color, suave, degradado]: Tinta, imgs: Record<string, string>) =>
+  Object.fromEntries(Object.entries(imgs).map(([id, img]) => [id, V(img, color, suave, degradado)]));
+
 const UNIDAD: Record<string, Visual> = {
   'gen-fundamentos': V('brain', '#c0267a', '#fdf0f6', 'linear-gradient(135deg,#ffd6ea,#f39ac6)'),
   'gen-curriculo': V('clipboard', '#b45309', '#fff6e5', 'linear-gradient(135deg,#ffe9c2,#f8c26b)'),
@@ -15,6 +23,14 @@ const UNIDAD: Record<string, Visual> = {
   'cn-cuerpo-humano': V('anatomical_heart', '#c81e1e', '#fdeeee', 'linear-gradient(135deg,#ffd9d9,#f59a9a)'),
   'cn-materia-energia': V('atom_symbol', '#7c3aed', '#f4efff', 'linear-gradient(135deg,#e6dcff,#b79cf7)'),
   'cn-tierra-universo': V('ringed_planet', '#c2410c', '#fff1eb', 'linear-gradient(135deg,#ffe0cf,#fbab83)'),
+  // EGB 2.º a 7.º: un color por asignatura y una ilustración por unidad.
+  ...asignatura(MATEMATICA, {'egb-algebra': 'abacus', 'egb-geometria': 'triangular_ruler', 'egb-estadistica': 'bar_chart'}),
+  ...asignatura(LENGUA, {
+    'egb-lengua-cultura': 'globe_showing_americas', 'egb-comunicacion-oral': 'speech_balloon', 'egb-lectura': 'open_book',
+    'egb-escritura': 'memo', 'egb-literatura': 'scroll',
+  }),
+  ...asignatura(NATURALES, {'egb-seres-vivos': 'seedling', 'egb-cuerpo-humano': 'anatomical_heart', 'egb-materia': 'atom_symbol', 'egb-tierra': 'volcano'}),
+  ...asignatura(SOCIALES, {'egb-historia': 'classical_building', 'egb-espacio': 'world_map', 'egb-convivencia': 'balance_scale'}),
 };
 
 const POR_DEFECTO = V('books', '#f0360a', '#fff1eb', 'linear-gradient(135deg,#ffd9c8,#ff9d77)');

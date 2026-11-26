@@ -34,7 +34,7 @@ export default async function Tema({params}: {params: Promise<{tema: string}>}) 
   const siguiente = t.lecciones.find((l) => !l.completada) ?? t.lecciones[0];
   const siguienteIdx = t.lecciones.indexOf(siguiente);
   const dominado = t.estado === 'dominado';
-  const pag = paginaDeTema(t.id);
+  const pag = paginaDeTema(t.id, u.especialidadId);
   const paso = dominado ? 3 : todas ? 2 : 1;
 
   return (
@@ -52,7 +52,7 @@ export default async function Tema({params}: {params: Promise<{tema: string}>}) 
               {t.lecciones.length} {t.lecciones.length === 1 ? 'lección' : 'lecciones'}
             </span>
             {pag && (
-              <a href={enlaceFicha(pag)} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 font-semibold text-accent-ink hover:underline">
+              <a href={enlaceFicha(pag, u.especialidadId)} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 font-semibold text-accent-ink hover:underline">
                 <FileText size={15} /> Ver en la ficha oficial, pág. {pag}
               </a>
             )}

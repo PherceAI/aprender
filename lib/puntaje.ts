@@ -9,11 +9,11 @@ export const PREGUNTAS_EXAMEN = 99;
 export type NivelIneval = 'En formación' | 'Fundamental' | 'Favorable' | 'Excelente';
 
 /** Niveles de desempeño (Nota técnica, tabla 3), del más alto al más bajo. */
-export const NIVELES: {nivel: NivelIneval; desde: number; hasta: number; aciertos: number}[] = [
-  {nivel: 'Excelente', desde: 951, hasta: 1000, aciertos: 93},
-  {nivel: 'Favorable', desde: 701, hasta: 950, aciertos: 61},
-  {nivel: 'Fundamental', desde: 601, hasta: 700, aciertos: 29},
-  {nivel: 'En formación', desde: 0, hasta: 600, aciertos: 0},
+export const NIVELES: {nivel: NivelIneval; desde: number; hasta: number; aciertos: number; aciertosHasta: number}[] = [
+  {nivel: 'Excelente', desde: 951, hasta: 1000, aciertos: 93, aciertosHasta: 99},
+  {nivel: 'Favorable', desde: 701, hasta: 950, aciertos: 61, aciertosHasta: 92},
+  {nivel: 'Fundamental', desde: 601, hasta: 700, aciertos: 29, aciertosHasta: 60},
+  {nivel: 'En formación', desde: 0, hasta: 600, aciertos: 0, aciertosHasta: 28},
 ];
 
 /** Calificación del Ineval (0 a 1000) para un número de aciertos de 99. Coincide con el anexo 1. */

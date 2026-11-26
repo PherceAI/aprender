@@ -6,17 +6,13 @@ import {getDb} from '@/lib/db';
 import {perfilDe} from '@/lib/perfil';
 import {planDe, simulacroGratisDisponible} from '@/lib/acceso';
 import {SIMULACRO_CORTO} from '@/lib/intentos';
+import {pruebasDe} from '@/lib/evaluacion';
 import {ILUSTRACION} from '@/lib/visual';
 import {BotonIniciar} from '@/components/boton-iniciar';
 
 export const metadata: Metadata = {title: 'Simulacros'};
 
 // Simulacros: medirse con el tiempo y los formatos del examen. El corto es para practicar seguido.
-
-const COMPLETOS = [
-  {nombre: 'Conocimientos generales', preguntas: 39, minutos: 45},
-  {nombre: 'Ciencias Naturales', preguntas: 60, minutos: 120},
-];
 
 function fecha(d: Date) {
   return new Intl.DateTimeFormat('es-EC', {day: 'numeric', month: 'short', timeZone: 'America/Guayaquil'}).format(d);
@@ -27,6 +23,7 @@ export default async function Simulacros() {
   const db = await getDb();
   const [p, plan, gratisDisponible] = await Promise.all([perfilDe(db, u.id), planDe(db, u.id), simulacroGratisDisponible(db, u.id)]);
   const ultimos = p.simulacros.slice(-8);
+  const COMPLETOS = pruebasDe(u.especialidadId).map((x) => ({nombre: x.nombre, preguntas: x.preguntas, minutos: x.minutos}));
 
   return (
     <div className="rise flex flex-col gap-6">

@@ -11,6 +11,8 @@ import {preparacion} from '@/lib/dominio';
 import {rutaDe} from '@/lib/ruta';
 import {Anillo, Barra, Marca, btn} from '@/components/ui';
 import {LeyendaDominio, MapaDominio} from '@/components/mapa-dominio';
+import {PuntajeIneval} from '@/components/puntaje-ineval';
+import {pruebasDe} from '@/lib/evaluacion';
 
 export const metadata: Metadata = {title: 'Tu punto de partida'};
 
@@ -51,6 +53,11 @@ export default async function ResultadoDiagnostico({params}: {params: Promise<{i
   const reforzar = res.porTema.filter((t) => t.aciertos === 0);
   const primeros = ruta.filter((r) => r.abierto).concat(ruta.filter((r) => !r.abierto)).slice(0, 3);
   const fallas = res.total - res.aciertos;
+  // Puntaje estimado: el acierto de cada prueba, pesado con sus preguntas en el examen real (39 y 60).
+  const examen = pruebasDe(u.especialidadId);
+  const pesoTotal = examen.reduce((s, x) => s + x.preguntas, 0);
+  const pctExamen = porPrueba.reduce((s, x, i) => s + (x.total ? x.aciertos / x.total : 0) * (examen[i]?.preguntas ?? 0), 0) / (pesoTotal || 1) * 100;
+  const totalTemas = unidades.reduce((s, x) => s + x.temas.length, 0);
 
   return (
     <div className="mx-auto max-w-[1080px] px-4 py-6 sm:px-6 lg:py-10">
@@ -75,8 +82,10 @@ export default async function ResultadoDiagnostico({params}: {params: Promise<{i
         </div>
       </div>
 
+      <PuntajeIneval porcentaje={pctExamen} titulo="Si el examen fuera hoy, tu puntaje estimado sería" className="mt-8" />
+
       {/* Por prueba */}
-      <section className="mt-8 grid grid-cols-[minmax(0,1fr)] gap-4 sm:grid-cols-2">
+      <section className="mt-4 grid grid-cols-[minmax(0,1fr)] gap-4 sm:grid-cols-2">
         {porPrueba.map((p) => {
           const pct = p.total ? Math.round((p.aciertos / p.total) * 100) : 0;
           return (
@@ -95,7 +104,7 @@ export default async function ResultadoDiagnostico({params}: {params: Promise<{i
       {/* Mapa tema por tema */}
       <section className="card mt-6 p-5 sm:p-7">
         <div className="mb-2 flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-[19px] font-semibold tracking-[-0.02em] text-ink">Tus 31 temas</h2>
+          <h2 className="text-[19px] font-semibold tracking-[-0.02em] text-ink">Tus {totalTemas} temas</h2>
           <LeyendaDominio />
         </div>
         <p className="mb-5 text-[14.5px] text-ink-2">Cada cuadro es un tema de la ficha, agrupado por unidad. Mientras más naranja, más lo dominas.</p>

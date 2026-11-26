@@ -62,7 +62,8 @@ test('el diagnóstico de Ciencias Naturales tiene 40 preguntas, toca los 31 tema
 
 test('los temas abiertos tienen lecciones escritas y preguntas para su prueba', () => {
   const abiertos = CONTENIDO.bloques.flatMap((b) => b.unidades.flatMap((u) => u.temas)).filter((t) => t.abierto);
-  assert.deepEqual(abiertos.map((t) => t.id).sort(), ['anatomia-celular', 'herramientas-digitales', 'medios-digitales', 'rea', 'riesgos-digitales'].sort());
+  const matematicaEgb = CONTENIDO.bloques.find((x) => x.id === 'egb-disciplinares')!.unidades.filter((u) => u.asignatura === 'Matemática').flatMap((u) => u.temas.map((t) => t.id));
+  assert.deepEqual(abiertos.map((t) => t.id).sort(), ['anatomia-celular', 'herramientas-digitales', 'medios-digitales', 'rea', 'riesgos-digitales', ...matematicaEgb].sort());
   for (const t of abiertos) {
     assert.ok(t.lecciones.every((l) => l.contenido?.length), `${t.id}: todas sus lecciones tienen contenido`);
     const prueba = CONTENIDO.preguntas.filter((p) => p.temaId === t.id && p.usos.includes('prueba'));

@@ -11,6 +11,7 @@ import {destinoResultado} from '@/lib/resultado';
 import {Anillo, Marca, btn} from '@/components/ui';
 import {BotonIniciar} from '@/components/boton-iniciar';
 import {RevisionRespuestas} from '@/components/revision-respuestas';
+import {PuntajeIneval} from '@/components/puntaje-ineval';
 import {SaltarBoton} from './saltar';
 
 export const metadata: Metadata = {title: 'Resultado'};
@@ -86,6 +87,8 @@ export default async function Resultado({params}: {params: Promise<{id: string}>
         <h1 className="mt-4 text-[30px] font-semibold tracking-[-0.04em] text-ink sm:text-[36px]">{titulo}</h1>
         <p className="mt-2 max-w-[54ch] text-[16px] leading-relaxed text-ink-2">{texto}</p>
       </div>
+
+      {r.tipo === 'simulacro' && <PuntajeIneval porcentaje={r.puntaje} titulo="Con este resultado, tu puntaje en el Ineval sería" className="mt-8" />}
 
       {hayAvance && r.avance && (
         <section className="card mt-8 p-5 sm:p-6">
