@@ -7,7 +7,7 @@ import {ANATOMIA_CELULAR} from './anatomia-celular';
 export const CCNN: Especialidad = {
   id: 'ccnn-egb-superior',
   nombre: 'Ciencias Naturales',
-  nivel: 'Educación General Básica Superior',
+  nivel: 'EGB Superior (8.º a 10.º)',
   estado: 'activa',
   orden: 1,
   bloques: ['generales', 'ccnn-disciplinares'],

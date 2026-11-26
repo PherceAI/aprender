@@ -9,7 +9,7 @@ import type {Bloque, Especialidad} from '../tipos';
 export const EGB: Especialidad = {
   id: 'egb-elemental-media',
   nombre: 'Educación General Básica',
-  nivel: '2.º a 7.º año (Elemental y Media)',
+  nivel: 'EGB Elemental y Media (2.º a 7.º)',
   // Se activa cuando tenga su diagnóstico completo (docs/plan-egb.md, fase 6).
   estado: 'proximamente',
   orden: 2,

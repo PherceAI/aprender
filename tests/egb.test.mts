@@ -6,7 +6,8 @@ import {validarContenido} from '../contenido/validar.ts';
 import type {Contenido} from '../contenido/tipos.ts';
 import {crearDbPrueba} from '../lib/db/index.ts';
 import {sembrar} from '../lib/db/sembrar.ts';
-import {unidades} from '../lib/db/schema.ts';
+import {intentos, unidades, usuarios} from '../lib/db/schema.ts';
+import {diagnosticoHecho} from '../lib/ruta.ts';
 import {crearUsuario, elegirEspecialidad} from '../lib/usuarios.ts';
 
 // EGB 2.º a 7.º: ficha técnica Ineval 2026, sección 4.2 (fuentes/Ficha EGB 2do a 7mo.pdf, págs. 6 a 9).
@@ -98,4 +99,30 @@ test('la siembra guarda la asignatura de cada unidad y no se puede elegir EGB to
 
   const u = await crearUsuario(db, {nombre: 'Docente', correo: 'egb@prueba.ec', clave: 'clave-segura-1'});
   await assert.rejects(elegirEspecialidad(db, u.id, 'egb-elemental-media'), /próximamente/);
+});
+
+test('el diagnóstico es de cada curso: al cambiar de curso le toca el del curso nuevo', async () => {
+  const db = await crearDbPrueba();
+  await sembrar(db);
+  const u = await crearUsuario(db, {nombre: 'Docente', correo: 'cambio@prueba.ec', clave: 'clave-segura-1'});
+  assert.equal(await diagnosticoHecho(db, u.id), false, 'sin curso no hay diagnóstico');
+  await elegirEspecialidad(db, u.id, 'ccnn-egb-superior');
+  assert.equal(await diagnosticoHecho(db, u.id), false);
+  const ahora = new Date();
+  await db.insert(intentos).values({id: 'i-diag-cn', usuarioId: u.id, tipo: 'diagnostico', referencia: 'ccnn-egb-superior', preguntaIds: [], iniciado: ahora, terminado: ahora});
+  assert.equal(await diagnosticoHecho(db, u.id), true);
+  // Cuando EGB se active, el docente podrá pasarse a ese curso (aquí se fuerza en la base).
+  await db.update(usuarios).set({especialidadId: 'egb-elemental-media'}).where(eq(usuarios.id, u.id));
+  assert.equal(await diagnosticoHecho(db, u.id), false, 'el curso nuevo tiene su propio diagnóstico');
+  await db.update(usuarios).set({especialidadId: 'ccnn-egb-superior'}).where(eq(usuarios.id, u.id));
+  assert.equal(await diagnosticoHecho(db, u.id), true, 'al volver, su diagnóstico sigue ahí');
+});
+
+test('el catálogo sigue las fases del Ineval: primero las de la Fase 1, luego Matemática y Lengua', () => {
+  const orden = [...CONTENIDO.especialidades].sort((a, b) => a.orden - b.orden).map((e) => e.nombre);
+  assert.deepEqual(orden, [
+    'Ciencias Naturales', 'Educación General Básica', 'Estudios Sociales', 'Biología', 'Química', 'Filosofía',
+    'Emprendimiento y Gestión', 'Matemática', 'Lengua y Literatura',
+  ]);
+  assert.equal(new Set(CONTENIDO.especialidades.map((e) => e.orden)).size, CONTENIDO.especialidades.length, 'sin órdenes repetidos');
 });

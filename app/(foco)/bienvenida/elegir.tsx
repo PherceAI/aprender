@@ -1,7 +1,7 @@
 'use client';
 
 import {useTransition} from 'react';
-import {Atom, BookText, Calculator, Globe, LoaderCircle, School, type LucideIcon} from 'lucide-react';
+import {Atom, BookText, Brain, Briefcase, Calculator, Dna, FlaskConical, Globe, LoaderCircle, School, type LucideIcon} from 'lucide-react';
 import {accionElegirEspecialidad} from '@/app/acciones';
 
 const ICONO: Record<string, LucideIcon> = {
@@ -10,6 +10,10 @@ const ICONO: Record<string, LucideIcon> = {
   'matematica-egb-superior': Calculator,
   'lengua-egb-superior': BookText,
   'estudios-sociales-egb-superior': Globe,
+  'biologia-bgu': Dna,
+  'quimica-bgu': FlaskConical,
+  'filosofia-bgu': Brain,
+  'emprendimiento-bgu': Briefcase,
 };
 
 export function ElegirEspecialidad({especialidades}: {especialidades: {id: string; nombre: string; nivel: string; activa: boolean}[]}) {

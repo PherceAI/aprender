@@ -9,11 +9,20 @@ import type {Contenido, Especialidad} from './tipos';
 
 // Todo el contenido de la plataforma. Para agregar una especialidad: su carpeta + una línea aquí.
 
+// Un curso = una especialidad del Ineval: cada docente rinde solo la de su nombramiento (docs/investigacion-ineval.md).
+// Orden: las de la Fase 1, cuyas fichas tenemos en fuentes/, y luego las grandes de la Fase 2.
+// Los ids viejos se conservan (la siembra actualiza por id); solo se corrigieron nombres y niveles.
+const proxima = (id: string, nombre: string, nivel: string, orden: number): Especialidad => ({id, nombre, nivel, estado: 'proximamente', orden, bloques: ['generales']});
+
 /** Especialidades que se muestran como «próximamente» (aún sin contenido). */
 const PROXIMAMENTE: Especialidad[] = [
-  {id: 'matematica-egb-superior', nombre: 'Matemática', nivel: 'Educación General Básica Superior', estado: 'proximamente', orden: 3, bloques: ['generales']},
-  {id: 'lengua-egb-superior', nombre: 'Lengua y Literatura', nivel: 'Educación General Básica Superior', estado: 'proximamente', orden: 4, bloques: ['generales']},
-  {id: 'estudios-sociales-egb-superior', nombre: 'Estudios Sociales', nivel: 'Educación General Básica Superior', estado: 'proximamente', orden: 5, bloques: ['generales']},
+  proxima('estudios-sociales-egb-superior', 'Estudios Sociales', 'EGB Superior (8.º a 10.º)', 3),
+  proxima('biologia-bgu', 'Biología', 'Bachillerato', 4),
+  proxima('quimica-bgu', 'Química', 'Bachillerato', 5),
+  proxima('filosofia-bgu', 'Filosofía', 'Bachillerato', 6),
+  proxima('emprendimiento-bgu', 'Emprendimiento y Gestión', 'Bachillerato', 7),
+  proxima('matematica-egb-superior', 'Matemática', '8.º EGB a 3.º BGU', 8),
+  proxima('lengua-egb-superior', 'Lengua y Literatura', '8.º EGB a 3.º BGU', 9),
 ];
 
 export const CONTENIDO: Contenido = {

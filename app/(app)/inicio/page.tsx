@@ -38,7 +38,7 @@ export default async function Inicio() {
     db
       .select({puntaje: intentos.puntaje})
       .from(intentos)
-      .where(and(eq(intentos.usuarioId, u.id), eq(intentos.tipo, 'diagnostico'), isNotNull(intentos.terminado)))
+      .where(and(eq(intentos.usuarioId, u.id), eq(intentos.tipo, 'diagnostico'), eq(intentos.referencia, u.especialidadId ?? ''), isNotNull(intentos.terminado)))
       .orderBy(desc(intentos.terminado))
       .limit(1),
   ]);

@@ -1,6 +1,6 @@
 import {and, asc, desc, eq, isNotNull, sql} from 'drizzle-orm';
 import type {Db} from './db';
-import {intentos, lecciones, progresoLecciones, respuestas} from './db/schema';
+import {intentos, lecciones, progresoLecciones, respuestas, usuarios} from './db/schema';
 import {especialidadDelUsuario} from './curso';
 import {nivelesDe, preparacion, temasConPeso, type EstadoDominio} from './dominio';
 import {contarPendientes} from './repaso';
@@ -75,11 +75,14 @@ export type Siguiente =
   | {tipo: 'prueba-tema'; temaId: string; temaNombre: string}
   | {tipo: 'nada'};
 
+/** ¿Ya hizo el diagnóstico de su curso actual? Cada curso tiene el suyo: el intento guarda la especialidad. */
 export async function diagnosticoHecho(db: Db, usuarioId: string): Promise<boolean> {
+  const [u] = await db.select({e: usuarios.especialidadId}).from(usuarios).where(eq(usuarios.id, usuarioId));
+  if (!u?.e) return false;
   const [i] = await db
     .select({id: intentos.id})
     .from(intentos)
-    .where(and(eq(intentos.usuarioId, usuarioId), eq(intentos.tipo, 'diagnostico'), isNotNull(intentos.terminado)))
+    .where(and(eq(intentos.usuarioId, usuarioId), eq(intentos.tipo, 'diagnostico'), eq(intentos.referencia, u.e), isNotNull(intentos.terminado)))
     .limit(1);
   return Boolean(i);
 }
