@@ -1,9 +1,11 @@
 import {getDb} from './db';
 import {sembrar} from './db/sembrar';
-import {asegurarUsuario} from './usuarios';
+import {randomBytes} from 'node:crypto';
+import {asegurarUsuario, bloquearClave} from './usuarios';
 
 // Al arrancar el servidor: migra la base, carga el contenido y deja listas las cuentas del entorno.
 // En Coolify las cuentas salen de variables: ADMIN_CORREO/ADMIN_CLAVE y DEMO_CORREO/DEMO_CLAVE.
+// DEMO_CORREO sin DEMO_CLAVE bloquea esa cuenta: le pone una contraseña al azar que nadie conoce.
 
 export async function arrancar() {
   const db = await getDb();
@@ -17,6 +19,8 @@ export async function arrancar() {
   if (env.DEMO_CORREO && env.DEMO_CLAVE) {
     await asegurarUsuario(db, {nombre: env.DEMO_NOMBRE || 'Docente de prueba', correo: env.DEMO_CORREO, clave: env.DEMO_CLAVE, rol: 'docente'});
     cuentas.push('docente de demo');
+  } else if (env.DEMO_CORREO) {
+    if (await bloquearClave(db, env.DEMO_CORREO, randomBytes(32).toString('hex'))) cuentas.push('demo bloqueada');
   }
   console.log(`[arranque] ${r.temas} temas, ${r.lecciones} lecciones, ${r.preguntas} preguntas${cuentas.length ? `; cuentas: ${cuentas.join(', ')}` : ''}`);
 }

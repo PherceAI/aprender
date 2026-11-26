@@ -77,6 +77,14 @@ export async function asegurarUsuario(db: Db, d: {nombre: string; correo: string
   return publico(u);
 }
 
+/** Cambia la contraseña de una cuenta por una que nadie conoce. Devuelve si la cuenta existía. */
+export async function bloquearClave(db: Db, correo: string, claveAlAzar: string) {
+  const u = await usuarioPorCorreo(db, correo);
+  if (!u) return false;
+  await db.update(usuarios).set({claveHash: hashClave(claveAlAzar)}).where(eq(usuarios.id, u.id));
+  return true;
+}
+
 export async function elegirEspecialidad(db: Db, usuarioId: string, especialidadId: string) {
   const [e] = await db.select().from(especialidades).where(eq(especialidades.id, especialidadId));
   if (!e) throw new Error('Esa especialidad no existe');

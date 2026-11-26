@@ -17,7 +17,7 @@ Lo que se revisa antes de abrir la plataforma a docentes reales, y antes de cada
 - ✅ Idempotencia: terminar un intento, responder, avisar un pago, registrarse, entrar con Google y elegir lecciones gratis no se duplican con doble toque, dos pestañas o recarga.
 - ✅ Un solo pago en revisión por docente (índice único en la base). Aprobar dos veces no hace nada.
 - ✅ Las migraciones corren solas al arrancar; la de pagos limpia duplicados antes de crear su índice.
-- ⬜ **Respaldo diario de Postgres** en Coolify (Postgres → Backups). Sin esto, una falla del servidor borra cuentas y pagos.
+- ✅ Respaldo diario de Postgres en Coolify: 3:00 a. m. de Ecuador, guarda los últimos 14 (probado el 25 nov).
 - ⬜ Probar un pago real de punta a punta: aviso del docente → aprobar en Panel → se abre todo.
 
 ## 4. Seguridad
@@ -26,21 +26,21 @@ Lo que se revisa antes de abrir la plataforma a docentes reales, y antes de cada
 - ✅ Encabezados: HSTS, nosniff, X-Frame-Options, Referrer-Policy, Permissions-Policy; sin `X-Powered-By`.
 - ✅ HTTP redirige a HTTPS.
 - ⬜ Cambiar el secreto de Google (quedó escrito en un chat).
-- ⬜ Quitar `DEMO_CORREO`/`DEMO_CLAVE` de Coolify: la cuenta de demo tiene acceso completo con una clave conocida.
-- ⬜ Apagar el modo revisión abierto (`REVISION_PUBLICA`) cuando terminen los comentarios.
+- ✅ Cuenta demo bloqueada: queda `DEMO_CORREO` sin `DEMO_CLAVE` y al arrancar se le pone una contraseña al azar.
+- ✅ Modo revisión apagado (sin `REVISION_CLAVE` ni `REVISION_PUBLICA`).
 
 ## 5. Experiencia del docente
 - ✅ Páginas de error y 404 en español, con «Intentar de nuevo» e «Ir al inicio».
 - ✅ Sin scroll horizontal en el teléfono (portada, Inicio, lecciones, pagos).
 - ✅ La app instalable no guarda páginas ni la API: siempre muestra datos frescos.
 - ⬜ «¿Olvidaste tu contraseña?»: hoy no existe (solo Google o pedir ayuda).
-- ⬜ `CONTACTO_WHATSAPP` en Coolify, para los botones de ayuda.
+- ✅ Botón de WhatsApp en la portada, el ingreso, el registro y la plataforma (`components/whatsapp.tsx`).
 - ⬜ Aviso de privacidad y términos (la Ley Orgánica de Protección de Datos Personales pide informar qué datos se guardan y para qué).
 
 ## 6. Buscadores y difusión
 - ✅ `robots.txt` deja indexar la portada, el registro y el ingreso; la plataforma por dentro no.
 - ✅ `sitemap.xml`.
-- ⬜ Imagen para compartir en WhatsApp y redes (Open Graph).
+- ✅ Imagen para compartir en WhatsApp y redes (`app/opengraph-image.tsx`).
 
 ## 7. Contenido
 - ✅ Abiertos con lecciones y preguntas: Anatomía celular y los 4 temas de Conocimientos digitales.
