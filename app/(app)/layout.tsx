@@ -6,6 +6,7 @@ import {accionSalir} from '@/app/acciones';
 import {requerirUsuario} from '@/lib/auth/cookies';
 import {getDb} from '@/lib/db';
 import {planDe} from '@/lib/acceso';
+import {precioTexto} from '@/lib/pagos';
 import {contarPendientes} from '@/lib/repaso';
 import {enlaceFicha} from '@/lib/ficha';
 import {especialidadInfo} from '@/lib/evaluacion';
@@ -65,6 +66,11 @@ export default async function LayoutApp({children}: {children: React.ReactNode})
             <Marca />
           </Link>
           <div className="flex items-center">
+            {esDocente && plan === 'gratis' && (
+              <Link href="/acceso" className="mr-1 inline-flex h-8 items-center rounded-full bg-accent px-3 text-[13px] font-semibold text-white">
+                Desbloquear {precioTexto()}
+              </Link>
+            )}
             <BotonInstalar compacto />
             <TemaToggle compacto />
             <form action={accionSalir}>
@@ -76,7 +82,15 @@ export default async function LayoutApp({children}: {children: React.ReactNode})
         </header>
         <main className="mx-auto w-full max-w-[1320px] px-4 pt-5 pb-28 sm:px-6 lg:px-8 lg:pt-7 lg:pb-12">{children}</main>
       </div>
-      <NavInferior items={itemsMovil} insignias={insignias} />
+      <NavInferior
+        items={itemsMovil}
+        insignias={insignias}
+        mas={
+          esDocente
+            ? {nombre: u.nombre, curso: especialidadInfo(u.especialidadId)?.nombre ?? null, gratis: plan === 'gratis', precio: precioTexto(), fichaUrl: enlaceFicha(1, u.especialidadId), salir: accionSalir}
+            : undefined
+        }
+      />
       {esDocente && <BotonWhatsApp sobreBarra usuario={{nombre: u.nombre, correo: u.correo}} />}
     </div>
   );

@@ -134,7 +134,7 @@ export function Runner({intento, titulo, salir}: {intento: IntentoUI; titulo: st
       <span aria-hidden className="pointer-events-none fixed -bottom-40 -left-40 h-96 w-96 rounded-full bg-[radial-gradient(circle,#ffe9df_0%,transparent_70%)] dark:opacity-20" />
     <div className="relative mx-auto flex min-h-dvh w-full max-w-[1120px] flex-col px-4 sm:px-6">
       {/* Cabecera: salir, tema, avance y (en el simulacro) el tiempo */}
-      <div className="sticky top-0 z-10 pt-3 pb-2 sm:pt-5">
+      <div className="sticky top-0 z-10 -mx-4 bg-surface/95 px-4 pt-3 pb-2 backdrop-blur-md sm:-mx-6 sm:px-6 sm:pt-5">
         <div className="flex items-center gap-3 rounded-full border border-line bg-surface/95 py-1.5 pr-2 pl-1.5 shadow-card backdrop-blur-md">
           <a href={salir.href} className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-surface-2 text-ink-2 hover:text-ink" aria-label={salir.texto} title={salir.texto}>
             <X size={19} />
