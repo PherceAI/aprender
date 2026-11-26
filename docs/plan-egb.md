@@ -53,6 +53,23 @@ El motor ya es de datos (VISION 4b): una especialidad nueva es una carpeta en `c
 5. **Primeros temas abiertos.** Lecciones, práctica y prueba (mínimo 3 de diagnóstico del tema y 8 de prueba por tema).
 6. **Simulacro y activación.** EGB pasa a «activa» y aparece en la landing.
 
+## Regla de contenido óptimo (26 nov, pedido del dueño)
+
+El docente no estudia una enciclopedia: estudia lo que la ficha pregunta, y solo lo que no sabe.
+- **Cada lección es un subtema de la ficha, en 4 o 5 pantallas y de 5 a 8 minutos.** Lleva solo lo que el Ineval puede preguntar: el concepto, la regla o la fórmula, un ejemplo y la trampa típica. Sin historia ni teoría de relleno.
+- **Cada tema tiene 10 preguntas**, en los formatos del examen y con la explicación de cada opción. No se hacen bancos gigantes.
+- **El docente no lo ve todo.** El diagnóstico marca lo que ya sabe, «¿Ya lo sabes?» le deja saltar temas, la ruta empieza por lo débil y el repaso solo trae lo que falló.
+- **Se escribe primero lo que más rinde en el examen** (preguntas por tema):
+
+  | Parte | Preguntas | Temas | Lecciones | Preguntas por tema |
+  |---|---|---|---|---|
+  | Pedagógicos (todos los cursos) | 21 | 6 | 7 | 3,5 |
+  | Digitales (todos los cursos, ya abiertos) | 18 | 4 | 6 | 4,5 |
+  | Disciplinar de EGB | 60 | 34 | 63 | 1,8 |
+
+  Los 6 temas pedagógicos son el 21 % del examen en 7 lecciones cortas, y sirven a todas las especialidades: son lo siguiente que conviene escribir.
+- **Tamaño total:** el curso completo de EGB son unas 8 horas de lecciones (1,5 de generales y 6,6 de la especialidad). A cada docente le tocan menos, porque salta lo que ya domina.
+
 ## Decisiones
 
 - **26 nov · Por asignatura.** El curso de EGB se organiza en 4 secciones (Matemática, Lengua y Literatura, Ciencias Naturales, Ciencias Sociales), cada una con sus unidades del PDF. En la base es la columna opcional `unidades.asignatura` (migración 0008); CCNN la deja vacía.
