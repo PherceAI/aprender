@@ -58,6 +58,8 @@ export const unidades = pgTable('unidades', {
     .references(() => bloques.id, {onDelete: 'cascade'}),
   nombre: text().notNull(),
   orden: integer().notNull(),
+  /** La asignatura que agrupa la unidad cuando un bloque mezcla varias (EGB 2.º a 7.º: Matemática, Lengua…). */
+  asignatura: text(),
 });
 
 export const temas = pgTable('temas', {

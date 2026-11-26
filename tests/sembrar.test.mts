@@ -6,10 +6,15 @@ import {lecciones, preguntas, temas} from '../lib/db/schema.ts';
 import {sembrar} from '../lib/db/sembrar.ts';
 import {CONTENIDO} from '../contenido/index.ts';
 
+// Todos los temas y lecciones del contenido: CCNN (31 y 70) y EGB 2.º a 7.º (34 y 63) comparten los 10 temas generales.
+const TEMAS = CONTENIDO.bloques.flatMap((b) => b.unidades.flatMap((u) => u.temas));
+const LECCIONES = TEMAS.flatMap((t) => t.lecciones);
+
 test('siembra el temario completo y el banco inicial', async () => {
   const db = await crearDbPrueba();
   const r = await sembrar(db);
-  assert.deepEqual(r, {temas: 31, lecciones: 70, preguntas: CONTENIDO.preguntas.length});
+  assert.deepEqual(r, {temas: TEMAS.length, lecciones: LECCIONES.length, preguntas: CONTENIDO.preguntas.length});
+  assert.deepEqual([TEMAS.length, LECCIONES.length], [31 + 34, 70 + 63]);
   const [ac] = await db.select().from(temas).where(eq(temas.id, 'anatomia-celular'));
   assert.equal(ac.abierto, true);
   const [l] = await db.select().from(lecciones).where(eq(lecciones.id, 'anatomia-celular-2'));
@@ -21,7 +26,7 @@ test('sembrar dos veces no duplica y respeta el video subido', async () => {
   await sembrar(db);
   await db.update(temas).set({videoUrl: '/videos/anatomia.mp4', videoTitulo: 'La célula'}).where(eq(temas.id, 'anatomia-celular'));
   const r = await sembrar(db);
-  assert.equal(r.temas, 31);
+  assert.equal(r.temas, TEMAS.length);
   const [{n}] = await db.select({n: count()}).from(preguntas);
   assert.equal(n, CONTENIDO.preguntas.length);
   const [ac] = await db.select().from(temas).where(eq(temas.id, 'anatomia-celular'));

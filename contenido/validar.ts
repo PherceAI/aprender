@@ -62,8 +62,18 @@ export function validarContenido(c: Contenido): string[] {
 
   for (const p of c.preguntas) validarPregunta(p, temaIds, leccionTema, err);
 
-  // Diagnóstico de entrada: al menos una pregunta por cada tema de la ficha, para ubicar al docente tema por tema.
-  const diagPorTema = new Map<string, number>(unidades.flatMap((u) => u.temas.map((t) => [t.id, 0] as const)));
+  // Un bloque que mezcla asignaturas (EGB 2.º a 7.º) las dice en todas sus unidades, o en ninguna.
+  for (const b of c.bloques) {
+    const con = b.unidades.filter((u) => u.asignatura?.trim()).length;
+    if (con && con < b.unidades.length) err(`Bloque «${b.id}»: si una unidad tiene asignatura, todas deben tenerla`);
+  }
+
+  // Diagnóstico de entrada: al menos una pregunta por cada tema de las especialidades activas, para ubicar
+  // al docente tema por tema. Una especialidad «próximamente» puede cargar su temario antes que sus preguntas.
+  const bloquesActivos = new Set(c.especialidades.filter((e) => e.estado === 'activa').flatMap((e) => e.bloques));
+  const diagPorTema = new Map<string, number>(
+    c.bloques.filter((b) => bloquesActivos.has(b.id)).flatMap((b) => b.unidades.flatMap((u) => u.temas.map((t) => [t.id, 0] as const)))
+  );
   for (const p of c.preguntas) {
     if (p.usos.includes('diagnostico') && diagPorTema.has(p.temaId)) diagPorTema.set(p.temaId, diagPorTema.get(p.temaId)! + 1);
   }

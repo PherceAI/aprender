@@ -57,6 +57,13 @@
       "when": 1795568592502,
       "tag": "0007_idempotencia",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1795721039095,
+      "tag": "0008_asignatura",
+      "breakpoints": true
     }
   ]
 }

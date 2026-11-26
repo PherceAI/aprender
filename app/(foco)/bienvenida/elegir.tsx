@@ -1,11 +1,12 @@
 'use client';
 
 import {useTransition} from 'react';
-import {Atom, BookText, Calculator, Globe, LoaderCircle, type LucideIcon} from 'lucide-react';
+import {Atom, BookText, Calculator, Globe, LoaderCircle, School, type LucideIcon} from 'lucide-react';
 import {accionElegirEspecialidad} from '@/app/acciones';
 
 const ICONO: Record<string, LucideIcon> = {
   'ccnn-egb-superior': Atom,
+  'egb-elemental-media': School,
   'matematica-egb-superior': Calculator,
   'lengua-egb-superior': BookText,
   'estudios-sociales-egb-superior': Globe,

@@ -28,6 +28,8 @@ export interface Bloque {
 export interface Unidad {
   id: string;
   nombre: string;
+  /** Solo cuando el bloque mezcla asignaturas (EGB 2.º a 7.º): Matemática, Lengua y Literatura… */
+  asignatura?: string;
   temas: Tema[];
 }
 

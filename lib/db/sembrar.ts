@@ -26,7 +26,7 @@ export async function sembrar(db: Db, c: Contenido = CONTENIDO) {
       };
       await tx.insert(bloques).values(fila).onConflictDoUpdate({target: bloques.id, set: fila});
       for (const [ui, u] of b.unidades.entries()) {
-        const filaU = {id: u.id, bloqueId: b.id, nombre: u.nombre, orden: ui + 1};
+        const filaU = {id: u.id, bloqueId: b.id, nombre: u.nombre, orden: ui + 1, asignatura: u.asignatura ?? null};
         await tx.insert(unidades).values(filaU).onConflictDoUpdate({target: unidades.id, set: filaU});
         for (const [ti, t] of u.temas.entries()) {
           const filaT = {id: t.id, unidadId: u.id, nombre: t.nombre, orden: ti + 1, abierto: Boolean(t.abierto)};

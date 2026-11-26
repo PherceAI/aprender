@@ -5,6 +5,9 @@ import {validarContenido} from '../contenido/validar.ts';
 
 const bloque = (id: string) => CONTENIDO.bloques.find((b) => b.id === id)!;
 const temasDe = (id: string) => bloque(id).unidades.flatMap((u) => u.temas);
+const especialidad = (id: string) => CONTENIDO.especialidades.find((e) => e.id === id)!;
+/** Las unidades que rinde una especialidad: el bloque general y el suyo. */
+const unidadesDe = (id: string) => especialidad(id).bloques.flatMap((b) => bloque(b).unidades);
 
 // Los 31 temas de la ficha técnica Ineval 2026 (Dimensión 1), en orden.
 const TEMAS_FICHA = [
@@ -19,8 +22,8 @@ const TEMAS_FICHA = [
   'Efectos antrópicos', 'Origen de la vida', 'Cambios geológicos en la Tierra',
 ];
 
-test('la Dimensión 1 tiene 9 unidades, 31 temas y 70 lecciones', () => {
-  const unidades = CONTENIDO.bloques.flatMap((b) => b.unidades);
+test('la Dimensión 1 de Ciencias Naturales tiene 9 unidades, 31 temas y 70 lecciones', () => {
+  const unidades = unidadesDe('ccnn-egb-superior');
   const temas = unidades.flatMap((u) => u.temas);
   assert.equal(unidades.length, 9);
   assert.equal(temas.length, 31);
@@ -46,10 +49,11 @@ test('todo el contenido pasa el validador', () => {
   assert.deepEqual(validarContenido(CONTENIDO), []);
 });
 
-test('el diagnóstico tiene 40 preguntas, toca los 31 temas y usa formatos interactivos', () => {
-  const diag = CONTENIDO.preguntas.filter((p) => p.usos.includes('diagnostico'));
+test('el diagnóstico de Ciencias Naturales tiene 40 preguntas, toca los 31 temas y usa formatos interactivos', () => {
+  const temas = unidadesDe('ccnn-egb-superior').flatMap((u) => u.temas);
+  const ids = new Set(temas.map((t) => t.id));
+  const diag = CONTENIDO.preguntas.filter((p) => p.usos.includes('diagnostico') && ids.has(p.temaId));
   assert.equal(diag.length, 40);
-  const temas = CONTENIDO.bloques.flatMap((b) => b.unidades.flatMap((u) => u.temas));
   for (const t of temas) assert.ok(diag.some((p) => p.temaId === t.id), `el tema ${t.id} no tiene pregunta de diagnóstico`);
   const formatos = new Set(diag.map((p) => p.formato));
   for (const f of ['simple', 'completamiento', 'seleccion', 'ordenamiento', 'emparejamiento']) assert.ok(formatos.has(f as never), `falta ${f}`);
