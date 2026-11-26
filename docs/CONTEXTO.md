@@ -7,7 +7,9 @@ Lee esto antes de trabajar. Después lee `CLAUDE.md`, `VISION.md`, `PRODUCT.md`,
 - Conocimientos generales: 39 preguntas en 45 min.
 - Conocimientos de la especialidad: 60 preguntas en 120 min.
 
-**El examen es en 2027 y solo se trabaja la Dimensión 1**: las dimensiones 2, 3 y 4 ya se aplicaron (dato del dueño, 16 nov). El PDF de la ficha se titula «2026 - Fase 1»; en la plataforma se dice «ficha técnica oficial» sin año y «examen 2027». Hoy tiene Ciencias Naturales de EGB Superior. Es un negocio del dueño con su cuñado, docente de Ciencias Naturales en Riobamba. Compite con cursos de unos $200 que son solo videos. Es independiente: no es del Ineval.
+**El examen es en 2027 y solo se trabaja la Dimensión 1**: las dimensiones 2, 3 y 4 ya se aplicaron (dato del dueño, 16 nov). El PDF de la ficha se titula «2026 - Fase 1»; en la plataforma se dice «ficha técnica oficial» sin año y «examen 2027». Hoy tiene Ciencias Naturales de EGB Superior.
+
+**Cómo funciona la evaluación y por qué un curso = una especialidad:** `docs/investigacion-ineval.md` (26 nov). Cada docente rinde solo la especialidad de su nombramiento. **Expansión en curso:** EGB 2.º a 7.º, con su plan en `docs/plan-egb.md`; las fichas de la Fase 1 están en `fuentes/`. Es un negocio del dueño con su cuñado, docente de Ciencias Naturales en Riobamba. Compite con cursos de unos $200 que son solo videos. Es independiente: no es del Ineval.
 
 ## Dónde está
 - **Carpeta:** `C:\Users\Keybe\Videos\academia-docente`. Es aparte de PherceStudio y no se mezclan.

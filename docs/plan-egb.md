@@ -58,6 +58,8 @@ El motor ya es de datos (VISION 4b): una especialidad nueva es una carpeta en `c
 - **26 nov · Por asignatura.** El curso de EGB se organiza en 4 secciones (Matemática, Lengua y Literatura, Ciencias Naturales, Ciencias Sociales), cada una con sus unidades del PDF. En la base es la columna opcional `unidades.asignatura` (migración 0008); CCNN la deja vacía.
 - **26 nov · Lecciones por asignatura completa.** En la fase 5 se escribe una asignatura entera antes de pasar a la siguiente (falta decidir cuál va primero).
 
+- **26 nov · Investigación del Ineval** (`docs/investigacion-ineval.md`). Un curso = una especialidad, porque cada docente rinde la de su nombramiento. Los $45 abren todos los cursos y el docente puede cambiar de curso. Las lecciones gratis siguen siendo 3 en total (por confirmar con el dueño). El puntaje se muestra como el del Ineval (0 a 1000 y su nivel). El boceto está en `public/bocetos/cursos-y-puntaje.html` y espera aprobación.
+
 ## Estado
 
 - **Fase 1 (26 nov): hecha.** `contenido/egb-elemental-media/estructura.ts` con las 15 unidades, 34 temas y 63 lecciones. Especialidad `egb-elemental-media`, «próximamente». El validador exige el diagnóstico completo solo a las especialidades activas. Pruebas en `tests/egb.test.mts`.
