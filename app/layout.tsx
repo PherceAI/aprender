@@ -13,7 +13,7 @@ const instrument = Instrument_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://aprender.automationpherce.cloud'),
+  metadataBase: new URL('https://pragma.automationpherce.cloud'),
   openGraph: {siteName: 'Pragma', locale: 'es_EC', type: 'website', title: 'Pragma: prepárate para tu evaluación docente', description: 'Lecciones, práctica y simulacros para la Dimensión 1 del examen 2027. Empieza gratis.'},
   twitter: {card: 'summary_large_image'},
   title: {default: 'Pragma', template: '%s · Pragma'},

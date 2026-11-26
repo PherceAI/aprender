@@ -33,7 +33,7 @@ Es una academia en línea para que los **docentes** de Ecuador (no los estudiant
 - El checklist de pulido está en docs/pulido-checklist.md.
 
 ## Producción
-- URL: https://aprender.automationpherce.cloud
+- URL: https://pragma.automationpherce.cloud
 - Repo: github.com/PherceAI/aprender (privado), rama main.
 - Coolify en panel.automationpherce.cloud, proyecto "Ruta Docente" (nombre viejo en Coolify):
   - app awqesizwrfjoonek78fkjgwo

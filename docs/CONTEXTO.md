@@ -12,7 +12,7 @@ Lee esto antes de trabajar. Después lee `CLAUDE.md`, `VISION.md`, `PRODUCT.md`,
 ## Dónde está
 - **Carpeta:** `C:\Users\Keybe\Videos\academia-docente`. Es aparte de PherceStudio y no se mezclan.
 - **Repo:** github.com/PherceAI/aprender (privado), rama `main`.
-- **Producción:** https://aprender.automationpherce.cloud
+- **Producción:** https://pragma.automationpherce.cloud
 - **Coolify:** panel.automationpherce.cloud, proyecto «Ruta Docente», app `awqesizwrfjoonek78fkjgwo`.
   - Para desplegar: push a `main` y luego `source ~/.coolify-api.sh; api POST /deploy -d '{"uuid":"awqesizwrfjoonek78fkjgwo"}'`.
 - **Secretos:** la clave de Gemini y las contraseñas viven solo en las variables de Coolify y en `data-local/` (ignorado por git). Nunca van al chat ni al repo.

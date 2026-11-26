@@ -2,7 +2,7 @@
 // Comprueba que las páginas públicas abren, que las privadas piden sesión, los encabezados de seguridad,
 // la página 404, robots y sitemap, y que el servidor responde rápido. Sale con código 1 si algo falla.
 
-const BASE = (process.argv[2] || 'https://aprender.automationpherce.cloud').replace(/\/$/, '');
+const BASE = (process.argv[2] || 'https://pragma.automationpherce.cloud').replace(/\/$/, '');
 const fallas = [];
 const ok = (msg) => console.log(`  ✓ ${msg}`);
 const mal = (msg) => {
