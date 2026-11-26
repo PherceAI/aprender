@@ -1,3 +1,4 @@
+import {WHATSAPP_NUMERO} from '@/components/whatsapp';
 // La ficha técnica oficial del Ineval 2026 (pública) servida desde /public.
 // Cada referencia apunta a la página exacta del PDF para que el docente compruebe de dónde sale el contenido.
 
@@ -31,6 +32,6 @@ export function paginaDeTema(temaId: string): number | null {
 
 /** Enlace a WhatsApp para pedir acceso. Se configura con CONTACTO_WHATSAPP (solo dígitos, con código de país). */
 export function enlaceAcceso(): string | null {
-  const n = (process.env.CONTACTO_WHATSAPP ?? '').replace(/\D/g, '');
+  const n = (process.env.CONTACTO_WHATSAPP || WHATSAPP_NUMERO).replace(/\D/g, '');
   return n ? `https://wa.me/${n}?text=${encodeURIComponent('Hola, quiero mi acceso a Pragma.')}` : null;
 }
