@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
   // Fotos de comprobantes y el QR de Deuna (hasta 6 MB) llegan por acciones del servidor.
   experimental: {serverActions: {bodySizeLimit: '7mb'}},
   poweredByHeader: false,
+  // Los metadatos (manifiesto, ícono de iPhone, título, vista previa) van siempre en el <head>.
+  // Desde 15.2, en páginas dinámicas Next los manda al <body> y ahí Chrome y Safari no ven el manifiesto:
+  // la app deja de poder instalarse. El layout raíz lee cookies (modo revisión), así que todo es dinámico.
+  htmlLimitedBots: /.*/,
   // Encabezados de seguridad básicos para todo el sitio.
   async headers() {
     return [

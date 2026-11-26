@@ -20,6 +20,8 @@ export const metadata: Metadata = {
   description: 'Prepárate para la Evaluación del Desempeño Docente con un método que se adapta a ti.',
   applicationName: 'Pragma',
   appleWebApp: {capable: true, title: 'Pragma', statusBarStyle: 'default'},
+  // Next solo escribe «mobile-web-app-capable»; los iPhone con iOS anterior al 16.4 necesitan además esta.
+  other: {'apple-mobile-web-app-capable': 'yes'},
 };
 
 export const viewport: Viewport = {
