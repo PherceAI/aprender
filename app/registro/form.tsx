@@ -5,7 +5,7 @@ import {LoaderCircle} from 'lucide-react';
 import {accionRegistrar} from '@/app/acciones';
 import {btn, field} from '@/components/ui';
 
-export function FormRegistro() {
+export function FormRegistro({correo = ''}: {correo?: string}) {
   const [estado, enviar, enviando] = useActionState(accionRegistrar, undefined);
   return (
     <form action={enviar} className="mt-6 flex flex-col gap-4" noValidate>
@@ -19,7 +19,7 @@ export function FormRegistro() {
         <label htmlFor="correo" className="text-[14px] font-semibold text-ink">
           Correo
         </label>
-        <input id="correo" name="correo" type="email" autoComplete="email" inputMode="email" required className={field} />
+        <input id="correo" name="correo" type="email" autoComplete="email" inputMode="email" required defaultValue={correo} className={field} />
       </div>
       <div className="flex flex-col gap-2">
         <label htmlFor="clave" className="text-[14px] font-semibold text-ink">
