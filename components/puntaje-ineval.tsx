@@ -14,7 +14,8 @@ const ESTILO: Record<NivelIneval, {chip: string; barra: string}> = {
 /** Cuántos «lugares» de aciertos ocupa cada nivel en la barra (0 a 28, 29 a 60, 61 a 92, 93 a 99). */
 const TRAMOS = [...NIVELES].reverse().map((n, i, xs) => ({...n, ancho: (xs[i + 1]?.aciertos ?? PREGUNTAS_EXAMEN + 1) - n.aciertos}));
 
-export function PuntajeIneval({porcentaje, titulo = 'Tu puntaje estimado en el Ineval', className = ''}: {porcentaje: number; titulo?: string; className?: string}) {
+/** «compacto»: sin la leyenda de niveles ni la nota de la fuente, para pantallas donde el siguiente paso debe verse sin bajar. */
+export function PuntajeIneval({porcentaje, titulo = 'Tu puntaje estimado en el Ineval', className = '', compacto = false}: {porcentaje: number; titulo?: string; className?: string; compacto?: boolean}) {
   const e = estimarIneval(porcentaje);
   return (
     <section className={`card p-5 sm:p-6 ${className}`} aria-label={`${titulo}: ${e.calificacion} de 1000, nivel ${e.nivel}`}>
@@ -37,6 +38,7 @@ export function PuntajeIneval({porcentaje, titulo = 'Tu puntaje estimado en el I
         </div>
         <span className="absolute -top-1 h-[18px] w-[3px] -translate-x-1/2 rounded-full bg-ink" style={{left: `${((e.aciertos + 0.5) / (PREGUNTAS_EXAMEN + 1)) * 100}%`}} />
       </div>
+      {!compacto && (
       <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[12.5px] text-ink-2">
         {TRAMOS.map((t) => (
           <li key={t.nivel} className="flex items-center gap-1.5">
@@ -45,6 +47,7 @@ export function PuntajeIneval({porcentaje, titulo = 'Tu puntaje estimado en el I
           </li>
         ))}
       </ul>
+      )}
 
       <p className="mt-4 text-[15px] leading-relaxed text-ink">
         Hoy acertarías unas <b className="num font-semibold">{e.aciertos} de las {PREGUNTAS_EXAMEN} preguntas</b>.{' '}
@@ -60,9 +63,11 @@ export function PuntajeIneval({porcentaje, titulo = 'Tu puntaje estimado en el I
           <>Estás en el nivel más alto.</>
         )}
       </p>
+      {!compacto && (
       <p className="mt-2 text-[12.5px] leading-snug text-ink-2">
         Estimación con la tabla oficial de calificación del Ineval (nota técnica 2026): de 0 a 1000 puntos sobre 99 preguntas.
       </p>
+      )}
     </section>
   );
 }

@@ -1,11 +1,13 @@
 import type {Metadata} from 'next';
-import {Building2, Check, Clock, ExternalLink, MessageCircle, QrCode, XCircle} from 'lucide-react';
+import {Building2, Check, Clock, CreditCard, ExternalLink, MessageCircle, QrCode, XCircle} from 'lucide-react';
 import {requerirDocente} from '@/lib/auth/cookies';
 import {getDb} from '@/lib/db';
 import {LECCIONES_GRATIS, planDe} from '@/lib/acceso';
 import {enlaceAcceso} from '@/lib/ficha';
 import {ACCESO_HASTA, datosCobro, precioTexto, ultimoPago} from '@/lib/pagos';
+import {CAJITA_CSS, CAJITA_JS, configPayphone, datosCajita} from '@/lib/payphone';
 import {AvisoPago} from './aviso-pago';
+import {CajitaPayphone} from './cajita-payphone';
 
 export const metadata: Metadata = {title: 'Acceso completo'};
 
@@ -36,6 +38,8 @@ export default async function Acceso() {
   const hayDeuna = Boolean(cobro.deunaQr || cobro.deunaLink);
   const hayCuentas = Boolean(cobro.cuentas);
   const metodos = [...(hayDeuna ? [{id: 'deuna' as const, texto: 'Deuna'}] : []), ...(hayCuentas ? [{id: 'transferencia' as const, texto: 'Transferencia'}] : [])];
+  // Tarjeta con Payphone: solo si están PAYPHONE_TOKEN y PAYPHONE_STORE_ID. Abre todo al instante, sin revisión.
+  const payphone = configPayphone();
 
   return (
     <div className="rise mx-auto flex max-w-[860px] flex-col gap-5">
@@ -58,6 +62,16 @@ export default async function Acceso() {
         </ul>
       </section>
 
+      {payphone && (
+        <section className="card p-5 sm:p-6">
+          <h2 className="flex items-center gap-2 text-[18px] font-semibold text-ink">
+            <CreditCard size={19} className="text-accent" /> Paga con tarjeta
+          </h2>
+          <p className="mt-1 text-[15px] text-ink-2">Débito o crédito, con el pago seguro de Payphone. Se abre todo al instante.</p>
+          <CajitaPayphone datos={datosCajita(u.id, payphone)} js={CAJITA_JS} css={CAJITA_CSS} precio={precioTexto()} />
+        </section>
+      )}
+
       {pago?.estado === 'pendiente' ? (
         <section className="card flex items-start gap-4 p-5 sm:p-6">
           <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-accent-soft text-accent">
@@ -79,7 +93,7 @@ export default async function Acceso() {
             </section>
           )}
 
-          {metodos.length === 0 ? (
+          {metodos.length === 0 && payphone ? null : metodos.length === 0 ? (
             <section className="card p-5 sm:p-6">
               <h2 className="text-[18px] font-semibold text-ink">Muy pronto podrás pagar aquí</h2>
               <p className="mt-1 text-[15px] text-ink-2">Estamos terminando de habilitar los pagos.</p>
@@ -91,6 +105,7 @@ export default async function Acceso() {
             </section>
           ) : (
             <>
+              {payphone && <p className="mt-2 text-[15px] font-semibold text-ink-2">¿Prefieres Deuna o transferencia?</p>}
               <h2 className="mt-1 text-[20px] font-semibold tracking-[-0.02em] text-ink">1. Paga {precioTexto()} por uno de estos medios</h2>
               <div className="grid grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-2">
                 {hayDeuna && (

@@ -102,8 +102,8 @@ export default async function Repaso() {
         <ol className="mt-6 grid grid-cols-[repeat(5,minmax(0,1fr))] gap-1">
           {DIAS.map((d, i) => (
             <li key={d} className="relative flex flex-col items-center gap-2 text-center">
-              {i > 0 && <span aria-hidden className="absolute top-5 right-1/2 h-1 w-full rounded-full bg-[linear-gradient(90deg,#ffd2bf,#ff9b74)]" />}
-              <span className={`relative grid h-10 w-10 place-items-center rounded-full text-[14px] font-bold ${i === DIAS.length - 1 ? 'bg-ok text-white' : 'bg-accent text-white'}`}>{i + 1}</span>
+              {i > 0 && <span aria-hidden className="absolute top-[18px] right-1/2 z-0 h-1 w-full rounded-full bg-[linear-gradient(90deg,#ffd2bf,#ff9b74)]" />}
+              <span className={`relative z-10 grid h-10 w-10 place-items-center rounded-full text-[14px] font-bold ring-4 ring-surface ${i === DIAS.length - 1 ? 'bg-ok text-white' : 'bg-accent text-white'}`}>{i + 1}</span>
               <span className="text-[12.5px] leading-tight font-medium text-ink-2">{d}</span>
             </li>
           ))}

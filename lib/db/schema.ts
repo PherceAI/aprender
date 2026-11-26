@@ -354,6 +354,8 @@ export const pagos = pgTable(
     index('pagos_usuario').on(t.usuarioId),
     // Un solo pago en revisión por docente, aunque toque «Ya pagué» dos veces a la vez.
     uniqueIndex('pagos_un_pendiente').on(t.usuarioId).where(sql`estado = 'pendiente'`),
+    // Un pago de Payphone se registra una sola vez, aunque se confirme desde dos pestañas a la vez.
+    uniqueIndex('pagos_tarjeta_unica').on(t.referencia).where(sql`metodo = 'tarjeta'`),
   ]
 );
 

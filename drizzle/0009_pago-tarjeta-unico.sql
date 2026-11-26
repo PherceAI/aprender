@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "pagos_tarjeta_unica" ON "pagos" USING btree ("referencia") WHERE metodo = 'tarjeta';
