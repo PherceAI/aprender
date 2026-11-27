@@ -13,7 +13,6 @@ import {
   ClipboardCheck,
   Dna,
   FileCheck,
-  FileText,
   FlaskConical,
   Gauge,
   Globe,
@@ -21,7 +20,6 @@ import {
   Layers,
   Leaf,
   ListChecks,
-  Mail,
   MessageCircle,
   MessageSquareText,
   PlayCircle,
@@ -29,7 +27,6 @@ import {
   Repeat,
   School,
   Shapes,
-  Smartphone,
   Sparkles,
   Timer,
   type LucideIcon,
@@ -39,10 +36,15 @@ import {LECCIONES_GRATIS} from '@/lib/acceso';
 import {configPayphone} from '@/lib/payphone';
 import {TemaToggle} from '@/components/tema-toggle';
 import {PreguntaMuestra, type Muestra} from '@/components/pregunta-muestra';
-import {BotonWhatsApp, enlaceWhatsApp} from '@/components/whatsapp';
+import {BotonWhatsApp, IconoWhatsApp, enlaceWhatsApp} from '@/components/whatsapp';
 import {CONTENIDO} from '@/contenido';
 import type {Bloque} from '@/contenido/tipos';
+import type {StaticImageData} from 'next/image';
 import fotoPortada from '@/public/landing/docente-portada.png';
+import fotoEgb from '@/public/landing/cursos/egb.jpg';
+import fotoCcnn from '@/public/landing/cursos/ccnn.jpg';
+import fotoPedagogicos from '@/public/landing/cursos/pedagogicos.jpg';
+import fotoDigitales from '@/public/landing/cursos/digitales.jpg';
 
 // Portada pública (boceto v2 aprobado por el dueño el 26 nov, sobre su referencia de academia):
 // barra superior y bandas en azul marino, naranja como acento, docente recortada sobre un círculo naranja.
@@ -71,14 +73,22 @@ const TOTAL_PREGUNTAS = CONTENIDO.preguntas.length;
 const TOTAL_LECCIONES = CONTENIDO.bloques.reduce((n, b) => n + leccionesListas(b), 0);
 
 // ---------- Contenido de las secciones ----------
-type Curso = {nombre: string; nivel: string; img: string; fondo: string; etiqueta: string; etiquetaClase: string; meta: [LucideIcon, string][]; pie: string};
+// Datos de la portada: en computadora flotan a los lados de la docente; en teléfono van en una franja debajo.
+const DATOS_PORTADA: {icono: LucideIcon; titulo: string; texto: string}[] = [
+  {icono: ListChecks, titulo: `${GEN.preguntasExamen + EGB.preguntasExamen} preguntas`, texto: 'como el examen real'},
+  {icono: Gauge, titulo: '0 a 1000', texto: 'tu puntaje estimado'},
+  {icono: FileCheck, titulo: 'Ficha oficial', texto: 'todo el temario'},
+];
+
+// Fotos reales de Unsplash (licencia libre, ver public/landing/CREDITOS.md).
+type Curso = {nombre: string; nivel: string; foto: StaticImageData; alt: string; etiqueta: string; etiquetaClase: string; meta: [LucideIcon, string][]; pie: string};
 
 const CURSOS: Curso[] = [
   {
     nombre: 'Educación General Básica',
     nivel: 'De 2.º a 7.º año',
-    img: '/ilustraciones/abacus.png',
-    fondo: 'linear-gradient(135deg,#d4e2ff,#93b4fb)',
+    foto: fotoEgb,
+    alt: 'Niños de escuela trabajando en sus pupitres',
     etiqueta: 'Disponible',
     etiquetaClase: 'bg-ok',
     meta: [
@@ -90,8 +100,8 @@ const CURSOS: Curso[] = [
   {
     nombre: 'Ciencias Naturales',
     nivel: 'EGB Superior, 8.º a 10.º',
-    img: '/ilustraciones/microscope.png',
-    fondo: 'linear-gradient(135deg,#ccf3dc,#7fd8a4)',
+    foto: fotoCcnn,
+    alt: 'Estudiante con bata mirando por un microscopio',
     etiqueta: 'Disponible',
     etiquetaClase: 'bg-ok',
     meta: [
@@ -104,8 +114,8 @@ const CURSOS: Curso[] = [
     nombre: 'Conocimientos pedagógicos',
     // 21 de las 39 preguntas de Conocimientos generales (ficha técnica, págs. 4 y 5).
     nivel: 'Generales, 21 preguntas del examen',
-    img: '/ilustraciones/brain.png',
-    fondo: 'linear-gradient(135deg,#ffd6ea,#f39ac6)',
+    foto: fotoPedagogicos,
+    alt: 'Docente dando clase frente a su grupo',
     etiqueta: 'En todos los cursos',
     etiquetaClase: 'bg-[#d42d06]',
     meta: [
@@ -117,8 +127,8 @@ const CURSOS: Curso[] = [
   {
     nombre: 'Conocimientos digitales',
     nivel: 'Generales, 18 preguntas del examen',
-    img: '/ilustraciones/laptop.png',
-    fondo: 'linear-gradient(135deg,#fff2b8,#f6d55c)',
+    foto: fotoDigitales,
+    alt: 'Docente trabajando con su laptop en el aula',
     etiqueta: 'En todos los cursos',
     etiquetaClase: 'bg-[#d42d06]',
     meta: [
@@ -160,11 +170,11 @@ const CIFRAS: {icono: LucideIcon; n: string; t: string}[] = [
   {icono: Gauge, n: '0 a 1000', t: 'tu puntaje estimado'},
 ];
 
-const PASOS: {titulo: string; texto: string; img: string}[] = [
-  {titulo: 'Diagnóstico', texto: 'Ves tu puntaje estimado y qué temas reforzar.', img: '/ilustraciones/clipboard.png'},
-  {titulo: 'Lecciones cortas', texto: 'Aprendes solo lo que no sabes, a tu ritmo.', img: '/ilustraciones/open_book.png'},
-  {titulo: 'Práctica y prueba', texto: 'Con 80 % en la prueba, el tema queda dominado.', img: '/ilustraciones/diana.png'},
-  {titulo: 'Repaso y simulacro', texto: 'Lo fallado vuelve y cierras con el simulacro.', img: '/ilustraciones/trophy.png'},
+const PASOS: {titulo: string; texto: string}[] = [
+  {titulo: 'Diagnóstico', texto: 'Ves tu puntaje estimado y qué temas reforzar.'},
+  {titulo: 'Lecciones cortas', texto: 'Aprendes solo lo que no sabes, a tu ritmo.'},
+  {titulo: 'Práctica y prueba', texto: 'Con 80 % en la prueba, el tema queda dominado.'},
+  {titulo: 'Repaso y simulacro', texto: 'Lo fallado vuelve y cierras con el simulacro.'},
 ];
 
 const FAQ: {p: string; r: string}[] = [
@@ -289,7 +299,9 @@ export default async function Portada() {
               </ul>
             </div>
 
-            {/* La docente recortada sobre el círculo naranja; las tarjetas van a los lados, sin taparle la cara. */}
+            {/* La docente recortada sobre el círculo naranja. Nada se le pone encima: en computadora, dos tarjetas
+                a los lados de la cabeza; en tablet y teléfono, los datos van en una franja debajo de la foto. */}
+            <div className="pb-10 lg:pb-0">
             <div className="relative mx-auto h-[360px] w-full max-w-[460px] sm:h-[440px] lg:h-[520px] lg:max-w-none">
               <span aria-hidden className="absolute top-[150px] left-[30px] hidden h-[60px] w-[84px] bg-[radial-gradient(#f0360a_1.6px,transparent_1.8px)] bg-[length:14px_14px] opacity-55 sm:block" />
               <span aria-hidden className="absolute right-[10px] bottom-[120px] hidden h-[60px] w-[84px] bg-[radial-gradient(#f0360a_1.6px,transparent_1.8px)] bg-[length:14px_14px] opacity-55 sm:block" />
@@ -302,9 +314,18 @@ export default async function Portada() {
                 sizes="(min-width: 1024px) 365px, (min-width: 640px) 307px, 252px"
                 className="absolute bottom-0 left-1/2 z-[1] h-[345px] w-auto max-w-none -translate-x-1/2 drop-shadow-[0_20px_30px_rgba(17,26,46,0.18)] sm:h-[420px] lg:h-[500px]"
               />
-              <Flotante className="top-5 left-0 sm:top-[70px]" icono={ListChecks} titulo={`${GEN.preguntasExamen + EGB.preguntasExamen} preguntas`} texto="como el examen real" />
-              <Flotante className="top-[215px] right-0 sm:top-[150px]" icono={Gauge} titulo="0 a 1000" texto="tu puntaje estimado" />
-              <Flotante className="bottom-6 left-0 sm:bottom-11 sm:left-3.5" icono={FileCheck} titulo="Ficha oficial" texto="todo el temario" />
+              <Flotante className="top-[56px] left-0" {...DATOS_PORTADA[0]} />
+              <Flotante className="top-[112px] right-0" {...DATOS_PORTADA[1]} />
+            </div>
+            <ul className="mx-auto grid max-w-[460px] grid-cols-[repeat(3,minmax(0,1fr))] divide-x divide-line rounded-[16px] border border-line bg-surface py-3.5 shadow-[0_14px_30px_-22px_rgba(17,26,46,0.35)] lg:hidden">
+              {DATOS_PORTADA.map((d) => (
+                <li key={d.titulo} className="flex flex-col items-center gap-1 px-2 text-center">
+                  <d.icono size={20} className="text-accent" />
+                  <b className="num text-[15px] leading-tight font-bold text-ink sm:text-[17px]">{d.titulo}</b>
+                  <span className="text-[12px] leading-tight text-ink-3">{d.texto}</span>
+                </li>
+              ))}
+            </ul>
             </div>
           </div>
         </section>
@@ -318,10 +339,9 @@ export default async function Portada() {
             </div>
             <div className="grid grid-cols-[minmax(0,1fr)] gap-[22px] min-[600px]:grid-cols-[repeat(2,minmax(0,1fr))] lg:grid-cols-[repeat(4,minmax(0,1fr))]">
               {CURSOS.map((c) => (
-                <article key={c.nombre} className={`${tarjeta} flex flex-col overflow-hidden transition-[transform,box-shadow] duration-200 hover:-translate-y-[3px] hover:shadow-[0_18px_36px_-24px_rgba(17,26,46,0.35)]`}>
-                  <div className="relative grid h-[150px] place-items-center" style={{background: c.fondo}}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={c.img} alt="" aria-hidden className="h-[104px] w-[104px] drop-shadow-[0_14px_18px_rgba(0,0,0,0.18)]" />
+                <article key={c.nombre} className={`${tarjeta} group flex flex-col overflow-hidden transition-[transform,box-shadow] duration-200 hover:-translate-y-[3px] hover:shadow-[0_18px_36px_-24px_rgba(17,26,46,0.35)]`}>
+                  <div className="relative h-[180px] overflow-hidden bg-bg">
+                    <Image src={c.foto} alt={c.alt} fill placeholder="blur" sizes="(min-width: 1024px) 280px, (min-width: 600px) 50vw, 100vw" className="object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
                     <span className={`absolute bottom-3 left-3.5 inline-flex h-[26px] items-center rounded-[6px] px-2.5 text-[12.5px] font-semibold text-white ${c.etiquetaClase}`}>{c.etiqueta}</span>
                   </div>
                   <div className="flex flex-1 flex-col px-[18px] pt-[18px] pb-4">
@@ -399,18 +419,19 @@ export default async function Portada() {
               </div>
             </div>
 
-            <dl className={`mt-12 grid grid-cols-[repeat(2,minmax(0,1fr))] overflow-hidden rounded-[20px] ${MARINO} text-white lg:grid-cols-[repeat(4,minmax(0,1fr))]`}>
+            {/* Cifras en claro (el dueño no quiso la banda oscura): tarjeta blanca, cifra naranja y una línea fina entre cada una. */}
+            <dl className="mt-6 grid grid-cols-[repeat(2,minmax(0,1fr))] rounded-[20px] border border-line bg-surface lg:grid-cols-[repeat(4,minmax(0,1fr))]">
               {CIFRAS.map((c, i) => (
                 <div
                   key={c.t}
-                  className={`flex flex-col items-start gap-2.5 px-3.5 py-[18px] sm:flex-row sm:items-center sm:gap-3.5 sm:px-7 sm:py-[26px] ${i % 2 === 1 ? 'border-l border-white/12' : ''} ${i >= 2 ? 'border-t border-white/12 lg:border-t-0' : ''} ${i === 2 ? 'lg:border-l' : ''}`}
+                  className={`flex flex-col gap-3 px-4 py-5 sm:px-7 sm:py-7 ${i % 2 === 1 ? 'border-l border-line' : ''} ${i >= 2 ? 'border-t border-line lg:border-t-0' : ''} ${i === 2 ? 'lg:border-l' : ''}`}
                 >
-                  <span className="grid h-[46px] w-[46px] shrink-0 place-items-center rounded-[12px] bg-white/8 text-[#ff8a5c]">
-                    <c.icono size={22} />
+                  <span className="grid h-10 w-10 place-items-center rounded-full bg-accent-soft text-accent">
+                    <c.icono size={19} />
                   </span>
                   <span>
-                    <dd className="num text-[24px] leading-none font-bold tracking-[-0.02em] sm:text-[28px]">{c.n}</dd>
-                    <dt className="mt-1 text-[13.5px] text-[#c4cadb]">{c.t}</dt>
+                    <dd className="num text-[28px] leading-none font-bold tracking-[-0.03em] text-accent-ink sm:text-[34px]">{c.n}</dd>
+                    <dt className="mt-1.5 text-[14px] leading-snug text-ink-2">{c.t}</dt>
                   </span>
                 </div>
               ))}
@@ -430,14 +451,12 @@ export default async function Portada() {
               </div>
               <ol className="flex flex-col gap-3">
                 {PASOS.map((p, i) => (
-                  <li key={p.titulo} className={`${tarjeta} grid grid-cols-[50px_minmax(0,1fr)] items-center gap-3 rounded-[14px] p-3.5 sm:grid-cols-[58px_minmax(0,1fr)_56px] sm:gap-4`}>
+                  <li key={p.titulo} className={`${tarjeta} grid grid-cols-[50px_minmax(0,1fr)] items-center gap-3 rounded-[14px] p-3.5 sm:grid-cols-[58px_minmax(0,1fr)] sm:gap-4`}>
                     <span className={`grid h-[50px] w-[50px] place-items-center rounded-[12px] text-[22px] font-bold text-white sm:h-[58px] sm:w-[58px] ${i % 2 ? 'bg-[#d42d06]' : MARINO}`}>{i + 1}</span>
                     <div>
                       <h3 className="text-[16px] font-semibold text-ink">{p.titulo}</h3>
                       <p className="mt-0.5 text-[13.5px] leading-normal text-ink-2">{p.texto}</p>
                     </div>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={p.img} alt="" aria-hidden className="hidden h-[52px] w-[52px] sm:block" />
                   </li>
                 ))}
               </ol>
@@ -498,34 +517,20 @@ export default async function Portada() {
           </div>
         </section>
 
-        {/* 8. Banda para empezar y contacto */}
+        {/* 8. Dudas: todo el contacto va directo a WhatsApp (decisión del dueño, sin formularios de correo). */}
         <section className="pt-14 sm:pt-20">
           <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
-            <div className={`grid grid-cols-[minmax(0,1fr)] items-center gap-6 rounded-[20px] ${MARINO} px-5 py-[26px] text-white sm:px-9 sm:py-[30px] lg:grid-cols-[auto_minmax(0,1fr)_minmax(0,1.1fr)]`}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/ilustraciones/graduation_cap.png" alt="" aria-hidden className="hidden h-[72px] w-[72px] lg:block" />
+            <div className="grid grid-cols-[minmax(0,1fr)] items-center gap-6 rounded-[20px] border border-[#ffd9c9] bg-accent-soft px-5 py-7 sm:px-9 md:grid-cols-[auto_minmax(0,1fr)_auto] dark:border-line">
+              <span className="grid h-14 w-14 place-items-center rounded-full bg-[#15803d] text-white max-md:hidden">
+                <IconoWhatsApp size={28} />
+              </span>
               <div>
-                <h2 className="text-[22px] font-bold tracking-[-0.02em]">Empieza hoy con tu diagnóstico</h2>
-                <p className="mt-1 text-[14.5px] text-[#c4cadb]">Es gratis y al terminar sabes qué temas reforzar.</p>
+                <h2 className="text-[22px] leading-tight font-bold tracking-[-0.02em] text-ink sm:text-[24px]">¿Tienes dudas antes de empezar?</h2>
+                <p className="mt-1.5 text-[15px] leading-relaxed text-ink-2">Escríbenos por WhatsApp: te ayudamos a elegir tu curso y te explicamos cómo pagar.</p>
               </div>
-              {/* Lleva el correo al registro para no escribirlo dos veces. */}
-              <form action={REGISTRO} method="get" className="flex flex-col gap-2.5 rounded-[12px] bg-white p-1.5 min-[420px]:flex-row">
-                <label htmlFor="correo-portada" className="sr-only">
-                  Tu correo
-                </label>
-                <span className="flex min-w-0 flex-1 items-center gap-2 px-3">
-                  <Mail size={17} className="shrink-0 text-[#6b7280]" />
-                  <input id="correo-portada" name="correo" type="email" inputMode="email" autoComplete="email" placeholder="Tu correo" className="h-11 w-full min-w-0 border-0 bg-transparent text-[15px] text-[#121826] outline-none placeholder:text-[#6b7280]" />
-                </span>
-                <button type="submit" className={`${principal} h-11`}>
-                  Empieza gratis
-                </button>
-              </form>
-            </div>
-            <div className="mt-7 grid grid-cols-[minmax(0,1fr)] gap-3.5 md:grid-cols-[repeat(3,minmax(0,1fr))] md:gap-0">
-              <Contacto href={whatsapp} externo icono={MessageCircle} titulo="Escríbenos" texto="Por WhatsApp" />
-              <Contacto href="/ficha-tecnica-egb.pdf" externo icono={FileText} titulo="Ficha técnica" texto="El PDF oficial del Ineval" borde />
-              <Contacto icono={Smartphone} titulo="Úsala como app" texto="Android, iPhone y computadora" borde />
+              <a href={whatsapp} target="_blank" rel="noopener noreferrer" className={`${boton} bg-[#15803d] text-white hover:bg-[#126c34] max-md:w-full`}>
+                <IconoWhatsApp size={20} /> Escríbenos por WhatsApp
+              </a>
             </div>
           </div>
         </section>
@@ -558,12 +563,12 @@ export default async function Portada() {
 
 function Flotante({className, icono: Icono, titulo, texto}: {className: string; icono: LucideIcon; titulo: string; texto: string}) {
   return (
-    <div className={`absolute z-[2] flex items-center gap-2 rounded-[14px] border border-line bg-surface py-2 pr-3 pl-2 shadow-[0_14px_30px_-18px_rgba(17,26,46,0.35)] sm:gap-3 sm:py-3 sm:pr-4 sm:pl-3 ${className}`}>
-      <span className="grid h-8 w-8 place-items-center rounded-[10px] bg-accent-soft text-accent sm:h-10 sm:w-10">
+    <div className={`absolute z-[2] flex items-center gap-3 rounded-[14px] border border-line bg-surface py-3 pr-4 pl-3 shadow-[0_14px_30px_-18px_rgba(17,26,46,0.35)] max-lg:hidden ${className}`}>
+      <span className="grid h-10 w-10 place-items-center rounded-[10px] bg-accent-soft text-accent">
         <Icono size={20} />
       </span>
       <span>
-        <b className="num block text-[16px] leading-tight tracking-[-0.02em] text-[#111a2e] sm:text-[19px] dark:text-ink">{titulo}</b>
+        <b className="num block text-[19px] leading-tight tracking-[-0.02em] text-[#111a2e] dark:text-ink">{titulo}</b>
         <span className="text-[12.5px] text-ink-3">{texto}</span>
       </span>
     </div>
@@ -588,27 +593,6 @@ function Plan({nombre, precio, nota, incluye, boton, destacado = false}: {nombre
       </ul>
       {boton}
     </article>
-  );
-}
-
-function Contacto({href, externo, icono: Icono, titulo, texto, borde}: {href?: string; externo?: boolean; icono: LucideIcon; titulo: string; texto: string; borde?: boolean}) {
-  const contenido = (
-    <>
-      <span className="grid h-[46px] w-[46px] shrink-0 place-items-center rounded-full bg-accent-soft text-accent">
-        <Icono size={19} />
-      </span>
-      <span>
-        <span className="block text-[15px] font-semibold text-ink">{titulo}</span>
-        <span className="text-[13.5px] text-ink-3">{texto}</span>
-      </span>
-    </>
-  );
-  const clase = `flex items-center gap-3.5 md:px-6 ${borde ? 'md:border-l md:border-line' : ''}`;
-  if (!href) return <div className={clase}>{contenido}</div>;
-  return (
-    <a href={href} className={`${clase} hover:opacity-80`} {...(externo ? {target: '_blank', rel: 'noopener noreferrer'} : {})}>
-      {contenido}
-    </a>
   );
 }
 
