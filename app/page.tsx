@@ -300,24 +300,24 @@ export default async function Portada() {
             </div>
 
             {/* La docente recortada sobre el círculo naranja. Nada se le pone encima: en computadora, dos tarjetas
-                a los lados de la cabeza; en tablet y teléfono, los datos van en una franja debajo de la foto. */}
-            <div className="pb-10 lg:pb-0">
+                a su derecha, lejos de la cara (medido con su silueta); en pantallas menores, los datos van en una franja debajo de la foto. */}
+            <div className="pb-10 xl:pb-0">
             <div className="relative mx-auto h-[360px] w-full max-w-[460px] sm:h-[440px] lg:h-[520px] lg:max-w-none">
-              <span aria-hidden className="absolute top-[150px] left-[30px] hidden h-[60px] w-[84px] bg-[radial-gradient(#f0360a_1.6px,transparent_1.8px)] bg-[length:14px_14px] opacity-55 sm:block" />
+              <span aria-hidden className="absolute top-[30px] left-0 hidden h-[60px] w-[84px] bg-[radial-gradient(#f0360a_1.6px,transparent_1.8px)] bg-[length:14px_14px] opacity-55 sm:block" />
               <span aria-hidden className="absolute right-[10px] bottom-[120px] hidden h-[60px] w-[84px] bg-[radial-gradient(#f0360a_1.6px,transparent_1.8px)] bg-[length:14px_14px] opacity-55 sm:block" />
-              <span aria-hidden className="absolute -bottom-[18px] left-1/2 h-[320px] w-[320px] -translate-x-1/2 rounded-full border-[1.5px] border-dashed border-[#f6b59c] sm:h-[396px] sm:w-[396px] lg:h-[470px] lg:w-[470px]" />
-              <span aria-hidden className="absolute bottom-0 left-1/2 h-[290px] w-[290px] -translate-x-1/2 rounded-full bg-[linear-gradient(150deg,#ff7a4d_0%,#f0360a_55%,#c62a04_100%)] sm:h-[360px] sm:w-[360px] lg:h-[430px] lg:w-[430px]" />
+              <span aria-hidden className="absolute -bottom-[18px] left-1/2 xl:left-[36%] h-[320px] w-[320px] -translate-x-1/2 rounded-full border-[1.5px] border-dashed border-[#f6b59c] sm:h-[396px] sm:w-[396px] lg:h-[470px] lg:w-[470px]" />
+              <span aria-hidden className="absolute bottom-0 left-1/2 xl:left-[36%] h-[290px] w-[290px] -translate-x-1/2 rounded-full bg-[linear-gradient(150deg,#ff7a4d_0%,#f0360a_55%,#c62a04_100%)] sm:h-[360px] sm:w-[360px] lg:h-[430px] lg:w-[430px]" />
               <Image
                 src={fotoPortada}
                 alt="Docente con sus libros"
                 priority
                 sizes="(min-width: 1024px) 365px, (min-width: 640px) 307px, 252px"
-                className="absolute bottom-0 left-1/2 z-[1] h-[345px] w-auto max-w-none -translate-x-1/2 drop-shadow-[0_20px_30px_rgba(17,26,46,0.18)] sm:h-[420px] lg:h-[500px]"
+                className="absolute bottom-0 left-1/2 xl:left-[36%] z-[1] h-[345px] w-auto max-w-none -translate-x-1/2 drop-shadow-[0_20px_30px_rgba(17,26,46,0.18)] sm:h-[420px] lg:h-[500px]"
               />
-              <Flotante className="top-[56px] left-0" {...DATOS_PORTADA[0]} />
-              <Flotante className="top-[112px] right-0" {...DATOS_PORTADA[1]} />
+              <Flotante className="top-[36px] right-0" {...DATOS_PORTADA[0]} />
+              <Flotante className="top-[128px] right-0" {...DATOS_PORTADA[1]} />
             </div>
-            <ul className="mx-auto grid max-w-[460px] grid-cols-[repeat(3,minmax(0,1fr))] divide-x divide-line rounded-[16px] border border-line bg-surface py-3.5 shadow-[0_14px_30px_-22px_rgba(17,26,46,0.35)] lg:hidden">
+            <ul className="mx-auto grid max-w-[460px] grid-cols-[repeat(3,minmax(0,1fr))] divide-x divide-line rounded-[16px] border border-line bg-surface py-3.5 shadow-[0_14px_30px_-22px_rgba(17,26,46,0.35)] xl:hidden">
               {DATOS_PORTADA.map((d) => (
                 <li key={d.titulo} className="flex flex-col items-center gap-1 px-2 text-center">
                   <d.icono size={20} className="text-accent" />
@@ -563,7 +563,7 @@ export default async function Portada() {
 
 function Flotante({className, icono: Icono, titulo, texto}: {className: string; icono: LucideIcon; titulo: string; texto: string}) {
   return (
-    <div className={`absolute z-[2] flex items-center gap-3 rounded-[14px] border border-line bg-surface py-3 pr-4 pl-3 shadow-[0_14px_30px_-18px_rgba(17,26,46,0.35)] max-lg:hidden ${className}`}>
+    <div className={`absolute z-[2] flex items-center gap-3 rounded-[14px] border border-line bg-surface py-3 pr-4 pl-3 shadow-[0_14px_30px_-18px_rgba(17,26,46,0.35)] max-xl:hidden ${className}`}>
       <span className="grid h-10 w-10 place-items-center rounded-[10px] bg-accent-soft text-accent">
         <Icono size={20} />
       </span>
